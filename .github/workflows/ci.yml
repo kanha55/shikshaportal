@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Backend — placeholder
+        run: echo "Rails tests will run here after backend scaffold (Sprint 1)"
+
+      - name: Frontend — placeholder
+        run: echo "Frontend tests will run here after frontend scaffold (Sprint 1)"
