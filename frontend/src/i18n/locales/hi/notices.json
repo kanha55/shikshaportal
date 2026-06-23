@@ -1,9 +1,15 @@
 {
   "title": "सूचनाएँ",
   "createNotice": "सूचना बनाएँ",
-  "editNotice": "सूचना संपादित करें",
+  "editNotice": "संपादित करें",
+  "saveNotice": "सूचना सहेजें",
+  "deleteNotice": "हटाएँ",
   "publish": "प्रकाशित करें",
   "recentNotices": "हाल की सूचनाएँ",
   "manageNotices": "सूचनाएँ प्रबंधित करें",
-  "noNoticesAdmin": "अभी कोई सूचना प्रकाशित नहीं।"
+  "noNoticesAdmin": "अभी कोई सूचना प्रकाशित नहीं।",
+  "noticeTitle": "शीर्षक",
+  "noticeBody": "विवरण",
+  "saveFailed": "सूचना सहेजी नहीं जा सकी।",
+  "deleteFailed": "सूचना हटाई नहीं जा सकी।"
 }

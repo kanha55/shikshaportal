@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { DashboardNav, StatCard } from "../components/DashboardNav";
 import { LanguageToggle } from "../components/LanguageToggle";
+import { NoticeManager } from "../components/NoticeManager";
+import { StudentNoticesPanel } from "../components/StudentNoticesPanel";
 
 function DashboardShell({
   titleKey,
@@ -55,10 +57,7 @@ export function AdminDashboard() {
           <StatCard label={t("fees:unpaidCount")} value={t("dashboard:statsPlaceholder")} />
         </div>
       </section>
-      <section className="dashboard-section">
-        <h2>{t("notices:recentNotices")}</h2>
-        <p className="muted">{t("notices:noNoticesAdmin")}</p>
-      </section>
+      <NoticeManager />
     </DashboardShell>
   );
 }
@@ -73,10 +72,7 @@ export function StudentDashboard() {
         <StatCard label={t("attendance:attendancePercent")} value={t("dashboard:statsPlaceholder")} />
         <StatCard label={t("fees:pendingFees")} value={t("dashboard:statsPlaceholder")} />
       </div>
-      <section className="dashboard-section">
-        <h2>{t("dashboard:myNotices")}</h2>
-        <p className="muted">{t("notices:noNoticesAdmin")}</p>
-      </section>
+      <StudentNoticesPanel />
       <section className="dashboard-section">
         <h2>{t("dashboard:classMaterials")}</h2>
         <p className="muted">{t("dashboard:comingSoon")}</p>
