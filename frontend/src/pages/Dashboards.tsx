@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../auth/AuthContext";
 import { DashboardNav, StatCard } from "../components/DashboardNav";
 import { LanguageToggle } from "../components/LanguageToggle";
+import { StudentImportPanel } from "../components/StudentImportPanel";
+import { useAuth } from "../auth/AuthContext";
 
 function DashboardShell({
   titleKey,
@@ -44,17 +46,21 @@ export function SuperAdminDashboard() {
 
 export function AdminDashboard() {
   const { t } = useTranslation(["dashboard", "attendance", "notices", "fees"]);
+  const [studentCount, setStudentCount] = useState<string>(t("dashboard:statsPlaceholder"));
 
   return (
     <DashboardShell titleKey="schoolAdmin" nav={<DashboardNav variant="admin" />}>
       <section className="dashboard-section">
         <h2>{t("dashboard:quickActions")}</h2>
         <div className="stat-grid">
-          <StatCard label={t("dashboard:totalStudents")} value={t("dashboard:statsPlaceholder")} />
+          <StatCard label={t("dashboard:totalStudents")} value={studentCount} />
           <StatCard label={t("attendance:todayAttendance")} value={t("dashboard:statsPlaceholder")} />
           <StatCard label={t("fees:unpaidCount")} value={t("dashboard:statsPlaceholder")} />
         </div>
       </section>
+
+      <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
+
       <section className="dashboard-section">
         <h2>{t("notices:recentNotices")}</h2>
         <p className="muted">{t("notices:noNoticesAdmin")}</p>
