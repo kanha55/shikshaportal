@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+
   ROLES = %w[super_admin school_admin student].freeze
-  BOARDS = %w[cbse state other].freeze
+
+  devise :database_authenticatable, :recoverable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
 
   belongs_to :school, optional: true
-
-  has_secure_password
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { case_sensitive: false }
@@ -24,6 +26,10 @@ class User < ApplicationRecord
 
   def school_admin?
     role == "school_admin"
+  end
+
+  def student?
+    role == "student"
   end
 
   private

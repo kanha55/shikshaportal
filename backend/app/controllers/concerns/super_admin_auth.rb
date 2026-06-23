@@ -11,11 +11,21 @@ module SuperAdminAuth
   private
 
   def authenticate_super_admin!
+    return if api_key_valid?
+    return if jwt_super_admin?
+
+    render json: { error: "Unauthorized" }, status: :unauthorized
+  end
+
+  def api_key_valid?
     provided = request.headers["X-Super-Admin-Key"].to_s
     expected = ENV.fetch("SUPER_ADMIN_API_KEY", "")
 
-    return if expected.present? && ActiveSupport::SecurityUtils.secure_compare(provided, expected)
+    expected.present? && ActiveSupport::SecurityUtils.secure_compare(provided, expected)
+  end
 
-    render json: { error: "Unauthorized" }, status: :unauthorized
+  def jwt_super_admin?
+    user = warden.authenticate(scope: :user)
+    user&.super_admin?
   end
 end

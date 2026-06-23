@@ -32,6 +32,10 @@ gem "rack-cors"
 # Multi-tenancy — each school is a tenant (T02)
 gem "acts_as_tenant"
 
+# Authentication (T05)
+gem "devise"
+gem "devise-jwt"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

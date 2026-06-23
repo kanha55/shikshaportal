@@ -49,6 +49,30 @@ curl -X POST http://localhost:3000/api/v1/admin/schools \
 
 Creates school tenant, school admin user, and sends welcome email.
 
+## Authentication (T05)
+
+JWT is returned in the `Authorization` response header on login.
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/api/v1/auth/login` | — | Login (`user[email]`, `user[password]`) |
+| DELETE | `/api/v1/auth/logout` | JWT | Logout / revoke token |
+| GET | `/api/v1/auth/me` | JWT | Current user profile + role |
+| POST | `/api/v1/auth/password` | — | Request password reset email |
+| PUT | `/api/v1/auth/password` | — | Reset password with token |
+
+### Login example
+
+```bash
+curl -i -X POST http://greenvalley.localhost:3000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"user":{"email":"principal@greenvalley.test","password":"password123"}}'
+```
+
+Use the `Authorization: Bearer <token>` header for protected routes.
+
+Seed users: `super@shikshaportal.test`, `principal@greenvalley.test` (password: `password123`).
+
 ## Planned (upcoming sprints)
 
 - `acts_as_tenant` multi-tenancy (T02)
