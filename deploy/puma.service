@@ -1,0 +1,16 @@
+[Unit]
+Description=Puma HTTP Server for Shiksha Portal
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/var/www/shikshaportal/backend
+Environment=RAILS_ENV=production
+EnvironmentFile=/var/www/shikshaportal/backend/.env
+ExecStart=/usr/local/bin/bundle exec puma -C config/puma.rb
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

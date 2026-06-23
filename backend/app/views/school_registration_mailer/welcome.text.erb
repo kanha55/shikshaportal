@@ -1,0 +1,13 @@
+Welcome to Shiksha Portal, <%= @admin.name %>!
+
+Your school "<%= @school.name %>" has been registered.
+
+Subdomain: <%= @school.subdomain %>.<%= ENV.fetch("APP_HOST", "shikshaportal.in") %>
+Login URL: <%= @login_url %>
+
+Email: <%= @admin.email %>
+Temporary password: <%= @temporary_password %>
+
+Please change your password after first login.
+
+— Shiksha Portal Team
