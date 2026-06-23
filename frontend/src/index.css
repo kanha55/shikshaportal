@@ -101,3 +101,100 @@ button:disabled {
 .dashboard main {
   padding: 2rem;
 }
+
+.public-page {
+  min-height: 100vh;
+}
+
+.public-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.school-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.school-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.public-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.public-section h2 {
+  margin-top: 0;
+}
+
+.contact-list,
+.notice-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-list li {
+  margin-bottom: 0.5rem;
+}
+
+.notice-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.notice-item:last-child {
+  border-bottom: none;
+}
+
+.notice-item h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.notice-date {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 0.5rem;
+}
+
+.link-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #2563eb;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .public-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .public-main {
+    padding: 1rem;
+  }
+}

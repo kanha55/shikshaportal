@@ -11,7 +11,12 @@ schools_data = [
     principal_email: "principal@greenvalley.test",
     board: "cbse",
     default_language: "hi",
-    admin_password: "password123"
+    about_us: "Green Valley School serves rural communities with quality education since 1998.",
+    admin_password: "password123",
+    notices: [
+      { title: "Summer Holiday", body: "School closed from 1 May to 15 June." },
+      { title: "Parent Meeting", body: "Annual parent-teacher meeting on Saturday at 10 AM." }
+    ]
   },
   {
     name: "Sunrise Public School",
@@ -22,15 +27,21 @@ schools_data = [
     principal_email: "principal@sunrise.test",
     board: "state",
     default_language: "hi",
-    admin_password: "password123"
+    about_us: "Sunrise Public School — learning with values.",
+    admin_password: "password123",
+    notices: [
+      { title: "Exam Schedule", body: "Half-yearly exams begin next Monday." }
+    ]
   }
 ]
 
 schools_data.each do |attrs|
+  notices = attrs.delete(:notices)
   password = attrs.delete(:admin_password)
   school = School.find_or_create_by!(subdomain: attrs[:subdomain]) do |s|
     s.assign_attributes(attrs)
   end
+  school.update!(attrs)
 
   User.find_or_create_by!(email: attrs[:principal_email]) do |user|
     user.name = attrs[:principal_name]
@@ -39,6 +50,16 @@ schools_data.each do |attrs|
     user.language_preference = school.default_language
     user.password = password
     user.password_confirmation = password
+  end
+
+  ActsAsTenant.with_tenant(school) do
+    notices.each do |notice_attrs|
+      Notice.find_or_create_by!(title: notice_attrs[:title]) do |n|
+        n.body = notice_attrs[:body]
+        n.published_at = Time.current
+        n.school = school
+      end
+    end
   end
 end
 
@@ -50,4 +71,4 @@ User.find_or_create_by!(email: "super@shikshaportal.test") do |user|
   user.password_confirmation = "password123"
 end
 
-puts "Seeded #{School.count} schools, #{User.count} users"
+puts "Seeded #{School.count} schools, #{User.count} users, #{Notice.count} notices"

@@ -7,6 +7,9 @@ require "rails/test_help"
 module ActiveSupport
   class TestCase
     parallelize(workers: :number_of_processors)
-    fixtures :all if respond_to?(:fixtures)
+
+    setup do
+      Rails.application.load_seed unless School.exists?(subdomain: "greenvalley")
+    end
   end
 end
