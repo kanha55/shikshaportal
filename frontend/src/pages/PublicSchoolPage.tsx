@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { fetchPublicNotices, fetchPublicSchool } from "../api/public";
 import type { PublicNotice, PublicSchool } from "../types/public";
 
 export function PublicSchoolPage() {
+  const { t } = useTranslation("common");
   const [school, setSchool] = useState<PublicSchool | null>(null);
   const [notices, setNotices] = useState<PublicNotice[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +21,7 @@ export function PublicSchoolPage() {
         setSchool(schoolData);
         setNotices(noticeData);
       } catch {
-        setError("School not found. Check the subdomain URL.");
+        setError(t("schoolNotFoundHint"));
       } finally {
         setLoading(false);
       }
@@ -29,17 +31,17 @@ export function PublicSchoolPage() {
   }, []);
 
   if (loading) {
-    return <div className="page-center">Loading…</div>;
+    return <div className="page-center">{t("loading")}</div>;
   }
 
   if (error || !school) {
     return (
       <div className="page-center">
         <div className="card">
-          <h1>Shiksha Portal</h1>
-          <p className="error">{error ?? "School not found"}</p>
+          <h1>{t("appName")}</h1>
+          <p className="error">{error ?? t("schoolNotFound")}</p>
           <Link to="/login" className="link-button">
-            Staff login
+            {t("staffLogin")}
           </Link>
         </div>
       </div>
@@ -55,33 +57,41 @@ export function PublicSchoolPage() {
           </div>
           <div>
             <h1>{school.name}</h1>
-            <p className="muted">{school.board?.toUpperCase()} Board</p>
+            <p className="muted">{t("board", { board: school.board?.toUpperCase() ?? "" })}</p>
           </div>
         </div>
         <Link to="/login" className="link-button">
-          Login
+          {t("login")}
         </Link>
       </header>
 
       <main className="public-main">
         <section className="card public-section">
-          <h2>About</h2>
-          <p>{school.about_us ?? "Welcome to our school."}</p>
+          <h2>{t("about")}</h2>
+          <p>{school.about_us ?? t("welcomeFallback")}</p>
         </section>
 
         <section className="card public-section">
-          <h2>Contact</h2>
+          <h2>{t("contact")}</h2>
           <ul className="contact-list">
             {school.address && <li>{school.address}</li>}
-            {school.phone && <li>Phone: {school.phone}</li>}
-            {school.principal_name && <li>Principal: {school.principal_name}</li>}
+            {school.phone && (
+              <li>
+                {t("phone")}: {school.phone}
+              </li>
+            )}
+            {school.principal_name && (
+              <li>
+                {t("principal")}: {school.principal_name}
+              </li>
+            )}
           </ul>
         </section>
 
         <section className="card public-section">
-          <h2>Latest Notices</h2>
+          <h2>{t("latestNotices")}</h2>
           {notices.length === 0 ? (
-            <p className="muted">No notices yet.</p>
+            <p className="muted">{t("noNotices")}</p>
           ) : (
             <ul className="notice-list">
               {notices.map((notice) => (
