@@ -1,20 +1,29 @@
 # Shiksha Portal — Backend (Rails API)
 
-Rails API-only application for Shiksha Portal.
+Rails 7.2 API-only application for Shiksha Portal.
 
-## Planned setup (Sprint 1)
-
-- PostgreSQL with `acts_as_tenant` (school-scoped data)
-- Devise + JWT authentication (super_admin, school_admin, student)
-- Subdomain-based tenant resolution
-- ActiveStorage → Cloudflare R2
-- Sidekiq + Redis for async jobs (CSV import, emails, AI)
-- Rails I18n (`hi` / `en`) for emails and API errors
-
-## Scaffold command
+## Setup
 
 ```bash
-rails new . --api --database=postgresql --skip-test
+cd backend
+bundle install
+rails db:create db:migrate
+rails server -p 3000
 ```
 
-See root `README.md` and `docs/shiksha_portal_roadmap.xlsx` for full sprint plan.
+## Health checks
+
+- `GET /up` — Rails health check
+- `GET /api/v1/health` — API JSON health response
+
+## Environment
+
+Copy `.env.example` to `.env` and set `DATABASE_URL` if not using local PostgreSQL defaults.
+
+## Planned (upcoming sprints)
+
+- `acts_as_tenant` multi-tenancy (T02)
+- Devise + JWT authentication (T05)
+- ActiveStorage → Cloudflare R2
+- Sidekiq + Redis
+- Rails I18n (`hi` / `en`)

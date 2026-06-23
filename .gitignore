@@ -7,6 +7,7 @@ config/master.key
 config/credentials/*.key
 
 # Ruby / Rails
+backend/config/master.key
 backend/tmp/
 backend/log/
 backend/storage/
