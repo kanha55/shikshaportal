@@ -15,11 +15,14 @@ class User < ApplicationRecord
   validates :role, inclusion: { in: ROLES }
   validates :language_preference, inclusion: { in: School::LANGUAGES }
   validates :school, presence: true, if: -> { school_admin? || student? }
+  validates :roll_number, :class_name, :section, :parent_phone, presence: true, if: :student?
+  validates :roll_number, uniqueness: { scope: :school_id }, allow_nil: true, if: :student?
 
   before_validation :normalize_email
 
   scope :super_admins, -> { where(role: "super_admin") }
   scope :school_admins, -> { where(role: "school_admin") }
+  scope :students, -> { where(role: "student") }
 
   def super_admin?
     role == "super_admin"

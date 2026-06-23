@@ -1,0 +1,15 @@
+{
+  "importTitle": "विद्यार्थी आयात (CSV)",
+  "importHint": "कॉलम: name, roll_number, class_name, section, parent_phone, email (वैकल्पिक)",
+  "chooseFile": "CSV फ़ाइल चुनें",
+  "upload": "CSV अपलोड करें",
+  "uploading": "अपलोड हो रहा है…",
+  "importSuccess": "{{count}} विद्यार्थी आयात हुए। लॉगिन ईमेल भेजे गए।",
+  "importPartial": "{{created}} आयात, {{failed}} पंक्तियाँ विफल।",
+  "importFailed": "आयात विफल।",
+  "rowError": "पंक्ति {{line}} (रोल {{roll}}): {{error}}",
+  "studentList": "विद्यार्थी",
+  "noStudents": "अभी कोई विद्यार्थी नहीं। CSV अपलोड करें।",
+  "rollNumber": "रोल नं.",
+  "classSection": "कक्षा / अनुभाग"
+}

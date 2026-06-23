@@ -50,6 +50,10 @@ class NoticeCrudTest < ActionDispatch::IntegrationTest
         email: "student-notice@test.com",
         role: "student",
         school: @school,
+        roll_number: "999",
+        class_name: "10",
+        section: "A",
+        parent_phone: "9876500000",
         password: "password123",
         password_confirmation: "password123"
       )
