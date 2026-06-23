@@ -2,5 +2,14 @@
   "superAdmin": "सुपर एडमिन",
   "schoolAdmin": "विद्यालय प्रशासक",
   "student": "विद्यार्थी",
-  "comingSoon": "डैशबोर्ड आने वाले स्प्रिंट में उपलब्ध होगा।"
+  "comingSoon": "डैशबोर्ड आने वाले स्प्रिंट में उपलब्ध होगा।",
+  "totalStudents": "कुल विद्यार्थी",
+  "todayAttendance": "आज की उपस्थिति",
+  "pendingFeesCount": "बकाया शुल्क",
+  "quickActions": "त्वरित कार्य",
+  "welcomeStudent": "स्वागत है",
+  "myNotices": "मेरी सूचनाएँ",
+  "classMaterials": "कक्षा सामग्री",
+  "statsPlaceholder": "—",
+  "menu": "मेनू"
 }

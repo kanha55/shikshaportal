@@ -2,5 +2,14 @@
   "superAdmin": "Super Admin",
   "schoolAdmin": "School Admin",
   "student": "Student",
-  "comingSoon": "Dashboard coming in upcoming sprints."
+  "comingSoon": "Dashboard coming in upcoming sprints.",
+  "totalStudents": "Total students",
+  "todayAttendance": "Today's attendance",
+  "pendingFeesCount": "Pending fees",
+  "quickActions": "Quick actions",
+  "welcomeStudent": "Welcome back",
+  "myNotices": "My notices",
+  "classMaterials": "Class materials",
+  "statsPlaceholder": "—",
+  "menu": "Menu"
 }

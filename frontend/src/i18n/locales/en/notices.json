@@ -1,0 +1,9 @@
+{
+  "title": "Notices",
+  "createNotice": "Create notice",
+  "editNotice": "Edit notice",
+  "publish": "Publish",
+  "recentNotices": "Recent notices",
+  "manageNotices": "Manage notices",
+  "noNoticesAdmin": "No notices published yet."
+}

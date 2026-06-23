@@ -1,6 +1,6 @@
 :root {
-  font-family: system-ui, -apple-system, sans-serif;
-  line-height: 1.5;
+  font-family: "Noto Sans Devanagari", "Noto Sans", system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
   color: #1a1a1a;
   background: #f4f6f8;
 }
@@ -12,6 +12,9 @@
 body {
   margin: 0;
   min-height: 100vh;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .page-center {
@@ -189,6 +192,11 @@ button:disabled {
 }
 
 @media (max-width: 640px) {
+  body {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
   .public-header {
     flex-direction: column;
     align-items: flex-start;
@@ -197,4 +205,100 @@ button:disabled {
   .public-main {
     padding: 1rem;
   }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.35rem;
+  }
+
+  .dashboard main {
+    padding: 1rem;
+  }
+
+  .dashboard-nav-list {
+    gap: 0.35rem;
+  }
+
+  .dashboard-nav-item {
+    font-size: 0.875rem;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.35rem;
+  }
+}
+
+.dashboard-nav {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.75rem 1.5rem;
+  overflow-x: auto;
+}
+
+.dashboard-nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-nav-item {
+  display: inline-block;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dashboard-section {
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.dashboard-greeting {
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin: 0 0 1rem;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.stat-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
