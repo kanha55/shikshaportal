@@ -11,6 +11,7 @@ class PublicSchoolPageTest < ActionDispatch::IntegrationTest
     assert_response :success
     body = JSON.parse(response.body)
     assert_equal "Green Valley School", body["name"]
+    assert_equal "hi", body["default_language"]
     assert body["address"].present?
   end
 

@@ -46,4 +46,24 @@ class AuthIntegrationTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  def test_update_language_preference
+    host! "greenvalley.localhost"
+
+    post api_v1_user_session_path,
+         params: { user: { email: "principal@greenvalley.test", password: "password123" } },
+         as: :json
+
+    auth = response.headers["Authorization"]
+    assert auth.present?
+
+    patch api_v1_auth_me_path,
+          params: { user: { language_preference: "en" } },
+          headers: { "Authorization" => auth },
+          as: :json
+
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal "en", body.dig("user", "language_preference")
+  end
 end

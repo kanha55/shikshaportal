@@ -11,6 +11,7 @@ import {
 import { configureApiClient } from "../api/client";
 import { login as apiLogin, logout as apiLogout } from "../api/auth";
 import { dashboardPathForRole } from "../lib/config";
+import { applyLocale, normalizeLocale } from "../lib/locale";
 import type { User } from "../types/user";
 
 interface AuthContextValue {
@@ -45,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { user: loggedInUser, token } = await apiLogin(email, password);
     tokenRef.current = token;
     setUser(loggedInUser);
+    await applyLocale(normalizeLocale(loggedInUser.language_preference));
     return dashboardPathForRole(loggedInUser.role);
   }, []);
 

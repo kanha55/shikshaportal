@@ -13,6 +13,7 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :role, inclusion: { in: ROLES }
+  validates :language_preference, inclusion: { in: School::LANGUAGES }
   validates :school, presence: true, if: -> { school_admin? || student? }
 
   before_validation :normalize_email

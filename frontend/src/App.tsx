@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthContext";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
+import { LocaleBootstrap } from "./components/LocaleBootstrap";
 import { LoginPage } from "./pages/LoginPage";
 import { PublicSchoolPage } from "./pages/PublicSchoolPage";
 import { AdminDashboard, StudentDashboard, SuperAdminDashboard } from "./pages/Dashboards";
@@ -8,6 +9,7 @@ import { AdminDashboard, StudentDashboard, SuperAdminDashboard } from "./pages/D
 export default function App() {
   return (
     <AuthProvider>
+      <LocaleBootstrap />
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />

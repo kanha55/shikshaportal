@@ -3,6 +3,8 @@
 module JwtAuthenticatable
   extend ActiveSupport::Concern
 
+  DEVISE_SCOPE = :api_v1_user
+
   included do
     before_action :authenticate_user!
   end
@@ -16,7 +18,7 @@ module JwtAuthenticatable
   end
 
   def current_user
-    @current_user ||= warden.authenticate(scope: :user)
+    @current_user ||= warden.authenticate(scope: DEVISE_SCOPE)
   end
 
   def authorize_role!(*roles)

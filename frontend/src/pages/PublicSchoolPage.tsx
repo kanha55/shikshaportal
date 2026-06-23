@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { LanguageToggle } from "../components/LanguageToggle";
 import { fetchPublicNotices, fetchPublicSchool } from "../api/public";
 import type { PublicNotice, PublicSchool } from "../types/public";
 
@@ -60,9 +61,12 @@ export function PublicSchoolPage() {
             <p className="muted">{t("board", { board: school.board?.toUpperCase() ?? "" })}</p>
           </div>
         </div>
-        <Link to="/login" className="link-button">
-          {t("login")}
-        </Link>
+        <div className="public-header-actions">
+          <LanguageToggle />
+          <Link to="/login" className="link-button">
+            {t("login")}
+          </Link>
+        </div>
       </header>
 
       <main className="public-main">

@@ -7,6 +7,7 @@ export interface PublicSchool {
   board: string;
   principal_name: string | null;
   about_us: string | null;
+  default_language: string;
 }
 
 export interface PublicNotice {

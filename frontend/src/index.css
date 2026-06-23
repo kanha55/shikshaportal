@@ -101,6 +101,56 @@ button:disabled {
   background: #64748b;
 }
 
+.dashboard-header-actions,
+.public-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f1f5f9;
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+}
+
+.language-toggle button {
+  width: auto;
+  padding: 0.35rem 0.65rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #475569;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.language-toggle button.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.language-toggle-sep {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.login-page {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
 .dashboard main {
   padding: 2rem;
 }

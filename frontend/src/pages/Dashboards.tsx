@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { DashboardNav, StatCard } from "../components/DashboardNav";
+import { LanguageToggle } from "../components/LanguageToggle";
 
 function DashboardShell({
   titleKey,
@@ -24,9 +25,12 @@ function DashboardShell({
             {user?.school_subdomain ? ` · ${user.school_subdomain}` : ""}
           </p>
         </div>
-        <button type="button" onClick={() => logout()}>
-          {t("common:logOut")}
-        </button>
+        <div className="dashboard-header-actions">
+          <LanguageToggle />
+          <button type="button" onClick={() => logout()}>
+            {t("common:logOut")}
+          </button>
+        </div>
       </header>
       {nav}
       <main>{children ?? <p>{t("dashboard:comingSoon")}</p>}</main>
