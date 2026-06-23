@@ -49,13 +49,13 @@ shikshaportal/
 - Node.js 20+
 - PostgreSQL (or Neon.tech URL for production)
 
-### Development (coming soon)
+### Development
 
 ```bash
 # Backend
-cd backend && bundle install && rails db:setup && rails s
+cd backend && bundle install && rails db:create db:migrate && rails s
 
-# Frontend
+# Frontend (after T06)
 cd frontend && npm install && npm run dev
 ```
 

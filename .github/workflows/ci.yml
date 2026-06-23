@@ -7,13 +7,50 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-test:
+  backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: shikshaportal_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/shikshaportal_test
+      RAILS_ENV: test
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Backend — placeholder
-        run: echo "Rails tests will run here after backend scaffold (Sprint 1)"
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+          working-directory: backend
 
+      - name: Prepare database
+        run: bin/rails db:prepare
+
+      - name: Boot check
+        run: bin/rails runner "puts 'Rails OK'"
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - name: Frontend — placeholder
-        run: echo "Frontend tests will run here after frontend scaffold (Sprint 1)"
+        run: echo "Frontend tests will run after React scaffold (T06)"
