@@ -45,8 +45,8 @@ jobs:
       - name: Prepare database
         run: bin/rails db:prepare
 
-      - name: Boot check
-        run: bin/rails runner "puts 'Rails OK'"
+      - name: Run tests
+        run: bin/rails db:prepare test
 
   frontend:
     runs-on: ubuntu-latest

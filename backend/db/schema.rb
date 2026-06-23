@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_23_000002) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_24_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,12 +32,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_23_000002) do
     t.bigint "school_id"
     t.string "name", null: false
     t.string "email", null: false
-    t.string "password_digest", null: false
+    t.string "encrypted_password"
     t.string "role", default: "student", null: false
     t.string "language_preference", default: "hi", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.string "jti", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role"], name: "index_users_on_role"
     t.index ["school_id"], name: "index_users_on_school_id"
   end
