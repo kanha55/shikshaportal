@@ -1,0 +1,15 @@
+{
+  "importTitle": "Import students (CSV)",
+  "importHint": "Columns: name, roll_number, class_name, section, parent_phone, email (optional)",
+  "chooseFile": "Choose CSV file",
+  "upload": "Upload CSV",
+  "uploading": "Uploading…",
+  "importSuccess": "{{count}} students imported. Login emails sent.",
+  "importPartial": "{{created}} imported, {{failed}} rows failed.",
+  "importFailed": "Import failed.",
+  "rowError": "Line {{line}} (roll {{roll}}): {{error}}",
+  "studentList": "Students",
+  "noStudents": "No students yet. Upload a CSV to get started.",
+  "rollNumber": "Roll no.",
+  "classSection": "Class / Section"
+}

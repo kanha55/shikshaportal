@@ -352,3 +352,68 @@ button:disabled {
   font-size: 1.5rem;
   font-weight: 600;
 }
+
+.import-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.import-form button {
+  width: auto;
+  min-width: 140px;
+}
+
+.file-input-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.import-message {
+  color: #166534;
+  background: #f0fdf4;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.import-errors {
+  color: #b91c1c;
+  background: #fef2f2;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 0 0 1rem;
+  list-style: none;
+}
+
+.import-errors li {
+  margin-bottom: 0.35rem;
+}
+
+.student-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.student-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.student-list-item:last-child {
+  border-bottom: none;
+}
+
+.student-list-item span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
