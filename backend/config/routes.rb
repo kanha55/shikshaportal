@@ -25,8 +25,11 @@ Rails.application.routes.draw do
       get "auth/me", to: "auth/me#show"
       patch "auth/me", to: "auth/me#update"
 
+      resources :notices, only: :index
+
       namespace :admin do
         resources :schools, only: :create
+        resources :notices
         resources :students, only: :index do
           collection do
             post :import

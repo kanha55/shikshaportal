@@ -1,9 +1,15 @@
 {
   "title": "Notices",
   "createNotice": "Create notice",
-  "editNotice": "Edit notice",
+  "editNotice": "Edit",
+  "saveNotice": "Save notice",
+  "deleteNotice": "Delete",
   "publish": "Publish",
   "recentNotices": "Recent notices",
   "manageNotices": "Manage notices",
-  "noNoticesAdmin": "No notices published yet."
+  "noNoticesAdmin": "No notices published yet.",
+  "noticeTitle": "Title",
+  "noticeBody": "Body",
+  "saveFailed": "Could not save notice.",
+  "deleteFailed": "Could not delete notice."
 }

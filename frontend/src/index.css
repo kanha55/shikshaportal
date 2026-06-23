@@ -353,6 +353,36 @@ button:disabled {
   font-weight: 600;
 }
 
+.notice-form textarea {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.notice-form-actions,
+.notice-item-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.notice-form-actions button,
+.notice-item-actions button {
+  width: auto;
+}
+
+.secondary-button {
+  background: #64748b !important;
+}
+
+.danger-button {
+  background: #b91c1c !important;
+}
+
 .import-form {
   display: flex;
   flex-wrap: wrap;
