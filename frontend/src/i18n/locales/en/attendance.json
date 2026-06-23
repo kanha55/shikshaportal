@@ -1,0 +1,12 @@
+{
+  "title": "Attendance",
+  "markAttendance": "Mark attendance",
+  "present": "Present",
+  "absent": "Absent",
+  "today": "Today",
+  "attendancePercent": "Attendance %",
+  "classReport": "Class report",
+  "bulkMarkPresent": "Mark all present",
+  "cannotMarkFuture": "Future dates cannot be marked",
+  "todayAttendance": "Today's attendance"
+}

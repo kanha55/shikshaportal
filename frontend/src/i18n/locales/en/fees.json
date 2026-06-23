@@ -1,0 +1,10 @@
+{
+  "title": "Fees",
+  "pendingFees": "Pending fees",
+  "paid": "Paid",
+  "unpaid": "Unpaid",
+  "amount": "Amount",
+  "dueDate": "Due date",
+  "feeSummary": "Fee summary",
+  "unpaidCount": "Unpaid count"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "उपस्थिति",
+  "markAttendance": "उपस्थिति दर्ज करें",
+  "present": "उपस्थित",
+  "absent": "अनुपस्थित",
+  "today": "आज",
+  "attendancePercent": "उपस्थिति %",
+  "classReport": "कक्षा रिपोर्ट",
+  "bulkMarkPresent": "सभी को उपस्थित चिह्नित करें",
+  "cannotMarkFuture": "भविष्य की तिथि चिह्नित नहीं की जा सकती",
+  "todayAttendance": "आज की उपस्थिति"
+}
