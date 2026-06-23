@@ -41,8 +41,6 @@ shikshaportal/
 
 ## Getting started
 
-> Backend and frontend apps will be scaffolded in Sprint 1 (see `docs/` roadmap).
-
 ### Prerequisites
 
 - Ruby 3.2+
@@ -55,8 +53,9 @@ shikshaportal/
 # Backend
 cd backend && bundle install && rails db:create db:migrate && rails s
 
-# Frontend (after T06)
+# Frontend
 cd frontend && npm install && npm run dev
+# Login: http://greenvalley.localhost:5173/login (backend on :3000)
 ```
 
 ## Deployment
