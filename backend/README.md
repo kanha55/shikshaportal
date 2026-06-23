@@ -18,7 +18,36 @@ rails server -p 3000
 
 ## Environment
 
-Copy `.env.example` to `.env` and set `DATABASE_URL` if not using local PostgreSQL defaults.
+Set in `backend/.env` (production) or shell:
+
+| Variable | Purpose |
+|----------|---------|
+| `DATABASE_URL` | PostgreSQL connection |
+| `APP_HOST` | Base domain (default `shikshaportal.in`) |
+| `SUPER_ADMIN_API_KEY` | Protects `POST /api/v1/admin/schools` |
+| `FRONTEND_ORIGIN` | CORS origin for React app |
+
+## Super admin — register a school (T04)
+
+```bash
+curl -X POST http://localhost:3000/api/v1/admin/schools \
+  -H "Content-Type: application/json" \
+  -H "X-Super-Admin-Key: $SUPER_ADMIN_API_KEY" \
+  -d '{
+    "school": {
+      "name": "Demo School",
+      "subdomain": "demo",
+      "address": "Village Road",
+      "phone": "9999999999",
+      "principal_name": "Principal Singh",
+      "principal_email": "admin@demo.test",
+      "board": "cbse",
+      "default_language": "hi"
+    }
+  }'
+```
+
+Creates school tenant, school admin user, and sends welcome email.
 
 ## Planned (upcoming sprints)
 

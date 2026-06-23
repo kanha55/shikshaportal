@@ -3,6 +3,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       get "health", to: "health#show"
       get "school/current", to: "schools#current"
+
+      namespace :admin do
+        resources :schools, only: :create
+      end
     end
   end
 
