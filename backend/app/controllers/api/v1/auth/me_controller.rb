@@ -7,16 +7,30 @@ module Api
         include JwtAuthenticatable
 
         def show
-          render json: {
-            user: {
-              id: current_user.id,
-              email: current_user.email,
-              name: current_user.name,
-              role: current_user.role,
-              language_preference: current_user.language_preference,
-              school_id: current_user.school_id,
-              school_subdomain: current_user.school&.subdomain
-            }
+          render json: { user: user_json(current_user) }
+        end
+
+        def update
+          lang = params.dig(:user, :language_preference)
+          unless lang.present? && School::LANGUAGES.include?(lang)
+            return render json: { error: "Invalid language" }, status: :unprocessable_entity
+          end
+
+          current_user.update!(language_preference: lang)
+          render json: { user: user_json(current_user) }
+        end
+
+        private
+
+        def user_json(user)
+          {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            language_preference: user.language_preference,
+            school_id: user.school_id,
+            school_subdomain: user.school&.subdomain
           }
         end
       end

@@ -16,7 +16,8 @@ module Api
             phone: school.phone,
             board: school.board,
             principal_name: school.principal_name,
-            about_us: school.about_us
+            about_us: school.about_us,
+            default_language: school.default_language
           }
         end
       end

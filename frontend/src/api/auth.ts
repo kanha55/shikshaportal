@@ -26,3 +26,10 @@ export async function fetchCurrentUser(): Promise<User> {
 export async function logout(): Promise<void> {
   await apiClient.delete("/auth/logout");
 }
+
+export async function updateLanguagePreference(language: string): Promise<User> {
+  const response = await apiClient.patch<{ user: User }>("/auth/me", {
+    user: { language_preference: language },
+  });
+  return response.data.user;
+}

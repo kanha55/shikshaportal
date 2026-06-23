@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { LanguageToggle } from "../components/LanguageToggle";
 import { useAuth } from "../auth/AuthContext";
 import { dashboardPathForRole } from "../lib/config";
 
@@ -37,7 +38,11 @@ export function LoginPage() {
 
   return (
     <div className="page-center">
-      <form className="card login-card" onSubmit={handleSubmit}>
+      <div className="login-page">
+        <div className="login-toolbar">
+          <LanguageToggle />
+        </div>
+        <form className="card login-card" onSubmit={handleSubmit}>
         <h1>{t("common:appName")}</h1>
         <p className="muted">{t("auth:signInSubtitle")}</p>
 
@@ -69,6 +74,7 @@ export function LoginPage() {
           {submitting ? t("auth:signingIn") : t("auth:signIn")}
         </button>
       </form>
+      </div>
     </div>
   );
 }

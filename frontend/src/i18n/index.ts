@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { readStoredLocale } from "../lib/localeStorage";
 import enAttendance from "./locales/en/attendance.json";
 import enAuth from "./locales/en/auth.json";
 import enCommon from "./locales/en/common.json";
@@ -53,7 +54,7 @@ void i18n.use(initReactI18next).init({
       fees: hiFees,
     },
   },
-  lng: getSchoolDefaultLocale(),
+  lng: readStoredLocale() ?? getSchoolDefaultLocale(),
   fallbackLng: "en",
   defaultNS: "common",
   ns: [...namespaces],

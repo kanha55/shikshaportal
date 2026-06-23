@@ -23,6 +23,7 @@ Rails.application.routes.draw do
                  }
 
       get "auth/me", to: "auth/me#show"
+      patch "auth/me", to: "auth/me#update"
 
       namespace :admin do
         resources :schools, only: :create

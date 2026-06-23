@@ -13,5 +13,6 @@
   "noNotices": "No notices yet.",
   "welcomeFallback": "Welcome to our school.",
   "schoolNotFound": "School not found",
-  "schoolNotFoundHint": "School not found. Check the subdomain URL."
+  "schoolNotFoundHint": "School not found. Check the subdomain URL.",
+  "languageToggle": "Choose language"
 }

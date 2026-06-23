@@ -25,7 +25,7 @@ module SuperAdminAuth
   end
 
   def jwt_super_admin?
-    user = warden.authenticate(scope: :user)
+    user = warden.authenticate(scope: JwtAuthenticatable::DEVISE_SCOPE)
     user&.super_admin?
   end
 end
