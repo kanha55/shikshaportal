@@ -4,6 +4,11 @@ Rails.application.routes.draw do
       get "health", to: "health#show"
       get "school/current", to: "schools#current"
 
+      namespace :public do
+        get "school", to: "schools#show"
+        get "notices", to: "notices#index"
+      end
+
       devise_for :users,
                  path: "auth",
                  only: %i[sessions passwords],

@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_24_000001) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_24_000003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "notices", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.string "title", null: false
+    t.text "body", null: false
+    t.datetime "published_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "published_at"], name: "index_notices_on_school_id_and_published_at"
+    t.index ["school_id"], name: "index_notices_on_school_id"
+  end
 
   create_table "schools", force: :cascade do |t|
     t.string "name", null: false
@@ -25,6 +36,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_24_000001) do
     t.string "principal_email"
     t.string "board", default: "cbse", null: false
     t.string "default_language", default: "hi", null: false
+    t.text "about_us"
     t.index ["subdomain"], name: "index_schools_on_subdomain", unique: true
   end
 
@@ -47,5 +59,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_24_000001) do
     t.index ["school_id"], name: "index_users_on_school_id"
   end
 
+  add_foreign_key "notices", "schools"
   add_foreign_key "users", "schools"
 end

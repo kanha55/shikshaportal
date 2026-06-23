@@ -5,6 +5,7 @@ class School < ApplicationRecord
   LANGUAGES = %w[hi en].freeze
 
   has_many :users, dependent: :destroy
+  has_many :notices, dependent: :destroy
 
   validates :name, presence: true
   validates :subdomain, presence: true,

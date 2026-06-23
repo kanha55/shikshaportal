@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-Open `http://greenvalley.localhost:5173/login` (map `*.localhost` in `/etc/hosts` or use localhost for super admin).
+Open `http://greenvalley.localhost:5173/` for the public school page, or `/login` for staff sign-in.
 
 ## Auth flow
 
