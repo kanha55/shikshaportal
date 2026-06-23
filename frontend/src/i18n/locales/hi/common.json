@@ -1,0 +1,17 @@
+{
+  "appName": "शिक्षा पोर्टल",
+  "loading": "लोड हो रहा है…",
+  "login": "लॉगिन",
+  "staffLogin": "कर्मचारी लॉगिन",
+  "logOut": "लॉग आउट",
+  "about": "हमारे बारे में",
+  "contact": "संपर्क",
+  "phone": "फ़ोन",
+  "principal": "प्रधानाचार्य",
+  "board": "{{board}} बोर्ड",
+  "latestNotices": "नवीनतम सूचनाएँ",
+  "noNotices": "अभी कोई सूचना नहीं।",
+  "welcomeFallback": "हमारे विद्यालय में आपका स्वागत है।",
+  "schoolNotFound": "विद्यालय नहीं मिला",
+  "schoolNotFoundHint": "विद्यालय नहीं मिला। सबडोमेन URL जाँचें।"
+}

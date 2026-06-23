@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "./AuthContext";
 import type { UserRole } from "../types/user";
 
@@ -10,10 +11,11 @@ export function ProtectedRoute({
   roles?: UserRole[];
 }) {
   const { user, isLoading } = useAuth();
+  const { t } = useTranslation("common");
   const location = useLocation();
 
   if (isLoading) {
-    return <div className="page-center">Loading…</div>;
+    return <div className="page-center">{t("loading")}</div>;
   }
 
   if (!user) {

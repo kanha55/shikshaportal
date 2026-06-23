@@ -1,0 +1,17 @@
+{
+  "appName": "Shiksha Portal",
+  "loading": "Loading…",
+  "login": "Login",
+  "staffLogin": "Staff login",
+  "logOut": "Log out",
+  "about": "About",
+  "contact": "Contact",
+  "phone": "Phone",
+  "principal": "Principal",
+  "board": "{{board}} Board",
+  "latestNotices": "Latest Notices",
+  "noNotices": "No notices yet.",
+  "welcomeFallback": "Welcome to our school.",
+  "schoolNotFound": "School not found",
+  "schoolNotFoundHint": "School not found. Check the subdomain URL."
+}

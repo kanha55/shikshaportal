@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import { dashboardPathForRole } from "../lib/config";
 
 export function LoginPage() {
+  const { t } = useTranslation(["auth", "common"]);
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,7 +29,7 @@ export function LoginPage() {
       const redirect = (location.state as { from?: string } | null)?.from;
       navigate(redirect ?? path, { replace: true });
     } catch {
-      setError("Invalid email or password");
+      setError(t("auth:invalidCredentials"));
     } finally {
       setSubmitting(false);
     }
@@ -36,13 +38,13 @@ export function LoginPage() {
   return (
     <div className="page-center">
       <form className="card login-card" onSubmit={handleSubmit}>
-        <h1>Shiksha Portal</h1>
-        <p className="muted">Sign in to your school account</p>
+        <h1>{t("common:appName")}</h1>
+        <p className="muted">{t("auth:signInSubtitle")}</p>
 
         {error && <p className="error">{error}</p>}
 
         <label>
-          Email
+          {t("auth:email")}
           <input
             type="email"
             value={email}
@@ -53,7 +55,7 @@ export function LoginPage() {
         </label>
 
         <label>
-          Password
+          {t("auth:password")}
           <input
             type="password"
             value={password}
@@ -64,7 +66,7 @@ export function LoginPage() {
         </label>
 
         <button type="submit" disabled={submitting}>
-          {submitting ? "Signing in…" : "Sign in"}
+          {submitting ? t("auth:signingIn") : t("auth:signIn")}
         </button>
       </form>
     </div>
