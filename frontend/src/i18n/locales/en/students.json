@@ -22,5 +22,16 @@
   "studentList": "Students",
   "noStudents": "No students yet. Add one using the form or upload a CSV.",
   "rollNumber": "Roll no.",
-  "classSection": "Class / Section"
+  "classSection": "Class / Section",
+  "searchLabel": "Search",
+  "searchPlaceholder": "Name, roll no., phone, email…",
+  "filterAllClasses": "All classes",
+  "filterAllSections": "All sections",
+  "clearFilters": "Clear filters",
+  "noMatches": "No students match your filters.",
+  "showingCount": "Showing {{from}}–{{to}} of {{total}}",
+  "perPage": "Per page",
+  "prevPage": "Previous",
+  "nextPage": "Next",
+  "pageOf": "Page {{page}} of {{total}}"
 }

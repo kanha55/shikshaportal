@@ -61,6 +61,23 @@ schools_data.each do |attrs|
       end
     end
   end
+
+  next unless attrs[:subdomain] == "greenvalley"
+
+  demo_student = User.find_or_initialize_by(email: "rahul@greenvalley.test")
+  demo_student.assign_attributes(
+    name: "Rahul Kumar",
+    role: "student",
+    school: school,
+    roll_number: "101",
+    class_name: "10",
+    section: "A",
+    parent_phone: "9876543210",
+    language_preference: school.default_language,
+    password: "password123",
+    password_confirmation: "password123"
+  )
+  demo_student.save!
 end
 
 User.find_or_create_by!(email: "super@shikshaportal.test") do |user|

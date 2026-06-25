@@ -22,5 +22,16 @@
   "studentList": "विद्यार्थी",
   "noStudents": "अभी कोई विद्यार्थी नहीं। फॉर्म से जोड़ें या CSV अपलोड करें।",
   "rollNumber": "रोल नं.",
-  "classSection": "कक्षा / अनुभाग"
+  "classSection": "कक्षा / अनुभाग",
+  "searchLabel": "खोजें",
+  "searchPlaceholder": "नाम, रोल नं., फ़ोन, ईमेल…",
+  "filterAllClasses": "सभी कक्षाएँ",
+  "filterAllSections": "सभी अनुभाग",
+  "clearFilters": "फ़िल्टर हटाएँ",
+  "noMatches": "आपके फ़िल्टर से कोई विद्यार्थी नहीं मिला।",
+  "showingCount": "{{total}} में से {{from}}–{{to}} दिख रहे हैं",
+  "perPage": "प्रति पृष्ठ",
+  "prevPage": "पिछला",
+  "nextPage": "अगला",
+  "pageOf": "पृष्ठ {{page}} / {{total}}"
 }

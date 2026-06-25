@@ -82,8 +82,13 @@ export function NoticeManager() {
   }
 
   return (
-    <section className="dashboard-section card public-section">
-      <h2>{t("manageNotices")}</h2>
+    <section className="panel">
+      <div className="panel-header">
+        <div className="panel-icon" aria-hidden>
+          N
+        </div>
+        <h2>{t("manageNotices")}</h2>
+      </div>
 
       <form className="notice-form" onSubmit={handleSubmit}>
         <label>
@@ -107,6 +112,7 @@ export function NoticeManager() {
         </div>
       </form>
 
+      <div className="panel-subsection">
       <h3>{t("recentNotices")}</h3>
       {loading ? (
         <p className="muted">{t("common:loading")}</p>
@@ -131,6 +137,7 @@ export function NoticeManager() {
           ))}
         </ul>
       )}
+      </div>
     </section>
   );
 }

@@ -43,8 +43,15 @@ export function LoginPage() {
           <LanguageToggle />
         </div>
         <form className="card login-card" onSubmit={handleSubmit}>
-        <h1>{t("common:appName")}</h1>
-        <p className="muted">{t("auth:signInSubtitle")}</p>
+        <div className="login-brand">
+          <div className="login-brand-mark" aria-hidden>
+            श
+          </div>
+          <div className="login-brand-text">
+            <h1>{t("common:appName")}</h1>
+            <p className="muted">{t("auth:signInSubtitle")}</p>
+          </div>
+        </div>
 
         {error && <p className="error">{error}</p>}
 

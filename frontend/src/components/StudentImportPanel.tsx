@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { createStudent, fetchStudents, importStudents } from "../api/students";
 import type { ImportError, StudentRecord } from "../types/student";
+import { StudentListTable } from "./StudentListTable";
 
 const emptyForm = {
   name: "",
@@ -109,10 +110,16 @@ export function StudentImportPanel({
   }
 
   return (
-    <section className="dashboard-section card public-section">
-      <h2>{t("students:pageTitle")}</h2>
+    <section className="panel">
+      <div className="panel-header">
+        <div className="panel-icon" aria-hidden>
+          S
+        </div>
+        <h2>{t("students:pageTitle")}</h2>
+      </div>
 
-      <h3>{t("students:addStudentTitle")}</h3>
+      <div className="panel-subsection">
+        <h3>{t("students:addStudentTitle")}</h3>
       <form className="student-form" onSubmit={handleAddStudent}>
         <label>
           {t("students:name")}
@@ -167,7 +174,9 @@ export function StudentImportPanel({
           {adding ? t("students:addingStudent") : t("students:addStudent")}
         </button>
       </form>
+      </div>
 
+      <div className="panel-subsection">
       <h3>{t("students:importTitle")}</h3>
       <p className="muted">{t("students:importHint")}</p>
 
@@ -201,24 +210,19 @@ export function StudentImportPanel({
         </ul>
       )}
 
+      </div>
+
+      <div className="panel-subsection">
       <h3>{t("students:studentList")}</h3>
       {loading ? (
-        <p className="muted">{t("common:loading")}</p>
-      ) : students.length === 0 ? (
-        <p className="muted">{t("students:noStudents")}</p>
+        <div className="loading-state">
+          <div className="spinner" aria-hidden />
+          <span>{t("common:loading")}</span>
+        </div>
       ) : (
-        <ul className="student-list">
-          {students.map((student) => (
-            <li key={student.id} className="student-list-item">
-              <strong>{student.name}</strong>
-              <span>
-                {t("students:rollNumber")}: {student.roll_number} · {t("students:classSection")}:{" "}
-                {student.class_name}/{student.section}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <StudentListTable students={students} />
       )}
+      </div>
     </section>
   );
 }

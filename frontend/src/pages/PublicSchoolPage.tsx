@@ -29,17 +29,31 @@ export function PublicSchoolPage() {
     }
 
     load();
-  }, []);
+  }, [t]);
 
   if (loading) {
-    return <div className="page-center">{t("loading")}</div>;
+    return (
+      <div className="page-center">
+        <div className="loading-state">
+          <div className="spinner" aria-hidden />
+          <span>{t("loading")}</span>
+        </div>
+      </div>
+    );
   }
 
   if (error || !school) {
     return (
       <div className="page-center">
         <div className="card">
-          <h1>{t("appName")}</h1>
+          <div className="login-brand">
+            <div className="login-brand-mark" aria-hidden>
+              श
+            </div>
+            <div className="login-brand-text">
+              <h1>{t("appName")}</h1>
+            </div>
+          </div>
           <p className="error">{error ?? t("schoolNotFound")}</p>
           <Link to="/login" className="link-button">
             {t("staffLogin")}
@@ -56,10 +70,7 @@ export function PublicSchoolPage() {
           <div className="school-logo" aria-hidden>
             {school.name.charAt(0)}
           </div>
-          <div>
-            <h1>{school.name}</h1>
-            <p className="muted">{t("board", { board: school.board?.toUpperCase() ?? "" })}</p>
-          </div>
+          <span className="muted">{t("appName")}</span>
         </div>
         <div className="public-header-actions">
           <LanguageToggle />
@@ -69,31 +80,63 @@ export function PublicSchoolPage() {
         </div>
       </header>
 
+      <div className="public-hero">
+        <div className="public-hero-inner">
+          <div className="school-logo" aria-hidden>
+            {school.name.charAt(0)}
+          </div>
+          <div>
+            <h1>{school.name}</h1>
+            <p className="hero-meta">
+              {t("board", { board: school.board?.toUpperCase() ?? "" })}
+              {school.principal_name ? ` · ${t("principal")}: ${school.principal_name}` : ""}
+            </p>
+          </div>
+        </div>
+      </div>
+
       <main className="public-main">
-        <section className="card public-section">
-          <h2>{t("about")}</h2>
-          <p>{school.about_us ?? t("welcomeFallback")}</p>
-        </section>
+        <div className="public-grid">
+          <section className="panel">
+            <div className="panel-header">
+              <div className="panel-icon" aria-hidden>
+                i
+              </div>
+              <h2>{t("about")}</h2>
+            </div>
+            <p>{school.about_us ?? t("welcomeFallback")}</p>
+          </section>
 
-        <section className="card public-section">
-          <h2>{t("contact")}</h2>
-          <ul className="contact-list">
-            {school.address && <li>{school.address}</li>}
-            {school.phone && (
-              <li>
-                {t("phone")}: {school.phone}
-              </li>
-            )}
-            {school.principal_name && (
-              <li>
-                {t("principal")}: {school.principal_name}
-              </li>
-            )}
-          </ul>
-        </section>
+          <section className="panel">
+            <div className="panel-header">
+              <div className="panel-icon" aria-hidden>
+                C
+              </div>
+              <h2>{t("contact")}</h2>
+            </div>
+            <ul className="contact-list">
+              {school.address && <li>{school.address}</li>}
+              {school.phone && (
+                <li>
+                  {t("phone")}: {school.phone}
+                </li>
+              )}
+              {school.principal_name && (
+                <li>
+                  {t("principal")}: {school.principal_name}
+                </li>
+              )}
+            </ul>
+          </section>
+        </div>
 
-        <section className="card public-section">
-          <h2>{t("latestNotices")}</h2>
+        <section className="panel">
+          <div className="panel-header">
+            <div className="panel-icon" aria-hidden>
+              N
+            </div>
+            <h2>{t("latestNotices")}</h2>
+          </div>
           {notices.length === 0 ? (
             <p className="muted">{t("noNotices")}</p>
           ) : (
