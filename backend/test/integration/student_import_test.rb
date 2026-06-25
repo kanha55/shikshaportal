@@ -85,6 +85,56 @@ class StudentImportTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test "creates single student from form submission" do
+    host! "greenvalley.localhost"
+
+    assert_emails 1 do
+      post api_v1_admin_students_path,
+           params: {
+             student: {
+               name: "Form Student",
+               roll_number: "501",
+               class_name: "10",
+               section: "A",
+               parent_phone: "9876512345",
+               email: "formstudent@greenvalley.test"
+             }
+           },
+           headers: auth_headers,
+           as: :json
+    end
+
+    assert_response :created
+    body = JSON.parse(response.body)
+    assert_equal "Form Student", body.dig("student", "name")
+    assert User.students.exists?(roll_number: "501", school: @school)
+  end
+
+  test "rejects duplicate roll number on single create" do
+    host! "greenvalley.localhost"
+    attrs = {
+      name: "First Student",
+      roll_number: "888",
+      class_name: "10",
+      section: "A",
+      parent_phone: "9876512345"
+    }
+
+    post api_v1_admin_students_path,
+         params: { student: attrs },
+         headers: auth_headers,
+         as: :json
+    assert_response :created
+
+    post api_v1_admin_students_path,
+         params: { student: attrs.merge(name: "Second Student") },
+         headers: auth_headers,
+         as: :json
+
+    assert_response :unprocessable_entity
+    assert_includes JSON.parse(response.body)["errors"].join, "already exists"
+  end
+
   test "imports one hundred students" do
     host! "greenvalley.localhost"
     rows = (1..100).map do |i|

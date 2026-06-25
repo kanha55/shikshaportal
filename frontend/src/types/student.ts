@@ -20,3 +20,17 @@ export interface StudentImportResult {
   errors: ImportError[];
   created: StudentRecord[];
 }
+
+export interface StudentInput {
+  name: string;
+  roll_number: string;
+  class_name: string;
+  section: string;
+  parent_phone: string;
+  email?: string;
+}
+
+export interface StudentCreateResult {
+  student: StudentRecord;
+  message: string;
+}

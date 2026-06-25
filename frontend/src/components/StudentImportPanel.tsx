@@ -1,7 +1,17 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchStudents, importStudents } from "../api/students";
+import axios from "axios";
+import { createStudent, fetchStudents, importStudents } from "../api/students";
 import type { ImportError, StudentRecord } from "../types/student";
+
+const emptyForm = {
+  name: "",
+  roll_number: "",
+  class_name: "",
+  section: "",
+  parent_phone: "",
+  email: "",
+};
 
 export function StudentImportPanel({
   onStudentsChange,
@@ -10,28 +20,64 @@ export function StudentImportPanel({
 }) {
   const { t } = useTranslation(["students", "common"]);
   const [file, setFile] = useState<File | null>(null);
+  const [form, setForm] = useState(emptyForm);
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [errors, setErrors] = useState<ImportError[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [adding, setAdding] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchStudents()
-      .then((rows) => {
-        setStudents(rows);
-        onStudentsChange?.(rows.length);
-      })
-      .catch(() => setStudents([]))
-      .finally(() => setLoading(false));
+  const reloadStudents = useCallback(async () => {
+    const rows = await fetchStudents();
+    setStudents(rows);
+    onStudentsChange?.(rows.length);
   }, [onStudentsChange]);
 
-  async function handleSubmit(event: FormEvent) {
+  useEffect(() => {
+    reloadStudents()
+      .catch(() => setStudents([]))
+      .finally(() => setLoading(false));
+  }, [reloadStudents]);
+
+  async function handleAddStudent(event: FormEvent) {
+    event.preventDefault();
+    setAdding(true);
+    setFormError(null);
+    setMessage(null);
+
+    try {
+      await createStudent({
+        name: form.name,
+        roll_number: form.roll_number,
+        class_name: form.class_name,
+        section: form.section,
+        parent_phone: form.parent_phone,
+        email: form.email || undefined,
+      });
+      setForm(emptyForm);
+      setMessage(t("students:createSuccess"));
+      await reloadStudents();
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.errors) {
+        const apiErrors = err.response.data.errors as string[];
+        setFormError(apiErrors.join(", "));
+      } else {
+        setFormError(t("students:createFailed"));
+      }
+    } finally {
+      setAdding(false);
+    }
+  }
+
+  async function handleCsvSubmit(event: FormEvent) {
     event.preventDefault();
     if (!file) return;
 
     setSubmitting(true);
     setMessage(null);
+    setFormError(null);
     setErrors([]);
 
     try {
@@ -49,9 +95,7 @@ export function StudentImportPanel({
         );
       }
 
-      const rows = await fetchStudents();
-      setStudents(rows);
-      onStudentsChange?.(rows.length);
+      await reloadStudents();
       setFile(null);
     } catch {
       setMessage(t("students:importFailed"));
@@ -60,12 +104,74 @@ export function StudentImportPanel({
     }
   }
 
+  function updateForm(field: keyof typeof emptyForm, value: string) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
   return (
     <section className="dashboard-section card public-section">
-      <h2>{t("students:importTitle")}</h2>
+      <h2>{t("students:pageTitle")}</h2>
+
+      <h3>{t("students:addStudentTitle")}</h3>
+      <form className="student-form" onSubmit={handleAddStudent}>
+        <label>
+          {t("students:name")}
+          <input
+            value={form.name}
+            onChange={(e) => updateForm("name", e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          {t("students:rollNumber")}
+          <input
+            value={form.roll_number}
+            onChange={(e) => updateForm("roll_number", e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          {t("students:className")}
+          <input
+            value={form.class_name}
+            onChange={(e) => updateForm("class_name", e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          {t("students:section")}
+          <input
+            value={form.section}
+            onChange={(e) => updateForm("section", e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          {t("students:parentPhone")}
+          <input
+            value={form.parent_phone}
+            onChange={(e) => updateForm("parent_phone", e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          {t("students:email")}
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => updateForm("email", e.target.value)}
+          />
+        </label>
+        {formError && <p className="error">{formError}</p>}
+        <button type="submit" disabled={adding}>
+          {adding ? t("students:addingStudent") : t("students:addStudent")}
+        </button>
+      </form>
+
+      <h3>{t("students:importTitle")}</h3>
       <p className="muted">{t("students:importHint")}</p>
 
-      <form className="import-form" onSubmit={handleSubmit}>
+      <form className="import-form" onSubmit={handleCsvSubmit}>
         <label className="file-input-label">
           {t("students:chooseFile")}
           <input
