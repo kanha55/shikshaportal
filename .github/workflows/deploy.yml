@@ -26,6 +26,18 @@ jobs:
           script_stop: true
           script: bash /var/www/shikshaportal/deploy/deploy.sh
 
+      - name: Production smoke test (T18)
+        env:
+          SMOKE_BASE_URL: https://greenvalley.shikshaportal.in
+          SMOKE_ADMIN_PASSWORD: ${{ secrets.SMOKE_ADMIN_PASSWORD }}
+          SMOKE_STUDENT_PASSWORD: ${{ secrets.SMOKE_STUDENT_PASSWORD }}
+        run: |
+          if [[ -z "${SMOKE_ADMIN_PASSWORD:-}" ]]; then
+            echo "Skipping smoke test — set SMOKE_ADMIN_PASSWORD secret to enable"
+            exit 0
+          fi
+          bash deploy/smoke-test.sh
+
       - name: Notify on success
         if: success()
         env:
