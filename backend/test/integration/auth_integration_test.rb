@@ -47,6 +47,21 @@ class AuthIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  def test_student_login_includes_profile_fields
+    host! "greenvalley.localhost"
+
+    post api_v1_user_session_path,
+         params: { user: { email: "rahul@greenvalley.test", password: "password123" } },
+         as: :json
+
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal "student", body.dig("user", "role")
+    assert_equal "10", body.dig("user", "class_name")
+    assert_equal "A", body.dig("user", "section")
+    assert_equal "101", body.dig("user", "roll_number")
+  end
+
   def test_update_language_preference
     host! "greenvalley.localhost"
 

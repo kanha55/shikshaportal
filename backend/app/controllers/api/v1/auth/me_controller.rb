@@ -23,15 +23,7 @@ module Api
         private
 
         def user_json(user)
-          {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            language_preference: user.language_preference,
-            school_id: user.school_id,
-            school_subdomain: user.school&.subdomain
-          }
+          UserSerializer.as_json(user)
         end
       end
     end
