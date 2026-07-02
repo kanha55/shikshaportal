@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# T17 — Validate backend environment before deploy or local prod boot
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+RAILS_ENV="${RAILS_ENV:-production}"
+export RAILS_ENV
+
+if [[ ! -f .env && ( "$RAILS_ENV" == "production" || "$RAILS_ENV" == "staging" ) ]]; then
+  echo "Error: backend/.env not found. Copy .env.example and fill in secrets." >&2
+  exit 1
+fi
+
+bundle exec rails env:check

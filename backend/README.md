@@ -16,19 +16,34 @@ rails server -p 3000
 - `GET /up` — Rails health check
 - `GET /api/v1/health` — API JSON health response
 
-## Environment
+## Environment (T17)
 
-Set in `backend/.env` (production) or shell:
+Copy the template and edit locally — **never commit `.env`**:
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | PostgreSQL connection |
-| `APP_HOST` | Base domain (default `shikshaportal.in`) |
-| `SUPER_ADMIN_API_KEY` | Protects `POST /api/v1/admin/schools` |
-| `FRONTEND_ORIGIN` | CORS origin for React app |
-| `CURSOR_API_KEY` | Cursor API key for AI Parent Communicator (T15) |
-| `CURSOR_AI_MODEL` | Optional Cursor model id (default `composer-2.5`) |
-| `ANTHROPIC_API_KEY` | Fallback AI provider if Cursor key is not set |
+```bash
+cp .env.example .env
+bin/check-env   # validates in production/staging only
+```
+
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `DATABASE_URL` | prod/staging | PostgreSQL connection |
+| `SECRET_KEY_BASE` | prod/staging | Rails session/crypto |
+| `JWT_SECRET_KEY` | prod/staging | JWT signing (use `rails secret`) |
+| `SUPER_ADMIN_API_KEY` | prod/staging | Protects `POST /api/v1/admin/schools` |
+| `APP_HOST` | — | Base domain (default `shikshaportal.in`) |
+| `FRONTEND_ORIGIN` | — | CORS origin for React app |
+| `MAILER_FROM` | — | Transactional email from address |
+| `CURSOR_API_KEY` | — | Cursor API for AI Parent Communicator (T15) |
+| `CURSOR_AI_MODEL` | — | Optional Cursor model id (default `composer-2.5`) |
+| `ANTHROPIC_API_KEY` | — | Fallback AI provider if Cursor key is not set |
+| `R2_ACCESS_KEY_ID` | — | Cloudflare R2 (set all four `R2_*` together) |
+| `R2_SECRET_ACCESS_KEY` | — | R2 secret key |
+| `R2_BUCKET` | — | R2 bucket name |
+| `R2_ENDPOINT` | — | R2 S3 endpoint URL |
+
+Staging uses a separate template: `cp .env.staging.example .env` with `RAILS_ENV=staging`.
+See `deploy/README.md` for production server setup.
 
 ## Super admin — register a school (T04)
 
