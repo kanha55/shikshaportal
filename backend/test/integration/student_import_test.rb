@@ -11,8 +11,8 @@ class StudentImportTest < ActionDispatch::IntegrationTest
     host! "greenvalley.localhost"
     csv = <<~CSV
       name,roll_number,class_name,section,parent_phone,email
-      Rahul Kumar,101,10,A,9876543210,rahul@greenvalley.test
-      Priya Singh,102,10,A,9876543211,
+      Import Student One,1101,10,A,9876543210,import-one@greenvalley.test
+      Import Student Two,1102,10,A,9876543211,
     CSV
 
     assert_emails 2 do
@@ -24,7 +24,7 @@ class StudentImportTest < ActionDispatch::IntegrationTest
     assert_equal 2, body["created_count"]
     assert_equal 2, body["emails_sent"]
     assert_empty body["errors"]
-    assert User.students.exists?(roll_number: "101", school: @school)
+    assert User.students.exists?(roll_number: "1101", school: @school)
   end
 
   test "flags duplicate roll numbers in csv and database" do
