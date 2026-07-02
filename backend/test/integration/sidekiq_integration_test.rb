@@ -10,7 +10,11 @@ class SidekiqIntegrationTest < ActionDispatch::IntegrationTest
     body = JSON.parse(response.body)
     assert_equal "ok", body["status"]
     assert_equal "test", body.dig("jobs", "adapter")
-    assert_equal "skipped", body.dig("redis", "status")
+    if ENV["REDIS_URL"].present?
+      assert_equal "ok", body.dig("redis", "status")
+    else
+      assert_equal "skipped", body.dig("redis", "status")
+    end
   end
 
   test "student bulk import job runs via active job" do
