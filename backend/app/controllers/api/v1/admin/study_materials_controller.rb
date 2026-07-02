@@ -37,7 +37,7 @@ module Api
         end
 
         def serialize(material)
-          StudyMaterialSerializer.serialize(material, request: request)
+          ::StudyMaterialSerializer.serialize(material, request: request)
         end
       end
     end

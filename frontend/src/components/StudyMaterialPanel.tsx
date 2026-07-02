@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 import {
   deleteStudyMaterial,
   fetchAdminStudyMaterials,
@@ -52,8 +53,12 @@ export function StudyMaterialPanel() {
       setFile(null);
       setMessage(t("materials:uploadSuccess"));
       await reload();
-    } catch {
-      setError(t("materials:uploadFailed"));
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.data?.errors) {
+        setError((err.response.data.errors as string[]).join(", "));
+      } else {
+        setError(t("materials:uploadFailed"));
+      }
     } finally {
       setSubmitting(false);
     }

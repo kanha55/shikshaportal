@@ -20,8 +20,7 @@ export async function uploadStudyMaterial(input: StudyMaterialInput): Promise<St
 
   const response = await apiClient.post<{ study_material: StudyMaterial }>(
     "/admin/study_materials",
-    formData,
-    { headers: { "Content-Type": "multipart/form-data" } }
+    formData
   );
   return response.data.study_material;
 }
