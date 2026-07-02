@@ -4,7 +4,7 @@ import { useAuth } from "../auth/AuthContext";
 import { fetchAttendanceReport } from "../api/attendance";
 import { AiNoticeComposer } from "../components/AiNoticeComposer";
 import { AttendanceMarkingPanel } from "../components/AttendanceMarkingPanel";
-import { DashboardNav, StatCard } from "../components/DashboardNav";
+import { DashboardNav, QuickActions, StatCard } from "../components/DashboardNav";
 import { FeeRecordingPanel } from "../components/FeeRecordingPanel";
 import { LanguageToggle } from "../components/LanguageToggle";
 import { NoticeManager } from "../components/NoticeManager";
@@ -20,6 +20,14 @@ const STUDENT_SECTIONS = [
   "student-materials",
   "student-attendance",
   "student-fees",
+] as const;
+
+const ADMIN_SECTIONS = [
+  "admin-students",
+  "admin-attendance",
+  "admin-notices",
+  "admin-fees",
+  "admin-materials",
 ] as const;
 
 function DashboardShell({
@@ -65,10 +73,13 @@ export function SuperAdminDashboard() {
 
 export function AdminDashboard() {
   const { t } = useTranslation(["dashboard", "attendance", "notices", "fees"]);
+  const { user } = useAuth();
   const [studentCount, setStudentCount] = useState<string>(t("dashboard:statsPlaceholder"));
   const [noticeRefreshKey, setNoticeRefreshKey] = useState(0);
   const [todayAttendance, setTodayAttendance] = useState<string>(t("dashboard:statsPlaceholder"));
   const [unpaidCount, setUnpaidCount] = useState<string>(t("dashboard:statsPlaceholder"));
+  const [noticeCount, setNoticeCount] = useState<string>(t("dashboard:statsPlaceholder"));
+  const activeSection = useActiveSection(ADMIN_SECTIONS);
 
   useEffect(() => {
     void fetchAttendanceReport()
@@ -77,19 +88,46 @@ export function AdminDashboard() {
   }, [t]);
 
   return (
-    <DashboardShell titleKey="schoolAdmin" nav={<DashboardNav variant="admin" />}>
+    <DashboardShell
+      titleKey="schoolAdmin"
+      nav={<DashboardNav variant="admin" activeSection={activeSection} />}
+    >
+      <p className="dashboard-greeting">
+        {t("dashboard:welcomeAdmin", { name: user?.name ?? "" })}
+      </p>
+      {user?.school_subdomain ? (
+        <p className="student-profile-banner">
+          {t("dashboard:schoolBanner", { school: user.school_subdomain })}
+        </p>
+      ) : null}
       <div className="stat-grid">
         <StatCard label={t("dashboard:totalStudents")} value={studentCount} />
         <StatCard label={t("attendance:todayAttendance")} value={todayAttendance} />
         <StatCard label={t("fees:unpaidCount")} value={unpaidCount} />
+        <StatCard label={t("dashboard:activeNotices")} value={noticeCount} />
       </div>
 
-      <AiNoticeComposer onPosted={() => setNoticeRefreshKey((key) => key + 1)} />
-      <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
-      <AttendanceMarkingPanel />
-      <FeeRecordingPanel onSummaryChange={(count) => setUnpaidCount(String(count))} />
-      <NoticeManager refreshKey={noticeRefreshKey} />
-      <StudyMaterialPanel />
+      <QuickActions />
+
+      <div id="admin-students" className="dashboard-section">
+        <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
+      </div>
+      <div id="admin-attendance" className="dashboard-section">
+        <AttendanceMarkingPanel />
+      </div>
+      <div id="admin-notices" className="dashboard-section">
+        <AiNoticeComposer onPosted={() => setNoticeRefreshKey((key) => key + 1)} />
+        <NoticeManager
+          refreshKey={noticeRefreshKey}
+          onNoticesChange={(count) => setNoticeCount(String(count))}
+        />
+      </div>
+      <div id="admin-fees" className="dashboard-section">
+        <FeeRecordingPanel onSummaryChange={(count) => setUnpaidCount(String(count))} />
+      </div>
+      <div id="admin-materials" className="dashboard-section">
+        <StudyMaterialPanel />
+      </div>
     </DashboardShell>
   );
 }

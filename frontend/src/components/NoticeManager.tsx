@@ -8,7 +8,13 @@ import {
 } from "../api/notices";
 import type { Notice } from "../types/notice";
 
-export function NoticeManager({ refreshKey = 0 }: { refreshKey?: number }) {
+export function NoticeManager({
+  refreshKey = 0,
+  onNoticesChange,
+}: {
+  refreshKey?: number;
+  onNoticesChange?: (count: number) => void;
+}) {
   const { t } = useTranslation(["notices", "common"]);
   const [notices, setNotices] = useState<Notice[]>([]);
   const [title, setTitle] = useState("");
@@ -21,9 +27,12 @@ export function NoticeManager({ refreshKey = 0 }: { refreshKey?: number }) {
   async function loadNotices() {
     setLoading(true);
     try {
-      setNotices(await fetchAdminNotices());
+      const rows = await fetchAdminNotices();
+      setNotices(rows);
+      onNoticesChange?.(rows.length);
     } catch {
       setNotices([]);
+      onNoticesChange?.(0);
     } finally {
       setLoading(false);
     }

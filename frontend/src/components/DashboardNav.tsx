@@ -7,12 +7,19 @@ type NavItem = {
 };
 
 const adminNavItems: NavItem[] = [
-  { key: "students", labelKey: "nav:students" },
-  { key: "attendance", labelKey: "nav:attendance" },
-  { key: "notices", labelKey: "nav:notices" },
-  { key: "fees", labelKey: "nav:fees" },
-  { key: "reports", labelKey: "nav:reports" },
+  { key: "students", labelKey: "nav:students", sectionId: "admin-students" },
+  { key: "attendance", labelKey: "nav:attendance", sectionId: "admin-attendance" },
+  { key: "notices", labelKey: "nav:notices", sectionId: "admin-notices" },
+  { key: "fees", labelKey: "nav:fees", sectionId: "admin-fees" },
+  { key: "materials", labelKey: "nav:materials", sectionId: "admin-materials" },
 ];
+
+const adminQuickActions = [
+  { labelKey: "dashboard:quickActionAddStudent", sectionId: "admin-students" },
+  { labelKey: "dashboard:quickActionMarkAttendance", sectionId: "admin-attendance" },
+  { labelKey: "dashboard:quickActionPostNotice", sectionId: "admin-notices" },
+  { labelKey: "dashboard:quickActionRecordFee", sectionId: "admin-fees" },
+] as const;
 
 const studentNavItems: NavItem[] = [
   { key: "notices", labelKey: "nav:notices", sectionId: "student-notices" },
@@ -72,6 +79,28 @@ export function StatCard({ label, value }: { label: string; value: string }) {
     <div className="stat-card">
       <p className="stat-label">{label}</p>
       <p className="stat-value">{value}</p>
+    </div>
+  );
+}
+
+export function QuickActions() {
+  const { t } = useTranslation("dashboard");
+
+  return (
+    <div className="quick-actions">
+      <h2 className="quick-actions-title">{t("quickActions")}</h2>
+      <div className="quick-actions-grid">
+        {adminQuickActions.map((action) => (
+          <button
+            key={action.sectionId}
+            type="button"
+            className="quick-action-btn"
+            onClick={() => scrollToSection(action.sectionId)}
+          >
+            {t(action.labelKey.replace("dashboard:", ""))}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
