@@ -13,7 +13,7 @@ class School < ApplicationRecord
   validates :name, presence: true
   validates :subdomain, presence: true,
                         uniqueness: { case_sensitive: false },
-                        format: { with: /\A[a-z0-9-]+\z/, message: "only lowercase letters, numbers, and hyphens" }
+                        format: { with: /\A[a-z0-9-]+\z/, message: :invalid }
   validates :principal_email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validates :board, inclusion: { in: BOARDS }, allow_nil: true
   validates :default_language, inclusion: { in: LANGUAGES }

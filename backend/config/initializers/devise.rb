@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Devise.setup do |config|
+  config.parent_controller = "ApplicationController"
   config.mailer_sender = ENV.fetch("MAILER_FROM", "noreply@shikshaportal.in")
   config.mailer = "DeviseMailer"
 

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -114,7 +114,7 @@ describe("AdminDashboard", () => {
     await i18n.changeLanguage("en");
   });
 
-  it("renders stats, greeting, and all five admin sections with live data", async () => {
+  it("renders stats, greeting, and default students panel", async () => {
     renderAdminDashboard();
 
     expect(await screen.findByText(/Welcome back, Priya Sharma/)).toBeInTheDocument();
@@ -122,30 +122,39 @@ describe("AdminDashboard", () => {
     expect(await screen.findAllByText("1")).toHaveLength(2);
     expect(await screen.findAllByText(/92%/)).toHaveLength(1);
     expect(await screen.findByText("3")).toBeInTheDocument();
-    expect(await screen.findByText("PTM Notice")).toBeInTheDocument();
-    expect(await screen.findByText("Science Notes")).toBeInTheDocument();
+    expect(await screen.findByText("Rahul Kumar")).toBeInTheDocument();
+    expect(screen.queryByText("PTM Notice")).not.toBeInTheDocument();
+    expect(screen.queryByText("Science Notes")).not.toBeInTheDocument();
   });
 
-  it("shows quick action shortcuts", () => {
+  it("shows quick action shortcuts that switch tabs", async () => {
     renderAdminDashboard();
 
     const quickActions = document.querySelector(".quick-actions");
     expect(quickActions).toBeTruthy();
     expect(quickActions?.querySelector('[class*="quick-action-btn"]')).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Quick actions" })).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "Add student" }).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole("button", { name: "Mark attendance" }).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole("button", { name: "Post notice" }).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole("button", { name: "Record fee" }).length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole("button", { name: "Post notice" }));
+    expect(await screen.findByText("PTM Notice")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Record fee" }));
+    expect(await screen.findByText("3")).toBeInTheDocument();
   });
 
-  it("exposes scroll targets for nav sections", () => {
+  it("switches panels via nav tabs and shows only active section", async () => {
     renderAdminDashboard();
 
-    expect(document.getElementById("admin-students")).toBeTruthy();
-    expect(document.getElementById("admin-attendance")).toBeTruthy();
-    expect(document.getElementById("admin-notices")).toBeTruthy();
-    expect(document.getElementById("admin-fees")).toBeTruthy();
-    expect(document.getElementById("admin-materials")).toBeTruthy();
+    expect(screen.getByRole("tab", { name: "Students" })).toHaveAttribute("aria-selected", "true");
+    expect(document.getElementById("panel-admin-students")).toBeTruthy();
+    expect(document.getElementById("panel-admin-notices")).toBeNull();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Notices" }));
+    expect(screen.getByRole("tab", { name: "Notices" })).toHaveAttribute("aria-selected", "true");
+    expect(await screen.findByText("PTM Notice")).toBeInTheDocument();
+    expect(document.getElementById("panel-admin-students")).toBeNull();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Class materials" }));
+    expect(await screen.findByText("Science Notes")).toBeInTheDocument();
   });
 });

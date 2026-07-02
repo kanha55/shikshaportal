@@ -39,7 +39,7 @@ class StudentBulkImportService
     headers = table.headers.compact.map { |h| h.to_s.strip.downcase.to_sym }
 
     missing = REQUIRED_HEADERS - headers
-    raise ArgumentError, "Missing CSV columns: #{missing.join(', ')}" if missing.any?
+    raise ArgumentError, I18n.t("services.import.missing_columns", columns: missing.join(", ")) if missing.any?
 
     table
   end
@@ -49,7 +49,7 @@ class StudentBulkImportService
     roll_number = data[:roll_number]
 
     if seen_roll_numbers.include?(roll_number)
-      result.errors << error_entry(line_number, roll_number, "Duplicate roll number in CSV")
+      result.errors << error_entry(line_number, roll_number, I18n.t("services.import.duplicate_roll"))
       return
     end
 

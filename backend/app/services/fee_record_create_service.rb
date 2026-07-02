@@ -15,7 +15,7 @@ class FeeRecordCreateService
 
   def call
     student = User.students.find_by(id: @attributes[:student_id])
-    return failure(["Student not found"]) unless student
+    return failure([I18n.t("services.fees.student_not_found")]) unless student
 
     status = @attributes[:status].presence || "paid"
     paid_on = parse_date(@attributes[:paid_on]) || (status == "paid" ? Time.zone.today : nil)
@@ -40,7 +40,7 @@ class FeeRecordCreateService
       failure(record.errors.full_messages)
     end
   rescue ArgumentError
-    failure(["Invalid amount"])
+    failure([I18n.t("services.fees.invalid_amount")])
   end
 
   private

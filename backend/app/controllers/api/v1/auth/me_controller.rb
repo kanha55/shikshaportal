@@ -13,7 +13,7 @@ module Api
         def update
           lang = params.dig(:user, :language_preference)
           unless lang.present? && School::LANGUAGES.include?(lang)
-            return render json: { error: "Invalid language" }, status: :unprocessable_entity
+            return render json: { error: I18n.t("errors.invalid_language") }, status: :unprocessable_entity
           end
 
           current_user.update!(language_preference: lang)

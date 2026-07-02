@@ -4,7 +4,14 @@ require "net/http"
 require "json"
 
 class AiNoticeGeneratorService
-  class GenerationError < StandardError; end
+  class GenerationError < StandardError
+    attr_reader :code
+
+    def initialize(code, **options)
+      @code = code
+      super(I18n.t("services.ai.#{code}", **options))
+    end
+  end
 
   CATEGORIES = %w[holiday fee exam event].freeze
   ANTHROPIC_MODEL = "claude-3-haiku-20240307"
@@ -46,9 +53,9 @@ class AiNoticeGeneratorService
   attr_reader :school, :rough_input, :category, :bilingual, :language, :cursor_client
 
   def validate!
-    raise GenerationError, "Rough input is required" if rough_input.blank?
-    raise GenerationError, "Invalid category" unless CATEGORIES.include?(category)
-    raise GenerationError, "Daily AI limit reached" if self.class.daily_cap_reached?(school)
+    raise GenerationError, :rough_input_required if rough_input.blank?
+    raise GenerationError, :invalid_category unless CATEGORIES.include?(category)
+    raise GenerationError, :daily_limit if self.class.daily_cap_reached?(school)
   end
 
   def cursor_api?
@@ -64,7 +71,7 @@ class AiNoticeGeneratorService
     text = client.complete(cursor_prompt)
     parse_json_payload(text)
   rescue CursorAgentClient::ApiError
-    raise GenerationError, "AI service unavailable"
+    raise GenerationError, :service_unavailable
   end
 
   def call_anthropic_api
@@ -86,16 +93,16 @@ class AiNoticeGeneratorService
     end
 
     unless response.is_a?(Net::HTTPSuccess)
-      raise GenerationError, "AI service unavailable"
+      raise GenerationError, :service_unavailable
     end
 
     body = JSON.parse(response.body)
     text = body.dig("content", 0, "text")
-    raise GenerationError, "Empty AI response" if text.blank?
+    raise GenerationError, :empty_response if text.blank?
 
     parse_json_payload(text)
   rescue JSON::ParserError, Net::OpenTimeout, Net::ReadTimeout, SocketError
-    raise GenerationError, "AI service unavailable"
+    raise GenerationError, :service_unavailable
   end
 
   def cursor_prompt
@@ -165,7 +172,7 @@ class AiNoticeGeneratorService
     body = payload["notice_body"].to_s.strip
     whatsapp = payload["whatsapp_message"].to_s.strip
 
-    raise GenerationError, "Incomplete AI response" if title.blank? || body.blank? || whatsapp.blank?
+    raise GenerationError, :incomplete_response if title.blank? || body.blank? || whatsapp.blank?
 
     {
       notice_title: title,

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 type NavItem = {
   key: string;
   labelKey: string;
-  sectionId?: string;
+  sectionId: string;
 };
 
 const adminNavItems: NavItem[] = [
@@ -28,44 +28,37 @@ const studentNavItems: NavItem[] = [
   { key: "fees", labelKey: "nav:myFees", sectionId: "student-fees" },
 ];
 
-function scrollToSection(sectionId: string) {
-  document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 export function DashboardNav({
   variant,
   activeSection,
+  onSectionChange,
 }: {
   variant: "admin" | "student";
-  activeSection?: string;
+  activeSection: string;
+  onSectionChange: (sectionId: string) => void;
 }) {
   const { t } = useTranslation(["nav", "dashboard"]);
   const items = variant === "admin" ? adminNavItems : studentNavItems;
 
   return (
     <nav className="dashboard-nav" aria-label={t("dashboard:menu")}>
-      <ul className="dashboard-nav-list">
+      <ul className="dashboard-nav-list" role="tablist">
         {items.map((item) => {
-          const isActive = item.sectionId != null && item.sectionId === activeSection;
-
-          if (item.sectionId) {
-            return (
-              <li key={item.key}>
-                <button
-                  type="button"
-                  className={`dashboard-nav-item${isActive ? " is-active" : ""}`}
-                  onClick={() => scrollToSection(item.sectionId!)}
-                  aria-current={isActive ? "true" : undefined}
-                >
-                  {t(item.labelKey)}
-                </button>
-              </li>
-            );
-          }
+          const isActive = item.sectionId === activeSection;
 
           return (
-            <li key={item.key}>
-              <span className="dashboard-nav-item">{t(item.labelKey)}</span>
+            <li key={item.key} role="presentation">
+              <button
+                type="button"
+                role="tab"
+                id={`tab-${item.sectionId}`}
+                aria-selected={isActive}
+                aria-controls={`panel-${item.sectionId}`}
+                className={`dashboard-nav-item${isActive ? " is-active" : ""}`}
+                onClick={() => onSectionChange(item.sectionId)}
+              >
+                {t(item.labelKey)}
+              </button>
             </li>
           );
         })}
@@ -83,7 +76,7 @@ export function StatCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function QuickActions() {
+export function QuickActions({ onSectionChange }: { onSectionChange: (sectionId: string) => void }) {
   const { t } = useTranslation("dashboard");
 
   return (
@@ -95,7 +88,7 @@ export function QuickActions() {
             key={action.sectionId}
             type="button"
             className="quick-action-btn"
-            onClick={() => scrollToSection(action.sectionId)}
+            onClick={() => onSectionChange(action.sectionId)}
           >
             {t(action.labelKey.replace("dashboard:", ""))}
           </button>

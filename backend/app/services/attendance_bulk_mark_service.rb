@@ -17,11 +17,11 @@ class AttendanceBulkMarkService
   end
 
   def call
-    return failure(["Future dates cannot be marked"]) if @date > Time.zone.today
-    return failure(["Class and section are required"]) if @class_name.blank? || @section.blank?
+    return failure([I18n.t("services.attendance.future_date")]) if @date > Time.zone.today
+    return failure([I18n.t("services.attendance.class_section_required")]) if @class_name.blank? || @section.blank?
 
     students = User.students.where(class_name: @class_name, section: @section).index_by(&:id)
-    return failure(["No students found for this class"]) if students.empty?
+    return failure([I18n.t("services.attendance.no_students")]) if students.empty?
 
     errors = []
 
@@ -32,7 +32,7 @@ class AttendanceBulkMarkService
         student = students[student_id]
 
         unless student && AttendanceRecord::STATUSES.include?(status)
-          errors << "Invalid attendance entry for student #{student_id}"
+          errors << I18n.t("services.attendance.invalid_entry", student_id: student_id)
           next
         end
 
@@ -59,7 +59,7 @@ class AttendanceBulkMarkService
   rescue ActiveRecord::RecordInvalid => e
     failure(e.record.errors.full_messages)
   rescue Date::Error
-    failure(["Invalid date"])
+    failure([I18n.t("services.attendance.invalid_date")])
   end
 
   private

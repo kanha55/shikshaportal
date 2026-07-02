@@ -20,7 +20,7 @@ module Api
           if result.success
             render json: {
               student: result.student,
-              message: "Student created. Login email sent to #{result.student[:email]}."
+              message: I18n.t("messages.student_created", email: result.student[:email])
             }, status: :created
           else
             render json: { errors: result.errors }, status: :unprocessable_entity
@@ -29,7 +29,7 @@ module Api
 
         def import
           file = params[:file]
-          return render json: { error: "CSV file required" }, status: :unprocessable_entity if file.blank?
+          return render json: { error: I18n.t("errors.csv_required") }, status: :unprocessable_entity if file.blank?
 
           student_import = StudentImport.create!(status: "queued")
           student_import.csv_file.attach(

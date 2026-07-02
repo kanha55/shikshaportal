@@ -1,13 +1,13 @@
-Welcome to Shiksha Portal, <%= @admin.name %>!
+<%= t("mailers.school_registration.greeting", name: @admin.name) %>
 
-Your school "<%= @school.name %>" has been registered.
+<%= t("mailers.school_registration.intro", school: @school.name) %>
 
-Subdomain: <%= @school.subdomain %>.<%= ENV.fetch("APP_HOST", "shikshaportal.in") %>
-Login URL: <%= @login_url %>
+<%= t("mailers.school_registration.subdomain", subdomain: "#{@school.subdomain}.#{ENV.fetch('APP_HOST', 'shikshaportal.in')}") %>
+<%= t("mailers.school_registration.login_url", url: @login_url) %>
 
-Email: <%= @admin.email %>
-Temporary password: <%= @temporary_password %>
+<%= t("mailers.school_registration.email", email: @admin.email) %>
+<%= t("mailers.school_registration.password", password: @temporary_password) %>
 
-Please change your password after first login.
+<%= t("mailers.school_registration.change_password") %>
 
-— Shiksha Portal Team
+<%= t("mailers.school_registration.signature") %>

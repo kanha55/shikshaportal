@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
-import { fetchAttendanceReport } from "../api/attendance";
+import { fetchAttendanceReport, fetchStudentAttendance } from "../api/attendance";
+import { fetchAdminFees, fetchStudentFees } from "../api/fees";
+import { fetchAdminNotices } from "../api/notices";
 import { AiNoticeComposer } from "../components/AiNoticeComposer";
 import { AttendanceMarkingPanel } from "../components/AttendanceMarkingPanel";
 import { DashboardNav, QuickActions, StatCard } from "../components/DashboardNav";
@@ -29,6 +31,9 @@ const ADMIN_SECTIONS = [
   "admin-fees",
   "admin-materials",
 ] as const;
+
+type StudentSection = (typeof STUDENT_SECTIONS)[number];
+type AdminSection = (typeof ADMIN_SECTIONS)[number];
 
 function DashboardShell({
   titleKey,
@@ -71,26 +76,61 @@ export function SuperAdminDashboard() {
   return <DashboardShell titleKey="superAdmin" />;
 }
 
+function DashboardPanel({
+  sectionId,
+  activeSection,
+  children,
+}: {
+  sectionId: string;
+  activeSection: string;
+  children: React.ReactNode;
+}) {
+  if (sectionId !== activeSection) return null;
+
+  return (
+    <div
+      id={`panel-${sectionId}`}
+      role="tabpanel"
+      aria-labelledby={`tab-${sectionId}`}
+      className="dashboard-section"
+    >
+      {children}
+    </div>
+  );
+}
+
 export function AdminDashboard() {
   const { t } = useTranslation(["dashboard", "attendance", "notices", "fees"]);
   const { user } = useAuth();
+  const [activeSection, setActiveSection] = useState<AdminSection>(ADMIN_SECTIONS[0]);
   const [studentCount, setStudentCount] = useState<string>(t("dashboard:statsPlaceholder"));
   const [noticeRefreshKey, setNoticeRefreshKey] = useState(0);
   const [todayAttendance, setTodayAttendance] = useState<string>(t("dashboard:statsPlaceholder"));
   const [unpaidCount, setUnpaidCount] = useState<string>(t("dashboard:statsPlaceholder"));
   const [noticeCount, setNoticeCount] = useState<string>(t("dashboard:statsPlaceholder"));
-  const activeSection = useActiveSection(ADMIN_SECTIONS);
 
   useEffect(() => {
     void fetchAttendanceReport()
       .then((report) => setTodayAttendance(`${report.attendance_percent}%`))
       .catch(() => setTodayAttendance(t("dashboard:statsPlaceholder")));
+    void fetchAdminNotices()
+      .then((rows) => setNoticeCount(String(rows.length)))
+      .catch(() => setNoticeCount(t("dashboard:statsPlaceholder")));
+    void fetchAdminFees()
+      .then((data) => setUnpaidCount(String(data.summary.pending_count)))
+      .catch(() => setUnpaidCount(t("dashboard:statsPlaceholder")));
   }, [t]);
 
   return (
     <DashboardShell
       titleKey="schoolAdmin"
-      nav={<DashboardNav variant="admin" activeSection={activeSection} />}
+      nav={
+        <DashboardNav
+          variant="admin"
+          activeSection={activeSection}
+          onSectionChange={(id) => setActiveSection(id as AdminSection)}
+        />
+      }
     >
       <p className="dashboard-greeting">
         {t("dashboard:welcomeAdmin", { name: user?.name ?? "" })}
@@ -107,27 +147,27 @@ export function AdminDashboard() {
         <StatCard label={t("dashboard:activeNotices")} value={noticeCount} />
       </div>
 
-      <QuickActions />
+      <QuickActions onSectionChange={(id) => setActiveSection(id as AdminSection)} />
 
-      <div id="admin-students" className="dashboard-section">
+      <DashboardPanel sectionId="admin-students" activeSection={activeSection}>
         <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
-      </div>
-      <div id="admin-attendance" className="dashboard-section">
+      </DashboardPanel>
+      <DashboardPanel sectionId="admin-attendance" activeSection={activeSection}>
         <AttendanceMarkingPanel />
-      </div>
-      <div id="admin-notices" className="dashboard-section">
+      </DashboardPanel>
+      <DashboardPanel sectionId="admin-notices" activeSection={activeSection}>
         <AiNoticeComposer onPosted={() => setNoticeRefreshKey((key) => key + 1)} />
         <NoticeManager
           refreshKey={noticeRefreshKey}
           onNoticesChange={(count) => setNoticeCount(String(count))}
         />
-      </div>
-      <div id="admin-fees" className="dashboard-section">
+      </DashboardPanel>
+      <DashboardPanel sectionId="admin-fees" activeSection={activeSection}>
         <FeeRecordingPanel onSummaryChange={(count) => setUnpaidCount(String(count))} />
-      </div>
-      <div id="admin-materials" className="dashboard-section">
+      </DashboardPanel>
+      <DashboardPanel sectionId="admin-materials" activeSection={activeSection}>
         <StudyMaterialPanel />
-      </div>
+      </DashboardPanel>
     </DashboardShell>
   );
 }
@@ -146,46 +186,31 @@ function StudentProfileBanner() {
   );
 }
 
-function useActiveSection(sectionIds: readonly string[]) {
-  const [activeSection, setActiveSection] = useState(sectionIds[0]);
-
-  useEffect(() => {
-    const elements = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el != null);
-
-    if (elements.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (visible[0]?.target.id) {
-          setActiveSection(visible[0].target.id);
-        }
-      },
-      { rootMargin: "-20% 0px -55% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [sectionIds]);
-
-  return activeSection;
-}
-
 export function StudentDashboard() {
   const { t } = useTranslation(["dashboard", "attendance", "notices", "fees"]);
+  const [activeSection, setActiveSection] = useState<StudentSection>(STUDENT_SECTIONS[0]);
   const [attendancePercent, setAttendancePercent] = useState<string>(t("dashboard:statsPlaceholder"));
   const [pendingFees, setPendingFees] = useState<string>(t("dashboard:statsPlaceholder"));
-  const activeSection = useActiveSection(STUDENT_SECTIONS);
+
+  useEffect(() => {
+    void fetchStudentAttendance()
+      .then((data) => setAttendancePercent(`${data.attendance_percent}%`))
+      .catch(() => setAttendancePercent(t("dashboard:statsPlaceholder")));
+    void fetchStudentFees()
+      .then((data) => setPendingFees(`Rs. ${data.summary.pending_amount}`))
+      .catch(() => setPendingFees(t("dashboard:statsPlaceholder")));
+  }, [t]);
 
   return (
     <DashboardShell
       titleKey="student"
-      nav={<DashboardNav variant="student" activeSection={activeSection} />}
+      nav={
+        <DashboardNav
+          variant="student"
+          activeSection={activeSection}
+          onSectionChange={(id) => setActiveSection(id as StudentSection)}
+        />
+      }
     >
       <p className="dashboard-greeting">{t("dashboard:welcomeStudent")}</p>
       <StudentProfileBanner />
@@ -194,18 +219,18 @@ export function StudentDashboard() {
         <StatCard label={t("fees:pendingFees")} value={pendingFees} />
       </div>
 
-      <div id="student-notices" className="dashboard-section">
+      <DashboardPanel sectionId="student-notices" activeSection={activeSection}>
         <StudentNoticesPanel />
-      </div>
-      <div id="student-materials" className="dashboard-section">
+      </DashboardPanel>
+      <DashboardPanel sectionId="student-materials" activeSection={activeSection}>
         <StudentMaterialsPanel />
-      </div>
-      <div id="student-attendance" className="dashboard-section">
+      </DashboardPanel>
+      <DashboardPanel sectionId="student-attendance" activeSection={activeSection}>
         <StudentAttendancePanel onPercentChange={setAttendancePercent} />
-      </div>
-      <div id="student-fees" className="dashboard-section">
+      </DashboardPanel>
+      <DashboardPanel sectionId="student-fees" activeSection={activeSection}>
         <StudentFeesPanel onSummaryChange={setPendingFees} />
-      </div>
+      </DashboardPanel>
     </DashboardShell>
   );
 }

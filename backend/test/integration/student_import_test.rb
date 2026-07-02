@@ -53,7 +53,7 @@ class StudentImportTest < ActionDispatch::IntegrationTest
 
     assert_equal 1, @import_body["created_count"]
     assert_equal 2, @import_body["errors"].length
-    assert @import_body["errors"].any? { |e| e["error"].include?("Duplicate roll number in CSV") }
+    assert @import_body["errors"].any? { |e| e["error"].include?(I18n.t("services.import.duplicate_roll", locale: :hi)) }
     assert @import_body["errors"].any? { |e| e["roll_number"] == "201" }
   end
 
@@ -68,7 +68,7 @@ class StudentImportTest < ActionDispatch::IntegrationTest
 
     assert_equal 0, @import_body["created_count"]
     assert_equal 1, @import_body["errors"].length
-    assert_includes @import_body["errors"].first["error"], "Missing required fields"
+    assert_includes @import_body["errors"].first["error"], I18n.t("services.students.missing_fields", locale: :hi)
   end
 
   test "requires school admin auth" do
@@ -130,7 +130,7 @@ class StudentImportTest < ActionDispatch::IntegrationTest
          as: :json
 
     assert_response :unprocessable_entity
-    assert_includes JSON.parse(response.body)["errors"].join, "already exists"
+    assert_includes JSON.parse(response.body)["errors"].join, I18n.t("services.students.roll_exists", locale: :hi)
   end
 
   test "imports one hundred students" do

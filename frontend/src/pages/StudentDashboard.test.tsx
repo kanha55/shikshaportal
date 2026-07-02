@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -86,13 +86,13 @@ describe("StudentDashboard", () => {
     await i18n.changeLanguage("en");
   });
 
-  it("renders all four student sections with live data", async () => {
+  it("renders default notices panel with live data", async () => {
     renderStudentDashboard();
 
     expect(await screen.findByText("Holiday")).toBeInTheDocument();
-    expect(await screen.findByText("Math Notes")).toBeInTheDocument();
     expect((await screen.findAllByText(/85%/)).length).toBeGreaterThan(0);
     expect((await screen.findAllByText(/Rs\. 5000/)).length).toBeGreaterThan(0);
+    expect(screen.queryByText("Math Notes")).not.toBeInTheDocument();
   });
 
   it("shows class and roll profile banner", async () => {
@@ -102,12 +102,22 @@ describe("StudentDashboard", () => {
     expect(screen.getByText(/Roll no\. 101/)).toBeInTheDocument();
   });
 
-  it("exposes scroll targets for nav sections", () => {
+  it("switches panels via nav tabs and shows only active section", async () => {
     renderStudentDashboard();
 
-    expect(document.getElementById("student-notices")).toBeTruthy();
-    expect(document.getElementById("student-materials")).toBeTruthy();
-    expect(document.getElementById("student-attendance")).toBeTruthy();
-    expect(document.getElementById("student-fees")).toBeTruthy();
+    expect(screen.getByRole("tab", { name: "Notices" })).toHaveAttribute("aria-selected", "true");
+    expect(document.getElementById("panel-student-notices")).toBeTruthy();
+    expect(document.getElementById("panel-student-materials")).toBeNull();
+
+    fireEvent.click(screen.getByRole("tab", { name: "Class materials" }));
+    expect(await screen.findByText("Math Notes")).toBeInTheDocument();
+    expect(document.getElementById("panel-student-notices")).toBeNull();
+
+    fireEvent.click(screen.getByRole("tab", { name: "My attendance" }));
+    expect((await screen.findAllByText(/85%/)).length).toBeGreaterThan(0);
+    expect(document.getElementById("panel-student-materials")).toBeNull();
+
+    fireEvent.click(screen.getByRole("tab", { name: "My fees" }));
+    expect((await screen.findAllByText(/Rs\. 5000/)).length).toBeGreaterThan(0);
   });
 });

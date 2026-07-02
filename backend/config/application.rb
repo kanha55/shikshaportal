@@ -36,6 +36,9 @@ module Backend
     # in config/environments, which are processed later.
     #
     config.time_zone = "Asia/Kolkata"
+    config.i18n.default_locale = :hi
+    config.i18n.available_locales = %i[en hi]
+    config.i18n.fallbacks = true
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Only loads a smaller set of middleware suitable for API only apps.

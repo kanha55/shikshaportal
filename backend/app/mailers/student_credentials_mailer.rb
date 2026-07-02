@@ -9,7 +9,7 @@ class StudentCredentialsMailer < ApplicationMailer
 
     mail(
       to: student.email,
-      subject: "Your #{school.name} student login"
+      subject: I18n.t("mailers.student_credentials.subject", school: school.name)
     )
   end
 end
