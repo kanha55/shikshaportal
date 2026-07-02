@@ -523,8 +523,20 @@ button:disabled {
   color: var(--color-text);
 }
 
+.student-profile-banner {
+  display: inline-block;
+  margin: 0 0 1.25rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 .dashboard-section {
   margin-bottom: 0;
+  scroll-margin-top: 5.5rem;
 }
 
 .dashboard-nav {
@@ -555,6 +567,18 @@ button:disabled {
   font-weight: 500;
   white-space: nowrap;
   border: 1px solid transparent;
+  font-family: inherit;
+  cursor: default;
+}
+
+button.dashboard-nav-item {
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+button.dashboard-nav-item:hover {
+  background: var(--color-primary);
+  color: #fff;
 }
 
 .dashboard-nav-item.is-active {

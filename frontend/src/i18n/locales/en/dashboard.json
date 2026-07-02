@@ -10,6 +10,8 @@
   "welcomeStudent": "Welcome back",
   "myNotices": "My notices",
   "classMaterials": "Class materials",
+  "classSection": "Class {{class}} · Section {{section}}",
+  "rollNumber": "Roll no. {{roll}}",
   "statsPlaceholder": "—",
   "menu": "Menu"
 }

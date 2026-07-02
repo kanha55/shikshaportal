@@ -10,6 +10,8 @@
   "welcomeStudent": "स्वागत है",
   "myNotices": "मेरी सूचनाएँ",
   "classMaterials": "कक्षा सामग्री",
+  "classSection": "कक्षा {{class}} · अनुभाग {{section}}",
+  "rollNumber": "रोल नं. {{roll}}",
   "statsPlaceholder": "—",
   "menu": "मेनू"
 }

@@ -15,6 +15,13 @@ import { StudentMaterialsPanel } from "../components/StudentMaterialsPanel";
 import { StudentNoticesPanel } from "../components/StudentNoticesPanel";
 import { StudyMaterialPanel } from "../components/StudyMaterialPanel";
 
+const STUDENT_SECTIONS = [
+  "student-notices",
+  "student-materials",
+  "student-attendance",
+  "student-fees",
+] as const;
+
 function DashboardShell({
   titleKey,
   children,
@@ -87,22 +94,80 @@ export function AdminDashboard() {
   );
 }
 
+function StudentProfileBanner() {
+  const { t } = useTranslation("dashboard");
+  const { user } = useAuth();
+
+  if (!user?.class_name || !user.section) return null;
+
+  return (
+    <p className="student-profile-banner">
+      {t("classSection", { class: user.class_name, section: user.section })}
+      {user.roll_number ? ` · ${t("rollNumber", { roll: user.roll_number })}` : ""}
+    </p>
+  );
+}
+
+function useActiveSection(sectionIds: readonly string[]) {
+  const [activeSection, setActiveSection] = useState(sectionIds[0]);
+
+  useEffect(() => {
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el != null);
+
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible[0]?.target.id) {
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-20% 0px -55% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [sectionIds]);
+
+  return activeSection;
+}
+
 export function StudentDashboard() {
   const { t } = useTranslation(["dashboard", "attendance", "notices", "fees"]);
   const [attendancePercent, setAttendancePercent] = useState<string>(t("dashboard:statsPlaceholder"));
   const [pendingFees, setPendingFees] = useState<string>(t("dashboard:statsPlaceholder"));
+  const activeSection = useActiveSection(STUDENT_SECTIONS);
 
   return (
-    <DashboardShell titleKey="student" nav={<DashboardNav variant="student" />}>
+    <DashboardShell
+      titleKey="student"
+      nav={<DashboardNav variant="student" activeSection={activeSection} />}
+    >
       <p className="dashboard-greeting">{t("dashboard:welcomeStudent")}</p>
+      <StudentProfileBanner />
       <div className="stat-grid">
         <StatCard label={t("attendance:attendancePercent")} value={attendancePercent} />
         <StatCard label={t("fees:pendingFees")} value={pendingFees} />
       </div>
-      <StudentAttendancePanel onPercentChange={setAttendancePercent} />
-      <StudentFeesPanel onSummaryChange={setPendingFees} />
-      <StudentNoticesPanel />
-      <StudentMaterialsPanel />
+
+      <div id="student-notices" className="dashboard-section">
+        <StudentNoticesPanel />
+      </div>
+      <div id="student-materials" className="dashboard-section">
+        <StudentMaterialsPanel />
+      </div>
+      <div id="student-attendance" className="dashboard-section">
+        <StudentAttendancePanel onPercentChange={setAttendancePercent} />
+      </div>
+      <div id="student-fees" className="dashboard-section">
+        <StudentFeesPanel onSummaryChange={setPendingFees} />
+      </div>
     </DashboardShell>
   );
 }
