@@ -1,0 +1,23 @@
+{
+  "panelTitle": "अध्ययन सामग्री",
+  "panelHint": "कक्षा और विषय के अनुसार PDF अपलोड करें। विद्यार्थी केवल अपनी कक्षा की सामग्री देख सकते हैं।",
+  "title": "शीर्षक",
+  "titlePlaceholder": "जैसे: अध्याय 1 नोट्स",
+  "className": "कक्षा",
+  "subject": "विषय",
+  "subjectPlaceholder": "जैसे: गणित",
+  "chooseFile": "PDF चुनें",
+  "upload": "PDF अपलोड करें",
+  "uploading": "अपलोड हो रहा है…",
+  "uploadSuccess": "सामग्री अपलोड हो गई।",
+  "uploadFailed": "अपलोड विफल।",
+  "noMaterials": "अभी कोई अध्ययन सामग्री नहीं।",
+  "materialList": "अपलोड की गई सामग्री",
+  "download": "डाउनलोड",
+  "delete": "हटाएँ",
+  "deleteFailed": "सामग्री नहीं हटाई जा सकी।",
+  "fileTooLarge": "PDF 10 MB या उससे छोटा होना चाहिए।",
+  "studentPanelTitle": "कक्षा सामग्री",
+  "studentPanelHint": "आपके शिक्षकों द्वारा साझा PDF।",
+  "noClassMaterials": "आपकी कक्षा के लिए अभी कोई सामग्री नहीं।"
+}

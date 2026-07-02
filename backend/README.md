@@ -26,6 +26,9 @@ Set in `backend/.env` (production) or shell:
 | `APP_HOST` | Base domain (default `shikshaportal.in`) |
 | `SUPER_ADMIN_API_KEY` | Protects `POST /api/v1/admin/schools` |
 | `FRONTEND_ORIGIN` | CORS origin for React app |
+| `CURSOR_API_KEY` | Cursor API key for AI Parent Communicator (T15) |
+| `CURSOR_AI_MODEL` | Optional Cursor model id (default `composer-2.5`) |
+| `ANTHROPIC_API_KEY` | Fallback AI provider if Cursor key is not set |
 
 ## Super admin — register a school (T04)
 

@@ -1,0 +1,23 @@
+{
+  "panelTitle": "Study materials",
+  "panelHint": "Upload PDF files by class and subject. Students can download materials for their class only.",
+  "title": "Title",
+  "titlePlaceholder": "e.g. Chapter 1 notes",
+  "className": "Class",
+  "subject": "Subject",
+  "subjectPlaceholder": "e.g. Mathematics",
+  "chooseFile": "Choose PDF",
+  "upload": "Upload PDF",
+  "uploading": "Uploading…",
+  "uploadSuccess": "Material uploaded.",
+  "uploadFailed": "Upload failed.",
+  "noMaterials": "No study materials yet.",
+  "materialList": "Uploaded materials",
+  "download": "Download",
+  "delete": "Delete",
+  "deleteFailed": "Could not delete material.",
+  "fileTooLarge": "PDF must be 10 MB or smaller.",
+  "studentPanelTitle": "Class materials",
+  "studentPanelHint": "PDFs shared by your teachers for your class.",
+  "noClassMaterials": "No materials for your class yet."
+}

@@ -1,0 +1,27 @@
+{
+  "panelTitle": "AI अभिभावक संदेश",
+  "panelHint": "हिंदी या अंग्रेज़ी में अपना विचार लिखें। AI औपचारिक सूचना और अभिभावकों के लिए WhatsApp संदेश तैयार करेगा।",
+  "roughInput": "आपका विचार",
+  "roughInputPlaceholder": "जैसे: kal barish ke karan school band / 15 तक fee जमा करें",
+  "category": "श्रेणी",
+  "categories": {
+    "holiday": "अवकाश",
+    "fee": "शुल्क",
+    "exam": "परीक्षा",
+    "event": "कार्यक्रम"
+  },
+  "bilingualOutput": "द्विभाषी आउटपुट (हिंदी + अंग्रेज़ी)",
+  "generate": "AI से बनाएँ",
+  "generating": "बन रहा है…",
+  "noticeTitle": "सूचना शीर्षक",
+  "noticeBody": "सूचना विवरण",
+  "whatsappMessage": "WhatsApp संदेश",
+  "postToBoard": "सूचना बोर्ड पर डालें",
+  "posting": "पोस्ट हो रहा है…",
+  "copyWhatsapp": "WhatsApp के लिए कॉपी करें",
+  "copied": "कॉपी हो गया!",
+  "generateFailed": "बन नहीं सका। फिर कोशिश करें।",
+  "postFailed": "सूचना पोस्ट नहीं हो सकी।",
+  "limitReached": "आज की AI सीमा पूरी (50/दिन)। कल फिर कोशिश करें।",
+  "usageToday": "आज {{used}} / {{limit}} AI ड्राफ्ट उपयोग"
+}

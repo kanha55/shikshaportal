@@ -924,6 +924,106 @@ button:disabled {
   }
 }
 
+/* ── AI notice composer ── */
+
+.ai-composer .panel-header {
+  align-items: flex-start;
+}
+
+.ai-composer .panel-header h2 {
+  margin-bottom: 0.25rem;
+}
+
+.ai-panel-icon {
+  background: linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ai-composer-options {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) 1fr;
+  gap: 0.75rem 1rem;
+  align-items: end;
+  margin-bottom: 0.5rem;
+}
+
+.ai-composer-options label {
+  margin-bottom: 0;
+}
+
+.ai-bilingual-toggle {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.ai-bilingual-toggle input {
+  width: auto;
+  margin: 0;
+}
+
+.ai-usage {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.ai-draft {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .ai-composer-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Study materials ── */
+
+.material-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.material-list-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  background: #f8fafc;
+  border: 1px solid var(--color-border);
+  margin-bottom: 0.5rem;
+}
+
+.material-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.material-list-item strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.material-list-item span {
+  font-size: 0.825rem;
+  color: var(--color-text-muted);
+}
+
+.material-download-link {
+  width: auto;
+  padding: 0.45rem 0.9rem !important;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
 /* ── Loading ── */
 
 .loading-state {

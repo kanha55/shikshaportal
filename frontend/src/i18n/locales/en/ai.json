@@ -1,0 +1,27 @@
+{
+  "panelTitle": "AI Parent Communicator",
+  "panelHint": "Type a rough idea in Hindi or English. AI will draft a formal notice and a WhatsApp message for parents.",
+  "roughInput": "Your rough idea",
+  "roughInputPlaceholder": "e.g. kal barish ke karan school band / fee due by 15th",
+  "category": "Category",
+  "categories": {
+    "holiday": "Holiday",
+    "fee": "Fee",
+    "exam": "Exam",
+    "event": "Event"
+  },
+  "bilingualOutput": "Bilingual output (Hindi + English)",
+  "generate": "Generate with AI",
+  "generating": "Generating…",
+  "noticeTitle": "Notice title",
+  "noticeBody": "Notice body",
+  "whatsappMessage": "WhatsApp message",
+  "postToBoard": "Post to notice board",
+  "posting": "Posting…",
+  "copyWhatsapp": "Copy for WhatsApp",
+  "copied": "Copied!",
+  "generateFailed": "Could not generate. Try again.",
+  "postFailed": "Could not post notice.",
+  "limitReached": "Daily AI limit reached (50/day). Try again tomorrow.",
+  "usageToday": "{{used}} / {{limit}} AI drafts used today"
+}

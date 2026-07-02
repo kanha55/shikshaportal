@@ -8,7 +8,7 @@ import {
 } from "../api/notices";
 import type { Notice } from "../types/notice";
 
-export function NoticeManager() {
+export function NoticeManager({ refreshKey = 0 }: { refreshKey?: number }) {
   const { t } = useTranslation(["notices", "common"]);
   const [notices, setNotices] = useState<Notice[]>([]);
   const [title, setTitle] = useState("");
@@ -31,7 +31,7 @@ export function NoticeManager() {
 
   useEffect(() => {
     void loadNotices();
-  }, []);
+  }, [refreshKey]);
 
   function resetForm() {
     setTitle("");

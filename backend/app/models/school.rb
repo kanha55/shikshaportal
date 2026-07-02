@@ -6,6 +6,8 @@ class School < ApplicationRecord
 
   has_many :users, dependent: :destroy
   has_many :notices, dependent: :destroy
+  has_many :ai_generation_logs, dependent: :destroy
+  has_many :study_materials, dependent: :destroy
 
   validates :name, presence: true
   validates :subdomain, presence: true,
