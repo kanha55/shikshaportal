@@ -18,11 +18,11 @@ class StudentCreateService
     roll_number = @attributes[:roll_number]
 
     if @attributes.values_at(:name, :roll_number, :class_name, :section, :parent_phone).any?(&:blank?)
-      return failure(["Missing required fields"])
+      return failure([I18n.t("services.students.missing_fields")])
     end
 
     if @school.users.students.exists?(roll_number: roll_number)
-      return failure(["Roll number already exists"])
+      return failure([I18n.t("services.students.roll_exists")])
     end
 
     password = SecureRandom.alphanumeric(10)
@@ -42,7 +42,9 @@ class StudentCreateService
     )
 
     if user.save
-      StudentCredentialsMailer.login_details(user, password, @school).deliver_now
+      I18n.with_locale(user.language_preference) do
+        StudentCredentialsMailer.login_details(user, password, @school).deliver_now
+      end
       Result.new(success: true, student: student_json(user), errors: [])
     else
       failure(user.errors.full_messages)

@@ -28,7 +28,7 @@ module Api
             }
           }
         rescue AiNoticeGeneratorService::GenerationError => e
-          status = e.message == "Daily AI limit reached" ? :too_many_requests : :unprocessable_entity
+          status = e.code == :daily_limit ? :too_many_requests : :unprocessable_entity
           render json: { errors: [e.message] }, status: status
         end
       end

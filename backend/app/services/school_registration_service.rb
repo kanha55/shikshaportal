@@ -25,7 +25,9 @@ class SchoolRegistrationService
         password_confirmation: temporary_password
       )
 
-      SchoolRegistrationMailer.welcome(admin, temporary_password, school).deliver_later
+      I18n.with_locale(admin.language_preference) do
+        SchoolRegistrationMailer.welcome(admin, temporary_password, school).deliver_later
+      end
 
       Result.new(school: school, admin_user: admin, temporary_password: temporary_password)
     end

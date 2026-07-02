@@ -10,7 +10,7 @@ module Api
           user = User.find_by(email: sign_in_params[:email]&.downcase)
 
           unless user&.valid_password?(sign_in_params[:password]) && tenant_login_allowed?(user)
-            return render json: { error: "Invalid email or password" }, status: :unauthorized
+            return render json: { error: I18n.t("errors.invalid_credentials") }, status: :unauthorized
           end
 
           sign_in(user)
@@ -20,9 +20,9 @@ module Api
         def destroy
           if current_user
             sign_out(current_user)
-            render json: { message: "Logged out" }, status: :ok
+            render json: { message: I18n.t("messages.logged_out") }, status: :ok
           else
-            render json: { error: "Unauthorized" }, status: :unauthorized
+            render json: { error: I18n.t("errors.unauthorized") }, status: :unauthorized
           end
         end
 
