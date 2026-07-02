@@ -1,0 +1,84 @@
+hi:
+  errors:
+    unauthorized: "अनधिकृत"
+    forbidden: "प्रतिबंधित"
+    invalid_credentials: "गलत ईमेल या पासवर्ड"
+    invalid_language: "अमान्य भाषा"
+    school_not_found: "विद्यालय नहीं मिला"
+    school_not_found_subdomain: "इस सबडोमेन के लिए विद्यालय नहीं मिला"
+    no_tenant: "इस सबडोमेन के लिए कोई टेनेंट नहीं"
+    csv_required: "CSV फ़ाइल आवश्यक है"
+    missing_parameter: "आवश्यक पैरामीटर गायब: %{param}"
+  messages:
+    logged_out: "लॉग आउट हो गया"
+    password_reset_sent: "यदि वह ईमेल मौजूद है, तो पासवर्ड रीसेट निर्देश भेजे गए हैं।"
+    password_updated: "पासवर्ड सफलतापूर्वक अपडेट हो गया।"
+    student_created: "छात्र बनाया गया। लॉगिन ईमेल %{email} पर भेजा गया।"
+    school_created: "विद्यालय बनाया गया। स्वागत ईमेल %{email} पर भेजा गया।"
+  services:
+    students:
+      missing_fields: "आवश्यक फ़ील्ड गायब हैं"
+      roll_exists: "रोल नंबर पहले से मौजूद है"
+    import:
+      missing_columns: "CSV कॉलम गायब: %{columns}"
+      duplicate_roll: "CSV में डुप्लिकेट रोल नंबर"
+    fees:
+      student_not_found: "छात्र नहीं मिला"
+      invalid_amount: "अमान्य राशि"
+    attendance:
+      future_date: "भविष्य की तारीखें चिह्नित नहीं की जा सकतीं"
+      class_section_required: "कक्षा और अनुभाग आवश्यक हैं"
+      no_students: "इस कक्षा के लिए कोई छात्र नहीं मिला"
+      invalid_entry: "छात्र %{student_id} के लिए अमान्य उपस्थिति प्रविष्टि"
+      invalid_date: "अमान्य तारीख"
+    ai:
+      rough_input_required: "रफ़ इनपुट आवश्यक है"
+      invalid_category: "अमान्य श्रेणी"
+      daily_limit: "दैनिक AI सीमा पूरी हो गई"
+      service_unavailable: "AI सेवा उपलब्ध नहीं"
+      empty_response: "खाली AI प्रतिक्रिया"
+      incomplete_response: "अपूर्ण AI प्रतिक्रिया"
+  mailers:
+    student_credentials:
+      subject: "आपका %{school} छात्र लॉगिन"
+      greeting: "नमस्ते %{name},"
+      intro: "आपका %{school} के लिए छात्र खाता बनाया गया है।"
+      login_url: "लॉगिन URL: %{url}"
+      email: "ईमेल: %{email}"
+      password: "अस्थायी पासवर्ड: %{password}"
+      class_info: "कक्षा: %{class_name} · अनुभाग: %{section}"
+      roll_number: "रोल नंबर: %{roll_number}"
+      change_password: "कृपया पहली बार लॉगिन के बाद अपना पासवर्ड बदलें।"
+      signature: "— शिक्षा पोर्टल"
+    school_registration:
+      subject: "शिक्षा पोर्टल में स्वागत — %{school}"
+      greeting: "शिक्षा पोर्टल में स्वागत, %{name}!"
+      intro: "आपका विद्यालय \"%{school}\" पंजीकृत हो गया है।"
+      subdomain: "सबडोमेन: %{subdomain}"
+      login_url: "लॉगिन URL: %{url}"
+      email: "ईमेल: %{email}"
+      password: "अस्थायी पासवर्ड: %{password}"
+      change_password: "कृपया पहली बार लॉगिन के बाद अपना पासवर्ड बदलें।"
+      signature: "— शिक्षा पोर्टल टीम"
+    devise:
+      reset_password:
+        subject: "पासवर्ड रीसेट निर्देश"
+        greeting: "नमस्ते %{name},"
+        intro: "आपके शिक्षा पोर्टल खाते के लिए पासवर्ड रीसेट का अनुरोध किया गया।"
+        token: "रीसेट टोकन: %{token}"
+        instructions: "ऐप में नया पासवर्ड सेट करने के लिए इस टोकन का उपयोग करें। लिंक 6 घंटे में समाप्त हो जाता है।"
+        ignore: "यदि आपने यह अनुरोध नहीं किया, तो इस ईमेल को अनदेखा करें।"
+        signature: "— शिक्षा पोर्टल"
+  activerecord:
+    errors:
+      messages:
+        blank: "खाली नहीं हो सकता"
+        taken: "पहले से लिया जा चुका है"
+        invalid: "अमान्य है"
+        too_short: "बहुत छोटा है (न्यूनतम %{count} अक्षर)"
+        too_long: "बहुत लंबा है (अधिकतम %{count} अक्षर)"
+      models:
+        school:
+          attributes:
+            subdomain:
+              invalid: "केवल छोटे अक्षर, संख्याएँ और हाइफ़न"

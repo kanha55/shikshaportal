@@ -14,6 +14,6 @@ module SchoolMemberAuth
     tenant = ActsAsTenant.current_tenant
     return if current_user && tenant && current_user.school_id == tenant.id
 
-    render json: { error: "Forbidden" }, status: :forbidden and return
+    render json: { error: I18n.t("errors.forbidden") }, status: :forbidden and return
   end
 end

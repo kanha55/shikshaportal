@@ -14,7 +14,7 @@ module SuperAdminAuth
     return if api_key_valid?
     return if jwt_super_admin?
 
-    render json: { error: "Unauthorized" }, status: :unauthorized
+    render json: { error: I18n.t("errors.unauthorized") }, status: :unauthorized
   end
 
   def api_key_valid?

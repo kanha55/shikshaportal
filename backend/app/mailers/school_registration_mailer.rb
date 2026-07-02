@@ -9,7 +9,7 @@ class SchoolRegistrationMailer < ApplicationMailer
 
     mail(
       to: admin.email,
-      subject: "Welcome to Shiksha Portal — #{school.name}"
+      subject: I18n.t("mailers.school_registration.subject", school: school.name)
     )
   end
 end

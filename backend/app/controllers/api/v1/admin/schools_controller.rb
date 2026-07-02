@@ -13,7 +13,7 @@ module Api
         rescue ActiveRecord::RecordInvalid => e
           render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
         rescue KeyError => e
-          render json: { error: "Missing parameter: #{e.key}" }, status: :unprocessable_entity
+          render json: { error: I18n.t("errors.missing_parameter", param: e.key) }, status: :unprocessable_entity
         end
 
         private
@@ -37,7 +37,7 @@ module Api
               email: result.admin_user.email,
               name: result.admin_user.name
             },
-            message: "School created. Welcome email sent to #{result.admin_user.email}."
+            message: I18n.t("messages.school_created", email: result.admin_user.email)
           }
         end
       end

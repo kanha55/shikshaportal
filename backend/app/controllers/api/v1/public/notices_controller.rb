@@ -6,7 +6,7 @@ module Api
       class NoticesController < ApplicationController
         def index
           school = ActsAsTenant.current_tenant
-          return render json: { error: "School not found" }, status: :not_found unless school
+          return render json: { error: I18n.t("errors.school_not_found") }, status: :not_found unless school
 
           notices = Notice.recent.limit(5)
 

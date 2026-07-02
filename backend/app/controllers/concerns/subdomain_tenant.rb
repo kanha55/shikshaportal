@@ -33,6 +33,6 @@ module SubdomainTenant
   end
 
   def render_tenant_not_found
-    render json: { error: "School not found for this subdomain" }, status: :not_found
+    render json: { error: I18n.t("errors.school_not_found_subdomain") }, status: :not_found
   end
 end
