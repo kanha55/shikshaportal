@@ -17,9 +17,21 @@ export function StudentNoticesPanel() {
   }, []);
 
   return (
-    <section className="dashboard-section card public-section">
-      <h2>{t("recentNotices")}</h2>
-      {loading ? <p className="muted">{t("common:loading")}</p> : <NoticeList notices={notices} />}
+    <section className="panel">
+      <div className="panel-header">
+        <div className="panel-icon" aria-hidden>
+          N
+        </div>
+        <h2>{t("recentNotices")}</h2>
+      </div>
+      {loading ? (
+        <div className="loading-state">
+          <div className="spinner" aria-hidden />
+          <span>{t("common:loading")}</span>
+        </div>
+      ) : (
+        <NoticeList notices={notices} />
+      )}
     </section>
   );
 }

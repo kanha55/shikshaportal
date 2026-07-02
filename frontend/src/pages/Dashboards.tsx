@@ -37,7 +37,9 @@ function DashboardShell({
         </div>
       </header>
       {nav}
-      <main>{children ?? <p>{t("dashboard:comingSoon")}</p>}</main>
+      <main>
+        <div className="content-wrap">{children ?? <p>{t("dashboard:comingSoon")}</p>}</div>
+      </main>
     </div>
   );
 }
@@ -52,14 +54,11 @@ export function AdminDashboard() {
 
   return (
     <DashboardShell titleKey="schoolAdmin" nav={<DashboardNav variant="admin" />}>
-      <section className="dashboard-section">
-        <h2>{t("dashboard:quickActions")}</h2>
-        <div className="stat-grid">
-          <StatCard label={t("dashboard:totalStudents")} value={studentCount} />
-          <StatCard label={t("attendance:todayAttendance")} value={t("dashboard:statsPlaceholder")} />
-          <StatCard label={t("fees:unpaidCount")} value={t("dashboard:statsPlaceholder")} />
-        </div>
-      </section>
+      <div className="stat-grid">
+        <StatCard label={t("dashboard:totalStudents")} value={studentCount} />
+        <StatCard label={t("attendance:todayAttendance")} value={t("dashboard:statsPlaceholder")} />
+        <StatCard label={t("fees:unpaidCount")} value={t("dashboard:statsPlaceholder")} />
+      </div>
 
       <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
       <NoticeManager />
@@ -78,8 +77,13 @@ export function StudentDashboard() {
         <StatCard label={t("fees:pendingFees")} value={t("dashboard:statsPlaceholder")} />
       </div>
       <StudentNoticesPanel />
-      <section className="dashboard-section">
-        <h2>{t("dashboard:classMaterials")}</h2>
+      <section className="panel">
+        <div className="panel-header">
+          <div className="panel-icon" aria-hidden>
+            M
+          </div>
+          <h2>{t("dashboard:classMaterials")}</h2>
+        </div>
         <p className="muted">{t("dashboard:comingSoon")}</p>
       </section>
     </DashboardShell>

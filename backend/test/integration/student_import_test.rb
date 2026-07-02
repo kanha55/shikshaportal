@@ -11,8 +11,8 @@ class StudentImportTest < ActionDispatch::IntegrationTest
     host! "greenvalley.localhost"
     csv = <<~CSV
       name,roll_number,class_name,section,parent_phone,email
-      Rahul Kumar,101,10,A,9876543210,rahul@greenvalley.test
-      Priya Singh,102,10,A,9876543211,
+      Import Student One,1101,10,A,9876543210,import-one@greenvalley.test
+      Import Student Two,1102,10,A,9876543211,
     CSV
 
     assert_emails 2 do
@@ -24,7 +24,7 @@ class StudentImportTest < ActionDispatch::IntegrationTest
     assert_equal 2, body["created_count"]
     assert_equal 2, body["emails_sent"]
     assert_empty body["errors"]
-    assert User.students.exists?(roll_number: "101", school: @school)
+    assert User.students.exists?(roll_number: "1101", school: @school)
   end
 
   test "flags duplicate roll numbers in csv and database" do
@@ -83,6 +83,56 @@ class StudentImportTest < ActionDispatch::IntegrationTest
 
     post import_api_v1_admin_students_path, params: { file: upload_csv(csv) }
     assert_response :unauthorized
+  end
+
+  test "creates single student from form submission" do
+    host! "greenvalley.localhost"
+
+    assert_emails 1 do
+      post api_v1_admin_students_path,
+           params: {
+             student: {
+               name: "Form Student",
+               roll_number: "501",
+               class_name: "10",
+               section: "A",
+               parent_phone: "9876512345",
+               email: "formstudent@greenvalley.test"
+             }
+           },
+           headers: auth_headers,
+           as: :json
+    end
+
+    assert_response :created
+    body = JSON.parse(response.body)
+    assert_equal "Form Student", body.dig("student", "name")
+    assert User.students.exists?(roll_number: "501", school: @school)
+  end
+
+  test "rejects duplicate roll number on single create" do
+    host! "greenvalley.localhost"
+    attrs = {
+      name: "First Student",
+      roll_number: "888",
+      class_name: "10",
+      section: "A",
+      parent_phone: "9876512345"
+    }
+
+    post api_v1_admin_students_path,
+         params: { student: attrs },
+         headers: auth_headers,
+         as: :json
+    assert_response :created
+
+    post api_v1_admin_students_path,
+         params: { student: attrs.merge(name: "Second Student") },
+         headers: auth_headers,
+         as: :json
+
+    assert_response :unprocessable_entity
+    assert_includes JSON.parse(response.body)["errors"].join, "already exists"
   end
 
   test "imports one hundred students" do

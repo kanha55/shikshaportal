@@ -30,7 +30,7 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :schools, only: :create
         resources :notices
-        resources :students, only: :index do
+        resources :students, only: %i[index create] do
           collection do
             post :import
           end

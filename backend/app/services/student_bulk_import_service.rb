@@ -48,11 +48,6 @@ class StudentBulkImportService
     data = normalize_row(row)
     roll_number = data[:roll_number]
 
-    if data.values_at(:name, :roll_number, :class_name, :section, :parent_phone).any?(&:blank?)
-      result.errors << error_entry(line_number, roll_number, "Missing required fields")
-      return
-    end
-
     if seen_roll_numbers.include?(roll_number)
       result.errors << error_entry(line_number, roll_number, "Duplicate roll number in CSV")
       return
@@ -60,34 +55,13 @@ class StudentBulkImportService
 
     seen_roll_numbers.add(roll_number)
 
-    if @school.users.students.exists?(roll_number: roll_number)
-      result.errors << error_entry(line_number, roll_number, "Roll number already exists")
-      return
-    end
-
-    password = SecureRandom.alphanumeric(10)
-    email = data[:email].presence || generated_email(roll_number)
-
-    user = @school.users.build(
-      name: data[:name],
-      email: email,
-      role: "student",
-      roll_number: roll_number,
-      class_name: data[:class_name],
-      section: data[:section],
-      parent_phone: data[:parent_phone],
-      language_preference: @school.default_language,
-      password: password,
-      password_confirmation: password
-    )
-
-    if user.save
-      StudentCredentialsMailer.login_details(user, password, @school).deliver_now
+    create_result = StudentCreateService.call(school: @school, attributes: data)
+    if create_result.success
       result.created_count += 1
       result.emails_sent += 1
-      result.created << student_json(user)
+      result.created << create_result.student
     else
-      result.errors << error_entry(line_number, roll_number, user.errors.full_messages.join(", "))
+      result.errors << error_entry(line_number, roll_number, create_result.errors.join(", "))
     end
   end
 
@@ -97,24 +71,7 @@ class StudentBulkImportService
     end
   end
 
-  def generated_email(roll_number)
-    host = ENV.fetch("APP_HOST", "shikshaportal.in")
-    "#{roll_number}.#{@school.subdomain}@students.#{host}".downcase
-  end
-
   def error_entry(line, roll_number, message)
     { line: line, roll_number: roll_number, error: message }
-  end
-
-  def student_json(user)
-    {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      roll_number: user.roll_number,
-      class_name: user.class_name,
-      section: user.section,
-      parent_phone: user.parent_phone
-    }
   end
 end

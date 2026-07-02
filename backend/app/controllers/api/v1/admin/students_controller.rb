@@ -11,6 +11,22 @@ module Api
           render json: { students: students.map { |student| serialize_student(student) } }
         end
 
+        def create
+          result = StudentCreateService.call(
+            school: ActsAsTenant.current_tenant,
+            attributes: student_params
+          )
+
+          if result.success
+            render json: {
+              student: result.student,
+              message: "Student created. Login email sent to #{result.student[:email]}."
+            }, status: :created
+          else
+            render json: { errors: result.errors }, status: :unprocessable_entity
+          end
+        end
+
         def import
           file = params[:file]
           return render json: { error: "CSV file required" }, status: :unprocessable_entity if file.blank?
@@ -31,6 +47,10 @@ module Api
         end
 
         private
+
+        def student_params
+          params.require(:student).permit(:name, :roll_number, :class_name, :section, :parent_phone, :email)
+        end
 
         def serialize_student(student)
           {
