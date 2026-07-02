@@ -19,11 +19,9 @@ class StudentImportTest < ActionDispatch::IntegrationTest
       perform_import(csv)
     end
 
-    assert_response :success
-    body = JSON.parse(response.body)
-    assert_equal 2, body["created_count"]
-    assert_equal 2, body["emails_sent"]
-    assert_empty body["errors"]
+    assert_equal 2, @import_body["created_count"]
+    assert_equal 2, @import_body["emails_sent"]
+    assert_empty @import_body["errors"]
     assert User.students.exists?(roll_number: "1101", school: @school)
   end
 
@@ -53,12 +51,10 @@ class StudentImportTest < ActionDispatch::IntegrationTest
 
     perform_import(csv)
 
-    assert_response :success
-    body = JSON.parse(response.body)
-    assert_equal 1, body["created_count"]
-    assert_equal 2, body["errors"].length
-    assert body["errors"].any? { |e| e["error"].include?("Duplicate roll number in CSV") }
-    assert body["errors"].any? { |e| e["roll_number"] == "201" }
+    assert_equal 1, @import_body["created_count"]
+    assert_equal 2, @import_body["errors"].length
+    assert @import_body["errors"].any? { |e| e["error"].include?("Duplicate roll number in CSV") }
+    assert @import_body["errors"].any? { |e| e["roll_number"] == "201" }
   end
 
   test "reports row validation errors" do
@@ -70,11 +66,9 @@ class StudentImportTest < ActionDispatch::IntegrationTest
 
     perform_import(csv)
 
-    assert_response :success
-    body = JSON.parse(response.body)
-    assert_equal 0, body["created_count"]
-    assert_equal 1, body["errors"].length
-    assert_includes body["errors"].first["error"], "Missing required fields"
+    assert_equal 0, @import_body["created_count"]
+    assert_equal 1, @import_body["errors"].length
+    assert_includes @import_body["errors"].first["error"], "Missing required fields"
   end
 
   test "requires school admin auth" do
@@ -89,19 +83,21 @@ class StudentImportTest < ActionDispatch::IntegrationTest
     host! "greenvalley.localhost"
 
     assert_emails 1 do
-      post api_v1_admin_students_path,
-           params: {
-             student: {
-               name: "Form Student",
-               roll_number: "501",
-               class_name: "10",
-               section: "A",
-               parent_phone: "9876512345",
-               email: "formstudent@greenvalley.test"
-             }
-           },
-           headers: auth_headers,
-           as: :json
+      perform_enqueued_jobs do
+        post api_v1_admin_students_path,
+             params: {
+               student: {
+                 name: "Form Student",
+                 roll_number: "501",
+                 class_name: "10",
+                 section: "A",
+                 parent_phone: "9876512345",
+                 email: "formstudent@greenvalley.test"
+               }
+             },
+             headers: auth_headers,
+             as: :json
+      end
     end
 
     assert_response :created
@@ -120,10 +116,12 @@ class StudentImportTest < ActionDispatch::IntegrationTest
       parent_phone: "9876512345"
     }
 
-    post api_v1_admin_students_path,
-         params: { student: attrs },
-         headers: auth_headers,
-         as: :json
+    perform_enqueued_jobs do
+      post api_v1_admin_students_path,
+           params: { student: attrs },
+           headers: auth_headers,
+           as: :json
+    end
     assert_response :created
 
     post api_v1_admin_students_path,
@@ -146,10 +144,22 @@ class StudentImportTest < ActionDispatch::IntegrationTest
       perform_import(csv)
     end
 
-    assert_response :success
+    assert_equal 100, @import_body["created_count"]
+    assert_empty @import_body["errors"]
+  end
+
+  test "returns import status while queued" do
+    host! "greenvalley.localhost"
+    csv = "name,roll_number,class_name,section,parent_phone\nA,1,10,A,999\n"
+
+    post import_api_v1_admin_students_path,
+         params: { file: upload_csv(csv) },
+         headers: auth_headers
+
+    assert_response :accepted
     body = JSON.parse(response.body)
-    assert_equal 100, body["created_count"]
-    assert_empty body["errors"]
+    assert_equal "queued", body["status"]
+    assert StudentImport.exists?(body["import_id"])
   end
 
   private
@@ -158,6 +168,16 @@ class StudentImportTest < ActionDispatch::IntegrationTest
     post import_api_v1_admin_students_path,
          params: { file: upload_csv(csv) },
          headers: auth_headers
+
+    assert_response :accepted
+    import_id = JSON.parse(response.body)["import_id"]
+
+    perform_enqueued_jobs
+
+    get imports_api_v1_admin_students_path(import_id: import_id), headers: auth_headers
+    assert_response :success
+    @import_body = JSON.parse(response.body)
+    assert_equal "completed", @import_body["status"]
   end
 
   def auth_headers

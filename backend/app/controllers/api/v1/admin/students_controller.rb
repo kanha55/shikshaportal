@@ -31,19 +31,24 @@ module Api
           file = params[:file]
           return render json: { error: "CSV file required" }, status: :unprocessable_entity if file.blank?
 
-          result = StudentBulkImportService.call(
-            school: ActsAsTenant.current_tenant,
-            csv_io: file.read
+          student_import = StudentImport.create!(status: "queued")
+          student_import.csv_file.attach(
+            io: file,
+            filename: file.original_filename,
+            content_type: file.content_type.presence || "text/csv"
           )
 
+          StudentBulkImportJob.perform_later(student_import.id)
+
           render json: {
-            created_count: result.created_count,
-            emails_sent: result.emails_sent,
-            errors: result.errors,
-            created: result.created
-          }
-        rescue ArgumentError => e
-          render json: { error: e.message }, status: :unprocessable_entity
+            import_id: student_import.id,
+            status: student_import.status
+          }, status: :accepted
+        end
+
+        def show_import
+          student_import = StudentImport.find(params[:import_id])
+          render json: serialize_import(student_import)
         end
 
         private
@@ -62,6 +67,25 @@ module Api
             section: student.section,
             parent_phone: student.parent_phone
           }
+        end
+
+        def serialize_import(student_import)
+          payload = {
+            import_id: student_import.id,
+            status: student_import.status,
+            error_message: student_import.error_message
+          }
+
+          if student_import.completed?
+            payload.merge!(
+              created_count: student_import.result["created_count"],
+              emails_sent: student_import.result["emails_sent"],
+              errors: student_import.result["errors"],
+              created: student_import.result["created"]
+            )
+          end
+
+          payload
         end
       end
     end

@@ -42,7 +42,7 @@ class StudentCreateService
     )
 
     if user.save
-      StudentCredentialsMailer.login_details(user, password, @school).deliver_now
+      StudentCredentialsMailer.login_details(user, password, @school).deliver_later
       Result.new(success: true, student: student_json(user), errors: [])
     else
       failure(user.errors.full_messages)

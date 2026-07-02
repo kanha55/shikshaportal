@@ -37,7 +37,11 @@ module Shiksha
       "RESEND_API_KEY" => "Resend API key for production email (future)",
       "SMTP_ADDRESS" => "SMTP host (alternative to Resend)",
       "SMTP_USERNAME" => "SMTP username",
-      "SMTP_PASSWORD" => "SMTP password"
+      "SMTP_PASSWORD" => "SMTP password",
+      "REDIS_URL" => "Redis URL for Sidekiq background jobs (T23)",
+      "SIDEKIQ_WEB_PASSWORD" => "Basic auth password for /sidekiq web UI",
+      "SIDEKIQ_WEB_USER" => "Basic auth username for /sidekiq (default: admin)",
+      "SIDEKIQ_CONCURRENCY" => "Sidekiq worker thread count (default: 5)"
     }.freeze
 
     R2_KEYS = %w[R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY R2_BUCKET R2_ENDPOINT].freeze

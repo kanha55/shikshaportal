@@ -15,10 +15,13 @@ export interface ImportError {
 }
 
 export interface StudentImportResult {
+  import_id?: number;
+  status: string;
   created_count: number;
   emails_sent: number;
   errors: ImportError[];
   created: StudentRecord[];
+  error_message?: string | null;
 }
 
 export interface StudentInput {

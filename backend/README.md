@@ -91,10 +91,36 @@ Use the `Authorization: Bearer <token>` header for protected routes.
 
 Seed users: `super@shikshaportal.test`, `principal@greenvalley.test` (password: `password123`).
 
+## Background jobs (T23)
+
+Sidekiq processes async work: student credential emails, school welcome emails, and CSV bulk imports.
+
+### Local setup
+
+```bash
+# From repo root — start Redis
+docker compose up -d redis
+
+# Terminal 1 — API
+cd backend && bundle install && rails s
+
+# Terminal 2 — worker
+cd backend && bundle exec sidekiq -C config/sidekiq.yml
+```
+
+Set `REDIS_URL=redis://localhost:6379/0` in `backend/.env` (see `.env.example`).
+
+Optional Sidekiq web UI at `/sidekiq` — set `SIDEKIQ_WEB_PASSWORD` (and optionally `SIDEKIQ_WEB_USER`, default `admin`).
+
+### CSV import (async)
+
+`POST /api/v1/admin/students/import` returns `202 Accepted` with `{ import_id, status: "queued" }`.
+Poll `GET /api/v1/admin/students/imports/:import_id` until `status` is `completed` or `failed`.
+
+### Health
+
+`GET /api/v1/health` includes Redis connectivity and Active Job adapter info.
+
 ## Planned (upcoming sprints)
 
-- `acts_as_tenant` multi-tenancy (T02)
-- Devise + JWT authentication (T05)
-- ActiveStorage → Cloudflare R2
-- Sidekiq + Redis
 - Rails I18n (`hi` / `en`)

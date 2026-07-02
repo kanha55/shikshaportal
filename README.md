@@ -50,8 +50,14 @@ shikshaportal/
 ### Development
 
 ```bash
+# Start Redis (from repo root)
+docker compose up -d redis
+
 # Backend
 cd backend && bundle install && rails db:create db:migrate && rails s
+
+# Sidekiq worker (separate terminal)
+cd backend && bundle exec sidekiq -C config/sidekiq.yml
 
 # Frontend
 cd frontend && npm install && npm run dev

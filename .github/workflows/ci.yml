@@ -23,6 +23,15 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     defaults:
       run:
@@ -30,6 +39,7 @@ jobs:
 
     env:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/shikshaportal_test
+      REDIS_URL: redis://localhost:6379/0
       RAILS_ENV: test
       JWT_SECRET_KEY: ci-test-jwt-secret-shikshaportal
       SECRET_KEY_BASE: ci-test-secret-key-base-shikshaportal
