@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
+import { AiNoticeComposer } from "../components/AiNoticeComposer";
 import { DashboardNav, StatCard } from "../components/DashboardNav";
 import { LanguageToggle } from "../components/LanguageToggle";
 import { NoticeManager } from "../components/NoticeManager";
 import { StudentImportPanel } from "../components/StudentImportPanel";
+import { StudentMaterialsPanel } from "../components/StudentMaterialsPanel";
 import { StudentNoticesPanel } from "../components/StudentNoticesPanel";
+import { StudyMaterialPanel } from "../components/StudyMaterialPanel";
 
 function DashboardShell({
   titleKey,
@@ -51,6 +54,7 @@ export function SuperAdminDashboard() {
 export function AdminDashboard() {
   const { t } = useTranslation(["dashboard", "attendance", "notices", "fees"]);
   const [studentCount, setStudentCount] = useState<string>(t("dashboard:statsPlaceholder"));
+  const [noticeRefreshKey, setNoticeRefreshKey] = useState(0);
 
   return (
     <DashboardShell titleKey="schoolAdmin" nav={<DashboardNav variant="admin" />}>
@@ -60,8 +64,10 @@ export function AdminDashboard() {
         <StatCard label={t("fees:unpaidCount")} value={t("dashboard:statsPlaceholder")} />
       </div>
 
+      <AiNoticeComposer onPosted={() => setNoticeRefreshKey((key) => key + 1)} />
       <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
-      <NoticeManager />
+      <NoticeManager refreshKey={noticeRefreshKey} />
+      <StudyMaterialPanel />
     </DashboardShell>
   );
 }
@@ -77,15 +83,7 @@ export function StudentDashboard() {
         <StatCard label={t("fees:pendingFees")} value={t("dashboard:statsPlaceholder")} />
       </div>
       <StudentNoticesPanel />
-      <section className="panel">
-        <div className="panel-header">
-          <div className="panel-icon" aria-hidden>
-            M
-          </div>
-          <h2>{t("dashboard:classMaterials")}</h2>
-        </div>
-        <p className="muted">{t("dashboard:comingSoon")}</p>
-      </section>
+      <StudentMaterialsPanel />
     </DashboardShell>
   );
 }

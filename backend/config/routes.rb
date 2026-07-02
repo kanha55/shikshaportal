@@ -27,9 +27,13 @@ Rails.application.routes.draw do
 
       resources :notices, only: :index
 
+      resources :study_materials, only: :index
+
       namespace :admin do
         resources :schools, only: :create
         resources :notices
+        post "ai/notices", to: "ai_notices#create"
+        resources :study_materials, only: %i[index create destroy]
         resources :students, only: %i[index create] do
           collection do
             post :import
