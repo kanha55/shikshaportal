@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_02_142500) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_02_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,43 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_02_142500) do
     t.datetime "updated_at", null: false
     t.index ["school_id", "created_at"], name: "index_ai_generation_logs_on_school_id_and_created_at"
     t.index ["school_id"], name: "index_ai_generation_logs_on_school_id"
+  end
+
+  create_table "attendance_records", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "student_id", null: false
+    t.bigint "marked_by_id", null: false
+    t.date "date", null: false
+    t.string "status", null: false
+    t.string "class_name", null: false
+    t.string "section", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["marked_by_id"], name: "index_attendance_records_on_marked_by_id"
+    t.index ["school_id", "date", "class_name", "section"], name: "idx_on_school_id_date_class_name_section_435c487ab0"
+    t.index ["school_id", "student_id", "date"], name: "index_attendance_records_on_school_id_and_student_id_and_date", unique: true
+    t.index ["school_id"], name: "index_attendance_records_on_school_id"
+    t.index ["student_id"], name: "index_attendance_records_on_student_id"
+  end
+
+  create_table "fee_records", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "student_id", null: false
+    t.bigint "recorded_by_id", null: false
+    t.string "fee_type", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.date "due_date"
+    t.date "paid_on"
+    t.string "status", default: "pending", null: false
+    t.string "receipt_number"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recorded_by_id"], name: "index_fee_records_on_recorded_by_id"
+    t.index ["school_id", "receipt_number"], name: "index_fee_records_on_school_id_and_receipt_number", unique: true, where: "(receipt_number IS NOT NULL)"
+    t.index ["school_id", "student_id", "status"], name: "index_fee_records_on_school_id_and_student_id_and_status"
+    t.index ["school_id"], name: "index_fee_records_on_school_id"
+    t.index ["student_id"], name: "index_fee_records_on_student_id"
   end
 
   create_table "notices", force: :cascade do |t|
@@ -115,6 +152,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_02_142500) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "ai_generation_logs", "schools"
+  add_foreign_key "attendance_records", "schools"
+  add_foreign_key "attendance_records", "users", column: "marked_by_id"
+  add_foreign_key "attendance_records", "users", column: "student_id"
+  add_foreign_key "fee_records", "schools"
+  add_foreign_key "fee_records", "users", column: "recorded_by_id"
+  add_foreign_key "fee_records", "users", column: "student_id"
   add_foreign_key "notices", "schools"
   add_foreign_key "study_materials", "schools"
   add_foreign_key "users", "schools"

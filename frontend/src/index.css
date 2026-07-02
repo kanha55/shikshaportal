@@ -1048,11 +1048,191 @@ button:disabled {
   to { transform: rotate(360deg); }
 }
 
+/* ── Attendance ── */
+
+.attendance-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.attendance-filters label {
+  margin-bottom: 0;
+}
+
+.attendance-mark-all {
+  margin-left: auto;
+}
+
+.attendance-summary {
+  margin-bottom: 0.75rem;
+}
+
+.attendance-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.attendance-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.attendance-list-item span {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.attendance-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.attendance-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-full);
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.attendance-btn.active.present {
+  background: var(--color-success-soft);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.attendance-btn.active.absent {
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.attendance-percent {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.attendance-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.attendance-history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.attendance-status.present {
+  color: var(--color-success);
+}
+
+.attendance-status.absent {
+  color: var(--color-danger);
+}
+
+/* ── Fees ── */
+
+.fee-filters {
+  display: grid;
+  grid-template-columns: 1fr repeat(3, minmax(100px, 140px)) auto;
+  gap: 0.75rem;
+  align-items: end;
+  margin-bottom: 0.85rem;
+}
+
+.fee-filters label {
+  margin-bottom: 0;
+}
+
+.fee-filter-search {
+  min-width: 0;
+}
+
+.fee-clear-filters {
+  width: auto !important;
+  align-self: end;
+  white-space: nowrap;
+  padding: 0.65rem 1rem !important;
+}
+
+.fee-list-summary {
+  font-size: 0.875rem;
+  margin: 0 0 0.65rem;
+}
+
+.fee-form {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.fee-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.fee-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.fee-list-item span {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.fee-status.paid {
+  color: var(--color-success);
+}
+
+.fee-status.pending {
+  color: var(--color-danger);
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 768px) {
   body {
     font-size: 15px;
+  }
+
+  .fee-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .fee-clear-filters {
+    justify-self: start;
   }
 
   .public-header,

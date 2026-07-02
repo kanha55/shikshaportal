@@ -33,6 +33,10 @@ gem "rack-cors"
 # Multi-tenancy — each school is a tenant (T02)
 gem "acts_as_tenant"
 
+# PDF fee receipts (T12)
+gem "prawn"
+gem "matrix"
+
 # Authentication (T05)
 gem "devise"
 gem "devise-jwt"
