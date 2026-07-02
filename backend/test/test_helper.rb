@@ -6,6 +6,8 @@ require "rails/test_help"
 
 module ActiveSupport
   class TestCase
+    include ActiveJob::TestHelper
+
     parallelize(workers: :number_of_processors)
 
     setup do

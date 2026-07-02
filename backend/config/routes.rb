@@ -48,6 +48,7 @@ Rails.application.routes.draw do
         resources :students, only: %i[index create] do
           collection do
             post :import
+            get "imports/:import_id", action: :show_import, as: :import_status
           end
         end
       end
@@ -55,4 +56,6 @@ Rails.application.routes.draw do
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
+
+  mount Sidekiq::Web => "/sidekiq" if ENV["SIDEKIQ_WEB_PASSWORD"].present?
 end

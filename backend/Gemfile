@@ -41,6 +41,10 @@ gem "matrix"
 gem "devise"
 gem "devise-jwt"
 
+# Background jobs (T23)
+gem "redis", ">= 4.0.1"
+gem "sidekiq", "~> 7.3"
+
 group :development, :test do
   gem "dotenv-rails", require: "dotenv/load"
 

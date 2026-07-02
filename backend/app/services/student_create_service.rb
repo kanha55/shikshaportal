@@ -43,7 +43,7 @@ class StudentCreateService
 
     if user.save
       I18n.with_locale(user.language_preference) do
-        StudentCredentialsMailer.login_details(user, password, @school).deliver_now
+        StudentCredentialsMailer.login_details(user, password, @school).deliver_later
       end
       Result.new(success: true, student: student_json(user), errors: [])
     else

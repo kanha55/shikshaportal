@@ -7,7 +7,11 @@ module Api
         render json: {
           status: "ok",
           app: "shikshaportal-api",
-          timestamp: Time.current.iso8601
+          timestamp: Time.current.iso8601,
+          redis: Shiksha::RedisHealth.check,
+          jobs: {
+            adapter: ActiveJob::Base.queue_adapter.class.name.demodulize.delete_suffix("Adapter").underscore
+          }
         }
       end
     end
