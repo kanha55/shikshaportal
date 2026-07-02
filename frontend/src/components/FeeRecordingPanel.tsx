@@ -48,7 +48,7 @@ export function FeeRecordingPanel({
   const feeFilters = useMemo<AdminFeesFilters>(() => {
     const filters: AdminFeesFilters = {};
     if (yearFilter) filters.year = yearFilter;
-    if (nameFilter.trim()) filters.name = nameFilter.trim();
+    if (nameFilter.trim()) filters.student_name = nameFilter.trim();
     if (classFilter) filters.class_name = classFilter;
     if (sectionFilter) filters.section = sectionFilter;
     return filters;

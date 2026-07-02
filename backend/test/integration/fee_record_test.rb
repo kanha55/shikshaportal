@@ -94,10 +94,10 @@ class FeeRecordTest < ActionDispatch::IntegrationTest
     assert_equal 2, JSON.parse(response.body)["fee_records"].length
 
     get api_v1_admin_fees_path,
-        params: { name: "Priya" },
+        params: { student_name: "Priya" },
         headers: auth_headers(@admin_auth),
         as: :json
-    assert_response :success, -> { response.body }
+    assert_response :success, response.body
     body = JSON.parse(response.body)
     assert_equal 1, body["fee_records"].length
     assert_equal "Priya Singh", body["fee_records"].first["student_name"]

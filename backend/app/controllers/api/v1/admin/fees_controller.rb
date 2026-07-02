@@ -12,7 +12,7 @@ module Api
           records = records.where(status: params[:status]) if params[:status].present?
           records = records.for_year(params[:year]) if params[:year].present?
           records = records.matching_student_filters(
-            name: params[:name],
+            name: params[:student_name],
             class_name: params[:class_name],
             section: params[:section]
           )

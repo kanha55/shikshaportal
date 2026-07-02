@@ -19,7 +19,7 @@ export type FeeRecordRow = {
 
 export type AdminFeesFilters = {
   year?: string;
-  name?: string;
+  student_name?: string;
   class_name?: string;
   section?: string;
 };
