@@ -95,31 +95,27 @@ class FeeRecordTest < ActionDispatch::IntegrationTest
 
     get api_v1_admin_fees_path,
         params: { student_name: "Priya" },
-        headers: auth_headers(@admin_auth),
-        as: :json
-    assert_response :success, response.body
+        headers: auth_headers(@admin_auth)
+    assert_response :success
     body = JSON.parse(response.body)
     assert_equal 1, body["fee_records"].length
     assert_equal "Priya Singh", body["fee_records"].first["student_name"]
 
     get api_v1_admin_fees_path,
         params: { class_name: "10", section: "A" },
-        headers: auth_headers(@admin_auth),
-        as: :json
+        headers: auth_headers(@admin_auth)
     body = JSON.parse(response.body)
     assert_equal 1, body["fee_records"].length
     assert_equal @student.id, body["fee_records"].first["student_id"]
 
     get api_v1_admin_fees_path,
         params: { year: Time.zone.today.year },
-        headers: auth_headers(@admin_auth),
-        as: :json
+        headers: auth_headers(@admin_auth)
     assert_equal 2, JSON.parse(response.body)["fee_records"].length
 
     get api_v1_admin_fees_path,
         params: { year: Time.zone.today.year - 1 },
-        headers: auth_headers(@admin_auth),
-        as: :json
+        headers: auth_headers(@admin_auth)
     assert_empty JSON.parse(response.body)["fee_records"]
   end
 
