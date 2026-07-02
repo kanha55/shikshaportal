@@ -174,7 +174,7 @@ class StudentImportTest < ActionDispatch::IntegrationTest
 
     perform_enqueued_jobs
 
-    get imports_api_v1_admin_students_path(import_id: import_id), headers: auth_headers
+    get import_status_api_v1_admin_students_path(import_id: import_id), headers: auth_headers
     assert_response :success
     @import_body = JSON.parse(response.body)
     assert_equal "completed", @import_body["status"]

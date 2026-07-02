@@ -10,7 +10,7 @@ module Api
           timestamp: Time.current.iso8601,
           redis: Shiksha::RedisHealth.check,
           jobs: {
-            adapter: ActiveJob::Base.queue_adapter.class.name.demodulize.underscore
+            adapter: ActiveJob::Base.queue_adapter.class.name.demodulize.delete_suffix("Adapter").underscore
           }
         }
       end
