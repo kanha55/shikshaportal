@@ -1,5 +1,7 @@
 # Deployment (T03 + T16 + T17 + T18)
 
+Full checklist with Done/Todo status: [`docs/DEPLOYMENT_TASKS.md`](../docs/DEPLOYMENT_TASKS.md)
+
 ## Oracle Cloud VM setup
 
 1. Clone repo to `/var/www/shikshaportal`
@@ -15,7 +17,15 @@
 4. `cd backend && bundle install && RAILS_ENV=production rails db:prepare`
 5. `cd frontend && npm ci && npm run build`
 6. Install Puma systemd service: `sudo cp deploy/puma.service /etc/systemd/system/ && sudo systemctl enable --now puma`
-7. Install Nginx: `bash deploy/install-nginx.sh`
+7. Install Redis and Sidekiq (T23):
+   ```bash
+   sudo apt install redis-server
+   sudo systemctl enable --now redis-server
+   # Add REDIS_URL and SIDEKIQ_WEB_PASSWORD to backend/.env
+   sudo cp deploy/sidekiq.service /etc/systemd/system/
+   sudo systemctl enable --now sidekiq
+   ```
+8. Install Nginx: `bash deploy/install-nginx.sh`
 8. Cloudflare: see `docs/cloudflare-dns.md`
 
 ## Environment variables (T17)
@@ -46,6 +56,8 @@ All secrets live in `backend/.env` on the server (loaded by `deploy/puma.service
 | `MAILER_FROM` | Email from address |
 | `CURSOR_API_KEY` / `ANTHROPIC_API_KEY` | AI Parent Communicator |
 | `R2_*` | Cloudflare R2 uploads (all four required together) |
+| `REDIS_URL` | Redis connection for Sidekiq (e.g. `redis://localhost:6379/0`) |
+| `SIDEKIQ_WEB_PASSWORD` | Protects `/sidekiq` web UI with HTTP basic auth |
 
 Validate anytime: `cd backend && bin/check-env` or `RAILS_ENV=staging bin/check-env`.
 
@@ -121,7 +133,7 @@ bundle exec rails smoke:prod
 
 ### What the smoke test covers
 
-- Health: `/up`, `/api/v1/health`
+- Health: `/up`, `/api/v1/health` (includes Redis job queue status)
 - Frontend SPA serves `index.html`
 - Public school profile and notices
 - Admin: login, notices CRUD, AI notice draft, students, attendance, fees, materials
