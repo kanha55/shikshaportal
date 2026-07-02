@@ -1,17 +1,51 @@
 name: Deploy
 
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
+    environment: production
 
-      - name: Deploy placeholder
+    steps:
+      - name: Deploy to Oracle Cloud
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
+          script: bash /var/www/shikshaportal/deploy/deploy.sh
+
+      - name: Notify on success
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          echo "Production deploy to Oracle Cloud will be configured in Sprint 3."
-          echo "Required GitHub secrets: DEPLOY_KEY, SERVER_IP, SERVER_USER"
+          if [[ -n "$SLACK_WEBHOOK_URL" ]]; then
+            curl -fsS -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"✅ Shiksha Portal deployed (${DEPLOY_SHA:0:7}) — https://shikshaportal.in\"}" \
+              "$SLACK_WEBHOOK_URL"
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          if [[ -n "$SLACK_WEBHOOK_URL" ]]; then
+            curl -fsS -X POST -H 'Content-type: application/json' \
+              --data "{\"text\":\"❌ Shiksha Portal deploy failed (${DEPLOY_SHA:0:7}) — see Actions logs\"}" \
+              "$SLACK_WEBHOOK_URL"
+          fi

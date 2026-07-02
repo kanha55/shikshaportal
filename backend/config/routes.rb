@@ -29,11 +29,22 @@ Rails.application.routes.draw do
 
       resources :study_materials, only: :index
 
+      get "attendance", to: "attendance#index"
+      get "fees", to: "fees#index"
+
       namespace :admin do
         resources :schools, only: :create
         resources :notices
         post "ai/notices", to: "ai_notices#create"
         resources :study_materials, only: %i[index create destroy]
+        get "attendance", to: "attendance#index"
+        post "attendance", to: "attendance#create"
+        get "attendance/report", to: "attendance#report"
+        resources :fees, only: %i[index create] do
+          member do
+            get :receipt
+          end
+        end
         resources :students, only: %i[index create] do
           collection do
             post :import
