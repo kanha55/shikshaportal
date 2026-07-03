@@ -1,6 +1,6 @@
-# Cloudflare DNS — dskl.in
+# Cloudflare DNS — campixo.com
 
-**Full walkthrough:** [`docs/D02-D04-cloudflare-dskl.in.md`](D02-D04-cloudflare-dskl.in.md) (D02 nameservers, D03 records, D04 SSL).
+**Full walkthrough:** [`docs/D02-D04-cloudflare-campixo.com.md`](D02-D04-cloudflare-campixo.com.md) (D02 nameservers, D03 records, D04 SSL).
 
 ## Wildcard A records (D03)
 
@@ -9,7 +9,7 @@
 | A | `*` | `<VM_IP>` | Proxied (orange cloud) |
 | A | `@` | `<VM_IP>` | Proxied |
 
-Replace `<VM_IP>` with your Oracle Cloud VM public IP (from D06). Add these **after the VM is created** — see [`D02-D04-cloudflare-dskl.in.md`](D02-D04-cloudflare-dskl.in.md).
+Replace `<VM_IP>` with your Oracle Cloud VM public IP (from D06). Add these **after the VM is created** — see [`D02-D04-cloudflare-campixo.com.md`](D02-D04-cloudflare-campixo.com.md).
 
 ## SSL (D04)
 
@@ -23,8 +23,8 @@ Edge SSL is handled by Cloudflare (no Certbot on server for public HTTPS). Origi
 ## Verify
 
 ```bash
-curl -I https://greenvalley.dskl.in/up
-curl https://greenvalley.dskl.in/api/v1/school/current
+curl -I https://greenvalley.campixo.com/up
+curl https://greenvalley.campixo.com/api/v1/school/current
 ```
 
 Expected: HTTP 200 on `/up`; school JSON for `greenvalley` tenant on `/api/v1/school/current`.

@@ -5,7 +5,7 @@ class SchoolRegistrationMailer < ApplicationMailer
     @admin = admin
     @temporary_password = temporary_password
     @school = school
-    @login_url = "https://#{school.subdomain}.#{ENV.fetch('APP_HOST', 'dskl.in')}/login"
+    @login_url = "https://#{school.subdomain}.#{ENV.fetch('APP_HOST', 'campixo.com')}/login"
 
     mail(
       to: admin.email,

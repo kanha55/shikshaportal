@@ -58,7 +58,7 @@ class StudentCreateService
   end
 
   def generated_email(roll_number)
-    host = ENV.fetch("APP_HOST", "dskl.in")
+    host = ENV.fetch("APP_HOST", "campixo.com")
     "#{roll_number}.#{@school.subdomain}@students.#{host}".downcase
   end
 

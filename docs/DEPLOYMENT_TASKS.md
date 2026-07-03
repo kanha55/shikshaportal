@@ -2,14 +2,14 @@
 
 Operational steps from the **🚀 Deployment** sheet in `shiksha_portal_roadmap.xlsx`. Sprint tasks T01–T23 cover application code and repo automation; this checklist tracks **production infrastructure and go-live** work.
 
-**Domain:** **dskl.in** (Digital Skol) — tenant URLs like `greenvalley.dskl.in`.
+**Domain:** **campixo.com** — tenant URLs like `greenvalley.campixo.com`.
 
 **Legend:** ✅ Done (covered by merged sprint / repo) · 🟡 Partial (code or docs exist; VM/prod step may remain) · ☐ Todo
 
 | ID | Phase | Step | Service | Status | Sprint / notes |
 |----|-------|------|---------|--------|----------------|
-| D01 | 1 — Domain & DNS | Purchase `.in` domain | GoDaddy | ✅ | **dskl.in** purchased (Digital Skol) |
-| D02 | 1 | Add domain to Cloudflare | Cloudflare | ☐ | See [`docs/D02-D04-cloudflare-dskl.in.md`](D02-D04-cloudflare-dskl.in.md) |
+| D01 | 1 — Domain & DNS | Purchase domain | GoDaddy | ✅ | **campixo.com** purchased |
+| D02 | 1 | Add domain to Cloudflare | Cloudflare | ☐ | See [`docs/D02-D04-cloudflare-campixo.com.md`](D02-D04-cloudflare-campixo.com.md) |
 | D03 | 1 | Add wildcard A record (`*` → Oracle VM IP) | Cloudflare DNS | 🟡 | D02-D04 guide — config documented |
 | D04 | 1 | Enable wildcard SSL (Full strict) | Cloudflare SSL | 🟡 | D02-D04 guide — no Certbot on server |
 | D05 | 2 — Server | Create Oracle Cloud account | Oracle Cloud | ☐ | |
@@ -18,7 +18,7 @@ Operational steps from the **🚀 Deployment** sheet in `shiksha_portal_roadmap.
 | D08 | 2 | Install Ruby + Rails stack | Oracle VM | 🟡 | `deploy/README.md` |
 | D09 | 2 | Install Node.js 20 | Oracle VM | 🟡 | `deploy/deploy.sh` |
 | D10 | 2 | Install Nginx + Puma systemd | Oracle VM | 🟡 | T03 — `deploy/puma.service`, `deploy/install-nginx.sh` |
-| D11 | 2 | Configure Nginx wildcard `*.dskl.in` | Oracle VM | 🟡 | T03 — `docs/nginx-wildcard.conf` |
+| D11 | 2 | Configure Nginx wildcard `*.campixo.com` | Oracle VM | 🟡 | T03 — `docs/nginx-wildcard.conf` |
 | D12 | 3 — DB & storage | Create Neon.tech project + `DATABASE_URL` | Neon | 🟡 | T17 — `.env.example` |
 | D13 | 3 | Create Cloudflare R2 bucket | R2 | 🟡 | T10 — R2 env vars in T17 |
 | D14 | 3 | Create Resend account + verify domain | Resend | 🟡 | T04/T08 emails |
@@ -29,7 +29,7 @@ Operational steps from the **🚀 Deployment** sheet in `shiksha_portal_roadmap.
 | D19 | 4 | Create super admin account | Rails console | 🟡 | `db/seeds.rb` — confirm prod user |
 | D20 | 5 — CI/CD | GitHub Actions deploy workflow | GitHub | ✅ | T16 — `.github/workflows/deploy.yml` |
 | D21 | 5 | Add deploy secrets to GitHub | GitHub | 🟡 | T16 — `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY` |
-| D22 | 5 | Setup UptimeRobot monitor | UptimeRobot | ☐ | Alert on `dskl.in/up` |
+| D22 | 5 | Setup UptimeRobot monitor | UptimeRobot | ☐ | Alert on `campixo.com/up` |
 | D23 | 5 | Test full deployment pipeline | GitHub Actions | 🟡 | T16/T18 — push to `main`, verify live site |
 | D24 | 6 — Go live | Register first test school on prod | App | 🟡 | T18 smoke — manual super-admin flow |
 | D25 | 6 | Add students + mark attendance | App | 🟡 | T18 smoke script |
@@ -55,7 +55,7 @@ Grouped issues for remaining operational work (sprint T01–T22 merged; T23/D29 
 
 ## Quick links
 
-- Cloudflare D02–D04: [`docs/D02-D04-cloudflare-dskl.in.md`](D02-D04-cloudflare-dskl.in.md)
+- Cloudflare D02–D04: [`docs/D02-D04-cloudflare-campixo.com.md`](D02-D04-cloudflare-campixo.com.md)
 - Deploy runbook: [`deploy/README.md`](../deploy/README.md)
 - Cloudflare DNS (quick): [`docs/cloudflare-dns.md`](cloudflare-dns.md)
 - Post-deploy smoke: [`deploy/smoke-test.sh`](../deploy/smoke-test.sh)
