@@ -20,8 +20,26 @@ cleanup() {
 }
 trap cleanup EXIT
 
+echo "==> Waiting for Puma /up..."
+for i in $(seq 1 60); do
+  if curl -sf http://127.0.0.1:3000/up > /dev/null; then
+    echo "==> Puma is ready."
+    break
+  fi
+  if ! kill -0 "$PUMA_PID" 2>/dev/null; then
+    echo "ERROR: Puma exited during startup. Check logs above for missing env vars or DB errors." >&2
+    exit 1
+  fi
+  if [ "$i" -eq 60 ]; then
+    echo "ERROR: Puma did not respond on /up within 60s." >&2
+    exit 1
+  fi
+  sleep 1
+done
+
 export PORT="${PORT:-8080}"
 echo "==> Starting Nginx on port ${PORT}..."
+mkdir -p /etc/nginx/sites-enabled
 envsubst '${PORT}' < /etc/nginx/templates/default.conf.template \
   > /etc/nginx/sites-enabled/default
 
