@@ -1,6 +1,12 @@
 # Cloudflare DNS — campixo.com
 
-**Full walkthrough:** [`docs/D02-D04-cloudflare-campixo.com.md`](D02-D04-cloudflare-campixo.com.md) (D02 nameservers, D03 records, D04 SSL).
+**Full walkthrough:** [`docs/D02-D04-cloudflare-campixo.com.md`](D02-D04-cloudflare-campixo.com.md) (D02 registration/DNS, D03 records, D04 SSL).
+
+## D02 — Register or add domain
+
+**Recommended:** Register **campixo.com** at [Cloudflare Registrar](https://dash.cloudflare.com) → **Domain Registration**. DNS is auto-configured in the same account — **no nameserver change**.
+
+**Alternative:** Domain bought at GoDaddy or elsewhere → **Add a site** in Cloudflare and change nameservers at the registrar. See path B in the full guide.
 
 ## Wildcard A records (D03)
 
