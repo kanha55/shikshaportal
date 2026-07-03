@@ -28,7 +28,7 @@ jobs:
 
       - name: Production smoke test (T18)
         env:
-          SMOKE_BASE_URL: https://greenvalley.shikshaportal.in
+          SMOKE_BASE_URL: https://greenvalley.dskl.in
           SMOKE_ADMIN_PASSWORD: ${{ secrets.SMOKE_ADMIN_PASSWORD }}
           SMOKE_STUDENT_PASSWORD: ${{ secrets.SMOKE_STUDENT_PASSWORD }}
         run: |
@@ -46,7 +46,7 @@ jobs:
         run: |
           if [[ -n "$SLACK_WEBHOOK_URL" ]]; then
             curl -fsS -X POST -H 'Content-type: application/json' \
-              --data "{\"text\":\"✅ Shiksha Portal deployed (${DEPLOY_SHA:0:7}) — https://shikshaportal.in\"}" \
+              --data "{\"text\":\"✅ Shiksha Portal deployed (${DEPLOY_SHA:0:7}) — https://dskl.in\"}" \
               "$SLACK_WEBHOOK_URL"
           fi
 

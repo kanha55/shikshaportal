@@ -20,8 +20,8 @@ module Shiksha
     }.freeze
 
     OPTIONAL = {
-      "APP_HOST" => "Base domain for tenant subdomains (default: shikshaportal.in)",
-      "FRONTEND_ORIGIN" => "CORS origin for SPA (production: https://shikshaportal.in)",
+      "APP_HOST" => "Base domain for tenant subdomains (default: dskl.in)",
+      "FRONTEND_ORIGIN" => "CORS origin for SPA (production: https://dskl.in)",
       "MAILER_FROM" => "From address for transactional email",
       "JWT_EXPIRY_HOURS" => "JWT lifetime in hours (default: 24)",
       "RAILS_LOG_LEVEL" => "Rails log level (default: info)",

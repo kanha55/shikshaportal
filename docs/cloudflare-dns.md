@@ -1,24 +1,30 @@
-# Cloudflare DNS (T03)
+# Cloudflare DNS — dskl.in
 
-## Wildcard A record
+**Full walkthrough:** [`docs/D02-D04-cloudflare-dskl.in.md`](D02-D04-cloudflare-dskl.in.md) (D02 nameservers, D03 records, D04 SSL).
+
+## Wildcard A records (D03)
 
 | Type | Name | Content | Proxy |
 |------|------|---------|-------|
-| A | `*` | `<ORACLE_VM_IP>` | Proxied (orange cloud) |
-| A | `@` | `<ORACLE_VM_IP>` | Proxied |
+| A | `*` | `<VM_IP>` | Proxied (orange cloud) |
+| A | `@` | `<VM_IP>` | Proxied |
 
-## SSL mode
+Replace `<VM_IP>` with your Oracle Cloud VM public IP (from D06). Add these **after the VM is created** — see [`D02-D04-cloudflare-dskl.in.md`](D02-D04-cloudflare-dskl.in.md).
 
-Cloudflare Dashboard → SSL/TLS → **Full (strict)**
+## SSL (D04)
 
-- Edge SSL handled by Cloudflare (no Certbot on server for public HTTPS)
-- Origin: self-signed or Cloudflare Origin Certificate on Nginx (port 80 only if Cloudflare terminates HTTPS)
+Cloudflare Dashboard → SSL/TLS:
+
+- Encryption mode: **Full (strict)**
+- Edge Certificates: **Always Use HTTPS** enabled
+
+Edge SSL is handled by Cloudflare (no Certbot on server for public HTTPS). Origin: Cloudflare Origin Certificate or self-signed on Nginx (port 80 from Cloudflare).
 
 ## Verify
 
 ```bash
-curl -I https://greenvalley.shikshaportal.in/up
-curl https://greenvalley.shikshaportal.in/api/v1/school/current
+curl -I https://greenvalley.dskl.in/up
+curl https://greenvalley.dskl.in/api/v1/school/current
 ```
 
-Expected: school JSON for `greenvalley` tenant.
+Expected: HTTP 200 on `/up`; school JSON for `greenvalley` tenant on `/api/v1/school/current`.

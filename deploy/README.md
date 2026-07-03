@@ -16,7 +16,7 @@
 5. `cd frontend && npm ci && npm run build`
 6. Install Puma systemd service: `sudo cp deploy/puma.service /etc/systemd/system/ && sudo systemctl enable --now puma`
 7. Install Nginx: `bash deploy/install-nginx.sh`
-8. Cloudflare: see `docs/cloudflare-dns.md`
+8. Cloudflare: see `docs/D02-D04-cloudflare-dskl.in.md`
 
 ## Environment variables (T17)
 
@@ -41,7 +41,7 @@ All secrets live in `backend/.env` on the server (loaded by `deploy/puma.service
 
 | Variable | Purpose |
 |----------|---------|
-| `APP_HOST` | Base domain (default `shikshaportal.in`) |
+| `APP_HOST` | Base domain (default `dskl.in`) |
 | `FRONTEND_ORIGIN` | CORS origin |
 | `MAILER_FROM` | Email from address |
 | `CURSOR_API_KEY` / `ANTHROPIC_API_KEY` | AI Parent Communicator |
@@ -87,8 +87,8 @@ ssh ubuntu@<SERVER_IP> 'bash /var/www/shikshaportal/deploy/deploy.sh'
 ## Verify
 
 ```bash
-curl -I https://greenvalley.shikshaportal.in/up
-curl https://greenvalley.shikshaportal.in/api/v1/school/current
+curl -I https://greenvalley.dskl.in/up
+curl https://greenvalley.dskl.in/api/v1/school/current
 ```
 
 ## Production smoke testing (T18)
@@ -103,7 +103,7 @@ Configure credentials via environment variables or `deploy/smoke-test.env` (copy
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `SMOKE_BASE_URL` | `https://greenvalley.shikshaportal.in` | Tenant base URL |
+| `SMOKE_BASE_URL` | `https://greenvalley.dskl.in` | Tenant base URL |
 | `SMOKE_ADMIN_EMAIL` | `principal@greenvalley.test` | School admin login |
 | `SMOKE_ADMIN_PASSWORD` | — | Admin password (required in prod) |
 | `SMOKE_STUDENT_EMAIL` | `rahul@greenvalley.test` | Student login |
@@ -114,7 +114,7 @@ Configure credentials via environment variables or `deploy/smoke-test.env` (copy
 From the backend directory:
 
 ```bash
-SMOKE_BASE_URL=https://greenvalley.shikshaportal.in \
+SMOKE_BASE_URL=https://greenvalley.dskl.in \
 SMOKE_ADMIN_PASSWORD=*** SMOKE_STUDENT_PASSWORD=*** \
 bundle exec rails smoke:prod
 ```
