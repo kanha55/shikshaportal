@@ -1,0 +1,16 @@
+.git
+.github
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.staging.example
+**/node_modules
+**/tmp
+**/log
+**/storage
+**/.DS_Store
+deploy/smoke-test.env
+docs/
+*.md
+!backend/README.md
+!frontend/README.md

@@ -1,0 +1,15 @@
+# Railway project config — Campixo (campixo.com)
+# Docs: docs/DEPLOY-RAILWAY.md
+#
+# Set the service "Root Directory" to repo root in the Railway dashboard
+# (not backend/) so this Dockerfile builds frontend + backend together.
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/up"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
