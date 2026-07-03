@@ -2,7 +2,7 @@
 
 Devise.setup do |config|
   config.parent_controller = "ApplicationController"
-  config.mailer_sender = ENV.fetch("MAILER_FROM", "noreply@shikshaportal.in")
+  config.mailer_sender = ENV.fetch("MAILER_FROM", "noreply@dskl.in")
   config.mailer = "DeviseMailer"
 
   require "devise/orm/active_record"

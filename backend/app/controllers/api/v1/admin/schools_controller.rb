@@ -31,7 +31,7 @@ module Api
             id: school.id,
             name: school.name,
             subdomain: school.subdomain,
-            url: "https://#{school.subdomain}.#{ENV.fetch('APP_HOST', 'shikshaportal.in')}",
+            url: "https://#{school.subdomain}.#{ENV.fetch('APP_HOST', 'dskl.in')}",
             admin: {
               id: result.admin_user.id,
               email: result.admin_user.email,

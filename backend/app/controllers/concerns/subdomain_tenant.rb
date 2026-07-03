@@ -26,7 +26,7 @@ module SubdomainTenant
       return host.delete_suffix(".localhost").split(".").first
     end
 
-    base = ENV.fetch("APP_HOST", "shikshaportal.in")
+    base = ENV.fetch("APP_HOST", "dskl.in")
     return host.split(".").first if host.end_with?(".#{base}") && host != base
 
     nil

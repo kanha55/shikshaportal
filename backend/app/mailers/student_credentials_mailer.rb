@@ -5,7 +5,7 @@ class StudentCredentialsMailer < ApplicationMailer
     @student = student
     @temporary_password = temporary_password
     @school = school
-    @login_url = "https://#{school.subdomain}.#{ENV.fetch('APP_HOST', 'shikshaportal.in')}/login"
+    @login_url = "https://#{school.subdomain}.#{ENV.fetch('APP_HOST', 'dskl.in')}/login"
 
     mail(
       to: student.email,
