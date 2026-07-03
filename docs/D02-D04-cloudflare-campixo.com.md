@@ -1,6 +1,6 @@
 # D02–D04: Cloudflare DNS for campixo.com
 
-Step-by-step guide for **Deployment checklist D02–D04**. Domain: **campixo.com** (purchased on GoDaddy). Each school gets a subdomain like `greenvalley.campixo.com`.
+Step-by-step guide for **Deployment checklist D02–D04**. Domain: **campixo.com** (multi-vertical SaaS — schools, health, finance). Purchased on GoDaddy. Each school gets a subdomain like `greenvalley.campixo.com`.
 
 **Prerequisites:** D01 done — you own `campixo.com`. Oracle VM IP from D05–D06 is needed for D03 A records.
 
