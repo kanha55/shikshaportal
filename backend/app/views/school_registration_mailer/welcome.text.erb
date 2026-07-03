@@ -2,7 +2,7 @@
 
 <%= t("mailers.school_registration.intro", school: @school.name) %>
 
-<%= t("mailers.school_registration.subdomain", subdomain: "#{@school.subdomain}.#{ENV.fetch('APP_HOST', 'shikshaportal.in')}") %>
+<%= t("mailers.school_registration.subdomain", subdomain: "#{@school.subdomain}.#{ENV.fetch('APP_HOST', 'campixo.com')}") %>
 <%= t("mailers.school_registration.login_url", url: @login_url) %>
 
 <%= t("mailers.school_registration.email", email: @admin.email) %>

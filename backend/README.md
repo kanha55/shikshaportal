@@ -31,7 +31,7 @@ bin/check-env   # validates in production/staging only
 | `SECRET_KEY_BASE` | prod/staging | Rails session/crypto |
 | `JWT_SECRET_KEY` | prod/staging | JWT signing (use `rails secret`) |
 | `SUPER_ADMIN_API_KEY` | prod/staging | Protects `POST /api/v1/admin/schools` |
-| `APP_HOST` | — | Base domain (default `shikshaportal.in`) |
+| `APP_HOST` | — | Base domain (default `campixo.com`) |
 | `FRONTEND_ORIGIN` | — | CORS origin for React app |
 | `MAILER_FROM` | — | Transactional email from address |
 | `CURSOR_API_KEY` | — | Cursor API for AI Parent Communicator (T15) |

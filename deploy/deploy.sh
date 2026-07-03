@@ -41,7 +41,7 @@ echo
 
 if [[ "${RUN_SMOKE_TEST:-0}" == "1" && -f "${APP_ROOT}/deploy/smoke-test.sh" ]]; then
   echo "==> Running production smoke test..."
-  SMOKE_BASE_URL="${SMOKE_BASE_URL:-https://greenvalley.shikshaportal.in}" \
+  SMOKE_BASE_URL="${SMOKE_BASE_URL:-https://greenvalley.campixo.com}" \
     bash "${APP_ROOT}/deploy/smoke-test.sh"
 fi
 

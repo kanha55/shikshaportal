@@ -4,7 +4,7 @@ Village school and college education platform — multi-tenant, Hindi + English,
 
 ## Overview
 
-Shiksha Portal helps schools manage students, notices, study materials, attendance, and fees. Each school gets its own subdomain (e.g. `greenvalley.shikshaportal.in`).
+Shiksha Portal helps schools manage students, notices, study materials, attendance, and fees. Each school gets its own subdomain (e.g. `greenvalley.campixo.com`).
 
 **Key features (MVP roadmap):**
 

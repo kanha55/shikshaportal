@@ -3,7 +3,7 @@
 #
 # Usage:
 #   bash deploy/smoke-test.sh
-#   SMOKE_BASE_URL=https://greenvalley.shikshaportal.in bash deploy/smoke-test.sh
+#   SMOKE_BASE_URL=https://greenvalley.campixo.com bash deploy/smoke-test.sh
 #   SMOKE_LOAD_TEST=1 bash deploy/smoke-test.sh   # 50 parallel student API calls
 #
 # Credentials: set SMOKE_ADMIN_* / SMOKE_STUDENT_* or copy deploy/smoke-test.env.example → smoke-test.env
@@ -15,7 +15,7 @@ if [[ -f "${SCRIPT_DIR}/smoke-test.env" ]]; then
   source "${SCRIPT_DIR}/smoke-test.env"
 fi
 
-BASE_URL="${SMOKE_BASE_URL:-https://greenvalley.shikshaportal.in}"
+BASE_URL="${SMOKE_BASE_URL:-https://greenvalley.campixo.com}"
 ADMIN_EMAIL="${SMOKE_ADMIN_EMAIL:-principal@greenvalley.test}"
 ADMIN_PASSWORD="${SMOKE_ADMIN_PASSWORD:-password123}"
 STUDENT_EMAIL="${SMOKE_STUDENT_EMAIL:-rahul@greenvalley.test}"
