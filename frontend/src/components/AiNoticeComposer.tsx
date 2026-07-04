@@ -7,6 +7,14 @@ import type { AiGenerateInput } from "../types/ai";
 
 const CATEGORIES: AiGenerateInput["category"][] = ["holiday", "fee", "exam", "event"];
 
+function extractApiError(err: unknown, fallback: string): string {
+  if (!axios.isAxiosError(err)) return fallback;
+  const data = err.response?.data as { errors?: string[]; error?: string } | undefined;
+  if (data?.errors?.length) return data.errors.join(", ");
+  if (data?.error) return data.error;
+  return fallback;
+}
+
 export function AiNoticeComposer({ onPosted }: { onPosted?: () => void }) {
   const { t, i18n } = useTranslation(["ai", "common"]);
   const [roughInput, setRoughInput] = useState("");
@@ -44,7 +52,7 @@ export function AiNoticeComposer({ onPosted }: { onPosted?: () => void }) {
       if (axios.isAxiosError(err) && err.response?.status === 429) {
         setError(t("ai:limitReached"));
       } else {
-        setError(t("ai:generateFailed"));
+        setError(extractApiError(err, t("ai:generateFailed")));
       }
     } finally {
       setGenerating(false);
@@ -61,8 +69,8 @@ export function AiNoticeComposer({ onPosted }: { onPosted?: () => void }) {
       setBody("");
       setWhatsapp("");
       onPosted?.();
-    } catch {
-      setError(t("ai:postFailed"));
+    } catch (err) {
+      setError(extractApiError(err, t("ai:postFailed")));
     } finally {
       setPosting(false);
     }

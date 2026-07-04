@@ -30,6 +30,25 @@ class AiNoticeGeneratorServiceTest < ActiveSupport::TestCase
     end
   end
 
+  test "falls back to mock when cursor fails and anthropic is unset" do
+    fake_client = Object.new
+    fake_client.define_singleton_method(:complete) do |_prompt, model_id: nil|
+      raise CursorAgentClient::ApiError, "Cursor API error (401)"
+    end
+
+    with_env("CURSOR_API_KEY" => "cursor_test_key", "ANTHROPIC_API_KEY" => nil) do
+      result = AiNoticeGeneratorService.new(
+        school: @school,
+        rough_input: "kal school band",
+        category: "holiday",
+        cursor_client: fake_client
+      ).call
+
+      assert result[:notice_title].present?
+      assert_includes result[:notice_body], "kal school band"
+    end
+  end
+
   private
 
   def with_env(updates)

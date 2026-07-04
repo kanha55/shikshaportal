@@ -105,7 +105,8 @@ Set these on **`campixo-web`** → **Variables** (Railway dashboard or `railway 
 |----------|---------|
 | `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_ENDPOINT` | Cloudflare R2 uploads (all four required together) |
 | `RESEND_API_KEY` or `SMTP_*` | Transactional email |
-| `CURSOR_API_KEY` / `ANTHROPIC_API_KEY` | AI Parent Communicator |
+| `ANTHROPIC_API_KEY` | **Recommended** for AI Parent Communicator on Railway (direct Claude API) |
+| `CURSOR_API_KEY` | Optional; uses Cursor Agents API and may fail on headless servers — app falls back to Anthropic, then template draft |
 | `RAILS_MASTER_KEY` | Only if you use encrypted credentials (`config/credentials`) |
 
 Validate locally against the same keys:
@@ -341,6 +342,7 @@ Suggested: add a GitHub **Environment** `railway-production` for manual approval
 | `502` / health check fail | Container crash, DB down | Check deploy logs; verify `DATABASE_URL` |
 | Tenant not found | Wrong subdomain / `APP_HOST` | Ensure `APP_HOST=campixo.com` and school exists in DB |
 | CORS errors | `FRONTEND_ORIGIN` mismatch | Set to `https://campixo.com` or tenant URL pattern your app expects |
+| AI notice "Could not generate" / `AI service unavailable` | `CURSOR_API_KEY` set but Agents API fails on Railway; or no AI keys and user expects real AI | Set `ANTHROPIC_API_KEY=sk-ant-...` on `campixo-web`, redeploy. Remove invalid `CURSOR_API_KEY` if unused. With no keys, template draft still works after deploy with fallback fix |
 | Build OOM | Frontend + Ruby build in one Dockerfile | Retry deploy; upgrade plan or enable larger build resources |
 | Old Oracle IP still served | Stale Cloudflare A record | Remove `*` A record; use Railway CNAME |
 
