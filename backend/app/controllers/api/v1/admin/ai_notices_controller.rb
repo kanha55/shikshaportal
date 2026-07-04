@@ -30,6 +30,9 @@ module Api
         rescue AiNoticeGeneratorService::GenerationError => e
           status = e.code == :daily_limit ? :too_many_requests : :unprocessable_entity
           render json: { errors: [e.message] }, status: status
+        rescue StandardError => e
+          Rails.logger.error("[AiNoticesController] #{e.class}: #{e.message}")
+          render json: { errors: [I18n.t("services.ai.service_unavailable")] }, status: :internal_server_error
         end
       end
     end

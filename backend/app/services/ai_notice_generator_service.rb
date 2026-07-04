@@ -29,15 +29,7 @@ class AiNoticeGeneratorService
   def call
     validate!
 
-    payload = if cursor_api?
-                call_cursor_api
-              elsif anthropic_api?
-                call_anthropic_api
-              else
-                mock_response
-              end
-
-    normalize_payload(payload)
+    normalize_payload(generate_with_fallback)
   end
 
   def self.daily_usage_for(school)
@@ -66,11 +58,32 @@ class AiNoticeGeneratorService
     ENV["ANTHROPIC_API_KEY"].present?
   end
 
+  def generate_with_fallback
+    if cursor_api?
+      payload = try_provider(:cursor) { call_cursor_api }
+      return payload if payload
+    end
+
+    if anthropic_api?
+      payload = try_provider(:anthropic) { call_anthropic_api }
+      return payload if payload
+    end
+
+    mock_response
+  end
+
+  def try_provider(name)
+    yield
+  rescue GenerationError => e
+    Rails.logger.warn("[AiNoticeGenerator] #{name} failed (#{e.code}): #{e.message}")
+    nil
+  end
+
   def call_cursor_api
     client = cursor_client || CursorAgentClient.new
     text = client.complete(cursor_prompt)
     parse_json_payload(text)
-  rescue CursorAgentClient::ApiError
+  rescue CursorAgentClient::ApiError, JSON::ParserError
     raise GenerationError, :service_unavailable
   end
 
