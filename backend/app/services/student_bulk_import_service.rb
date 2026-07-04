@@ -35,13 +35,24 @@ class StudentBulkImportService
   private
 
   def parse_csv!
-    table = CSV.parse(@csv_io, headers: true, strip: true)
-    headers = table.headers.compact.map { |h| h.to_s.strip.downcase.to_sym }
+    @table = CSV.parse(@csv_io, headers: true, strip: true)
+    @header_map = build_header_map(@table.headers)
 
-    missing = REQUIRED_HEADERS - headers
+    missing = REQUIRED_HEADERS - @header_map.keys
     raise ArgumentError, I18n.t("services.import.missing_columns", columns: missing.join(", ")) if missing.any?
 
-    table
+    @table
+  end
+
+  def build_header_map(headers)
+    headers.compact.each_with_object({}) do |raw, map|
+      key = normalize_header(raw)
+      map[key] = raw unless map.key?(key)
+    end
+  end
+
+  def normalize_header(raw)
+    raw.to_s.strip.delete("\uFEFF").downcase.to_sym
   end
 
   def process_row(row, line_number, seen_roll_numbers, result)
@@ -67,7 +78,8 @@ class StudentBulkImportService
 
   def normalize_row(row)
     ALL_HEADERS.index_with do |header|
-      row[header.to_s]&.to_s&.strip
+      col = @header_map[header]
+      col ? row[col]&.to_s&.strip : nil
     end
   end
 

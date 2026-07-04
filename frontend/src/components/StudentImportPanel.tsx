@@ -14,6 +14,14 @@ const emptyForm = {
   email: "",
 };
 
+function extractApiError(err: unknown, fallback: string): string {
+  if (!axios.isAxiosError(err)) return fallback;
+  const data = err.response?.data as { errors?: string[]; error?: string } | undefined;
+  if (data?.errors?.length) return data.errors.join(", ");
+  if (data?.error) return data.error;
+  return fallback;
+}
+
 export function StudentImportPanel({
   onStudentsChange,
 }: {
@@ -61,12 +69,7 @@ export function StudentImportPanel({
       setMessage(t("students:createSuccess"));
       await reloadStudents();
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.data?.errors) {
-        const apiErrors = err.response.data.errors as string[];
-        setFormError(apiErrors.join(", "));
-      } else {
-        setFormError(t("students:createFailed"));
-      }
+      setFormError(extractApiError(err, t("students:createFailed")));
     } finally {
       setAdding(false);
     }
@@ -98,8 +101,8 @@ export function StudentImportPanel({
 
       await reloadStudents();
       setFile(null);
-    } catch {
-      setMessage(t("students:importFailed"));
+    } catch (err) {
+      setMessage(extractApiError(err, t("students:importFailed")));
     } finally {
       setSubmitting(false);
     }

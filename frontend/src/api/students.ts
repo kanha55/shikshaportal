@@ -22,8 +22,7 @@ export async function importStudents(file: File): Promise<StudentImportResult> {
 
   const response = await apiClient.post<StudentImportResult>(
     "/admin/students/import",
-    formData,
-    { headers: { "Content-Type": "multipart/form-data" } }
+    formData
   );
 
   return response.data;

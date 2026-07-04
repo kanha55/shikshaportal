@@ -42,9 +42,7 @@ class StudentCreateService
     )
 
     if user.save
-      I18n.with_locale(user.language_preference) do
-        StudentCredentialsMailer.login_details(user, password, @school).deliver_now
-      end
+      send_credentials_email(user, password)
       Result.new(success: true, student: student_json(user), errors: [])
     else
       failure(user.errors.full_messages)
@@ -60,6 +58,16 @@ class StudentCreateService
   def generated_email(roll_number)
     host = ENV.fetch("APP_HOST", "campixo.com")
     "#{roll_number}.#{@school.subdomain}@students.#{host}".downcase
+  end
+
+  def send_credentials_email(user, password)
+    I18n.with_locale(user.language_preference) do
+      StudentCredentialsMailer.login_details(user, password, @school).deliver_now
+    end
+  rescue StandardError => e
+    Rails.logger.warn(
+      "[StudentCreateService] credentials email failed for user #{user.id}: #{e.class}: #{e.message}"
+    )
   end
 
   def student_json(user)
