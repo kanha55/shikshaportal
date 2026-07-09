@@ -12,6 +12,28 @@ import type { GalleryPhoto } from "../types/gallery";
 const MAX_BYTES = 5 * 1024 * 1024;
 const MAX_PHOTOS = 6;
 
+
+function isFileTooLarge(file: File): boolean {
+  return file.size > MAX_BYTES;
+}
+
+function mapBackendErrors(errors: string[], t: (key: string) => string): string {
+  return errors
+    .map((message) => {
+      if (/5\s*MB/i.test(message) || /smaller than/i.test(message)) {
+        return t("gallery:fileTooLarge");
+      }
+      if (/JPEG|PNG|WebP/i.test(message)) {
+        return t("gallery:invalidType");
+      }
+      if (/Maximum|6 gallery photos|cannot exceed/i.test(message)) {
+        return t("gallery:limitReached");
+      }
+      return message;
+    })
+    .join(", ");
+}
+
 export function GalleryPhotoPanel() {
   const { t } = useTranslation(["gallery", "common"]);
   const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
@@ -21,6 +43,8 @@ export function GalleryPhotoPanel() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const fileTooLarge = file !== null && isFileTooLarge(file);
 
   const reload = useCallback(async () => {
     setPhotos(await fetchAdminGalleryPhotos());
@@ -32,17 +56,29 @@ export function GalleryPhotoPanel() {
       .finally(() => setLoading(false));
   }, [reload]);
 
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    if (!file) return;
+  function handleFileChange(selected: File | null) {
+    setFile(selected);
+    setMessage(null);
 
-    if (photos.length >= MAX_PHOTOS) {
-      setError(t("gallery:limitReached"));
+    if (!selected) {
+      setError(null);
       return;
     }
 
-    if (file.size > MAX_BYTES) {
+    if (isFileTooLarge(selected)) {
       setError(t("gallery:fileTooLarge"));
+      return;
+    }
+
+    setError(null);
+  }
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (!file || fileTooLarge) return;
+
+    if (photos.length >= MAX_PHOTOS) {
+      setError(t("gallery:limitReached"));
       return;
     }
 
@@ -57,8 +93,10 @@ export function GalleryPhotoPanel() {
       setMessage(t("gallery:uploadSuccess"));
       await reload();
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response?.data?.errors) {
-        setError((err.response.data.errors as string[]).join(", "));
+      if (err instanceof Error && err.message === "FILE_TOO_LARGE") {
+        setError(t("gallery:fileTooLarge"));
+      } else if (axios.isAxiosError(err) && err.response?.data?.errors) {
+        setError(mapBackendErrors(err.response.data.errors as string[], t));
       } else {
         setError(t("gallery:uploadFailed"));
       }
@@ -113,13 +151,13 @@ export function GalleryPhotoPanel() {
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            onChange={(e) => handleFileChange(e.target.files?.[0] ?? null)}
             required
           />
         </label>
         {error && <p className="error">{error}</p>}
         {message && <p className="import-message">{message}</p>}
-        <button type="submit" disabled={submitting || !file || photos.length >= MAX_PHOTOS}>
+        <button type="submit" disabled={submitting || !file || photos.length >= MAX_PHOTOS || fileTooLarge}>
           {submitting ? t("gallery:uploading") : t("gallery:upload")}
         </button>
       </form>

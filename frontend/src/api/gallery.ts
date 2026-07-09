@@ -1,6 +1,8 @@
 import { apiClient } from "./client";
 import type { GalleryPhoto, GalleryPhotoInput } from "../types/gallery";
 
+const MAX_BYTES = 5 * 1024 * 1024;
+
 export async function fetchPublicGalleryPhotos(): Promise<GalleryPhoto[]> {
   const response = await apiClient.get<{ gallery_photos: GalleryPhoto[] }>("/public/gallery_photos");
   return response.data.gallery_photos;
@@ -12,6 +14,10 @@ export async function fetchAdminGalleryPhotos(): Promise<GalleryPhoto[]> {
 }
 
 export async function uploadGalleryPhoto(input: GalleryPhotoInput): Promise<GalleryPhoto> {
+  if (input.image.size > MAX_BYTES) {
+    throw new Error("FILE_TOO_LARGE");
+  }
+
   const formData = new FormData();
   if (input.caption) {
     formData.append("gallery_photo[caption]", input.caption);

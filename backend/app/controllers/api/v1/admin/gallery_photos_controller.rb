@@ -6,6 +6,8 @@ module Api
       class GalleryPhotosController < ApplicationController
         include SchoolAdminAuth
 
+        MAX_GALLERY_SIZE = GalleryPhoto::MAX_FILE_SIZE
+
         def index
           photos = GalleryPhoto.ordered
           render json: {
@@ -14,6 +16,11 @@ module Api
         end
 
         def create
+          image = photo_params[:image]
+          if image.present? && image.size > MAX_GALLERY_SIZE
+            return render json: { errors: ["Photo must be smaller than 5 MB"] }, status: :unprocessable_entity
+          end
+
           photo = GalleryPhoto.new(photo_params)
 
           if photo.save
