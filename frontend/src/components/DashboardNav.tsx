@@ -12,6 +12,7 @@ const adminNavItems: NavItem[] = [
   { key: "notices", labelKey: "nav:notices", sectionId: "admin-notices" },
   { key: "fees", labelKey: "nav:fees", sectionId: "admin-fees" },
   { key: "materials", labelKey: "nav:materials", sectionId: "admin-materials" },
+  { key: "gallery", labelKey: "nav:gallery", sectionId: "admin-gallery" },
 ];
 
 const adminQuickActions = [

@@ -1,0 +1,20 @@
+{
+  "panelTitle": "Photo gallery",
+  "panelHint": "Upload up to 6 photos for your public school homepage.",
+  "caption": "Caption (optional)",
+  "captionPlaceholder": "e.g. Annual day 2026",
+  "chooseImage": "Choose image",
+  "upload": "Upload photo",
+  "uploading": "Uploading…",
+  "uploadSuccess": "Photo uploaded.",
+  "uploadFailed": "Could not upload photo.",
+  "deleteFailed": "Could not delete photo.",
+  "photoList": "Gallery photos",
+  "noPhotos": "No photos yet.",
+  "delete": "Delete",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "fileTooLarge": "Image must be 5 MB or smaller.",
+  "limitReached": "You can upload at most 6 photos.",
+  "publicTitle": "School gallery"
+}

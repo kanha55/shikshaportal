@@ -1,0 +1,20 @@
+{
+  "panelTitle": "फोटो गैलरी",
+  "panelHint": "स्कूल होमपेज पर अधिकतम 6 फोटो अपलोड करें।",
+  "caption": "कैप्शन (वैकल्पिक)",
+  "captionPlaceholder": "जैसे वार्षिक दिवस 2026",
+  "chooseImage": "फोटो चुनें",
+  "upload": "फोटो अपलोड करें",
+  "uploading": "अपलोड हो रहा है…",
+  "uploadSuccess": "फोटो अपलोड हो गई।",
+  "uploadFailed": "फोटो अपलोड नहीं हो सकी।",
+  "deleteFailed": "फोटो हटाई नहीं जा सकी।",
+  "photoList": "गैलरी फोटो",
+  "noPhotos": "अभी कोई फोटो नहीं।",
+  "delete": "हटाएँ",
+  "moveUp": "ऊपर ले जाएँ",
+  "moveDown": "नीचे ले जाएँ",
+  "fileTooLarge": "फोटो 5 MB या उससे छोटी होनी चाहिए।",
+  "limitReached": "अधिकतम 6 फोटो अपलोड कर सकते हैं।",
+  "publicTitle": "स्कूल गैलरी"
+}
