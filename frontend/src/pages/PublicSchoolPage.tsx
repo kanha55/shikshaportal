@@ -2,25 +2,30 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { LanguageToggle } from "../components/LanguageToggle";
+import { fetchPublicGalleryPhotos } from "../api/gallery";
 import { fetchPublicNotices, fetchPublicSchool } from "../api/public";
+import type { GalleryPhoto } from "../types/gallery";
 import type { PublicNotice, PublicSchool } from "../types/public";
 
 export function PublicSchoolPage() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["common", "gallery"]);
   const [school, setSchool] = useState<PublicSchool | null>(null);
   const [notices, setNotices] = useState<PublicNotice[]>([]);
+  const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        const [schoolData, noticeData] = await Promise.all([
+        const [schoolData, noticeData, galleryData] = await Promise.all([
           fetchPublicSchool(),
           fetchPublicNotices(),
+          fetchPublicGalleryPhotos().catch(() => []),
         ]);
         setSchool(schoolData);
         setNotices(noticeData);
+        setGalleryPhotos(galleryData);
       } catch {
         setError(t("schoolNotFoundHint"));
       } finally {
@@ -129,6 +134,30 @@ export function PublicSchoolPage() {
             </ul>
           </section>
         </div>
+
+
+        {galleryPhotos.length > 0 ? (
+          <section className="panel public-gallery-panel">
+            <div className="panel-header">
+              <div className="panel-icon" aria-hidden>
+                P
+              </div>
+              <h2>{t("gallery:publicTitle")}</h2>
+            </div>
+            <div className="public-gallery-grid">
+              {galleryPhotos.map((photo) => (
+                <figure key={photo.id} className="public-gallery-item">
+                  <img
+                    src={photo.image_url}
+                    alt={photo.caption ?? school.name}
+                    loading="lazy"
+                  />
+                  {photo.caption ? <figcaption>{photo.caption}</figcaption> : null}
+                </figure>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         <section className="panel">
           <div className="panel-header">

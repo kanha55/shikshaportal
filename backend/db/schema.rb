@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_02_160000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_09_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -88,6 +88,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_02_160000) do
     t.index ["student_id"], name: "index_fee_records_on_student_id"
   end
 
+  create_table "gallery_photos", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.integer "position", null: false
+    t.string "caption"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "position"], name: "index_gallery_photos_on_school_id_and_position", unique: true
+    t.index ["school_id"], name: "index_gallery_photos_on_school_id"
+  end
+
   create_table "notices", force: :cascade do |t|
     t.bigint "school_id", null: false
     t.string "title", null: false
@@ -158,6 +168,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_02_160000) do
   add_foreign_key "fee_records", "schools"
   add_foreign_key "fee_records", "users", column: "recorded_by_id"
   add_foreign_key "fee_records", "users", column: "student_id"
+  add_foreign_key "gallery_photos", "schools"
   add_foreign_key "notices", "schools"
   add_foreign_key "study_materials", "schools"
   add_foreign_key "users", "schools"

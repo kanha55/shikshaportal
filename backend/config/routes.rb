@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       namespace :public do
         get "school", to: "schools#show"
         get "notices", to: "notices#index"
+        get "gallery_photos", to: "gallery_photos#index"
       end
 
       devise_for :users,
@@ -43,6 +44,11 @@ Rails.application.routes.draw do
         resources :fees, only: %i[index create] do
           member do
             get :receipt
+          end
+        end
+        resources :gallery_photos, only: %i[index create destroy] do
+          member do
+            patch :move
           end
         end
         resources :students, only: %i[index create] do

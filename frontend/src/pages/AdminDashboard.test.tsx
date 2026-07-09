@@ -80,6 +80,13 @@ vi.mock("../api/fees", () => ({
   downloadFeeReceipt: vi.fn(),
 }));
 
+vi.mock("../api/gallery", () => ({
+  fetchAdminGalleryPhotos: vi.fn().mockResolvedValue([]),
+  uploadGalleryPhoto: vi.fn(),
+  deleteGalleryPhoto: vi.fn(),
+  moveGalleryPhoto: vi.fn(),
+}));
+
 vi.mock("../api/studyMaterials", () => ({
   fetchAdminStudyMaterials: vi.fn().mockResolvedValue([
     {

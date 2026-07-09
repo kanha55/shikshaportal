@@ -11,6 +11,7 @@ import enNotices from "./locales/en/notices.json";
 import enStudents from "./locales/en/students.json";
 import enAi from "./locales/en/ai.json";
 import enMaterials from "./locales/en/materials.json";
+import enGallery from "./locales/en/gallery.json";
 import hiAttendance from "./locales/hi/attendance.json";
 import hiAuth from "./locales/hi/auth.json";
 import hiCommon from "./locales/hi/common.json";
@@ -21,6 +22,7 @@ import hiNotices from "./locales/hi/notices.json";
 import hiStudents from "./locales/hi/students.json";
 import hiAi from "./locales/hi/ai.json";
 import hiMaterials from "./locales/hi/materials.json";
+import hiGallery from "./locales/hi/gallery.json";
 
 export const SCHOOL_DEFAULT_LOCALE = "hi";
 
@@ -35,6 +37,7 @@ const namespaces = [
   "students",
   "ai",
   "materials",
+  "gallery",
 ] as const;
 
 /** School tenant sites default to Hindi per product requirements. */
@@ -55,6 +58,7 @@ void i18n.use(initReactI18next).init({
       students: enStudents,
       ai: enAi,
       materials: enMaterials,
+      gallery: enGallery,
     },
     hi: {
       common: hiCommon,
@@ -67,6 +71,7 @@ void i18n.use(initReactI18next).init({
       students: hiStudents,
       ai: hiAi,
       materials: hiMaterials,
+      gallery: hiGallery,
     },
   },
   lng: readStoredLocale() ?? getSchoolDefaultLocale(),

@@ -16,6 +16,7 @@ import { StudentImportPanel } from "../components/StudentImportPanel";
 import { StudentMaterialsPanel } from "../components/StudentMaterialsPanel";
 import { StudentNoticesPanel } from "../components/StudentNoticesPanel";
 import { StudyMaterialPanel } from "../components/StudyMaterialPanel";
+import { GalleryPhotoPanel } from "../components/GalleryPhotoPanel";
 
 const STUDENT_SECTIONS = [
   "student-notices",
@@ -30,6 +31,7 @@ const ADMIN_SECTIONS = [
   "admin-notices",
   "admin-fees",
   "admin-materials",
+  "admin-gallery",
 ] as const;
 
 type StudentSection = (typeof STUDENT_SECTIONS)[number];
@@ -167,6 +169,9 @@ export function AdminDashboard() {
       </DashboardPanel>
       <DashboardPanel sectionId="admin-materials" activeSection={activeSection}>
         <StudyMaterialPanel />
+      </DashboardPanel>
+      <DashboardPanel sectionId="admin-gallery" activeSection={activeSection}>
+        <GalleryPhotoPanel />
       </DashboardPanel>
     </DashboardShell>
   );
