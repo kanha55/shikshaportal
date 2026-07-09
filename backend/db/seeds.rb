@@ -34,6 +34,23 @@ schools_data = [
     ]
   },
   {
+    name: "Sunrays Public School",
+    subdomain: "sunrays",
+    address: "Main Road, Sunrays Nagar, Madhya Pradesh",
+    phone: "9876543213",
+    principal_name: "Principal Ravi Verma",
+    principal_email: "principal@sunrays.test",
+    board: "cbse",
+    default_language: "hi",
+    about_us: "Sunrays Public School provides quality education with digital attendance, fee tracking, notices, and study materials for parents and students.",
+    admin_password: "password123",
+    notices: [
+      { title: "Sunrays Digital Portal Live", body: "Parents and students can now check notices, attendance, fee status, and study materials from the portal." },
+      { title: "Monthly Fee Reminder", body: "Please submit the monthly fee before the 10th of this month. Online and office payments are both accepted." },
+      { title: "Annual Day Celebration", body: "Annual day will be held this Saturday at 10 AM in the school auditorium." }
+    ]
+  },
+  {
     name: "IPS",
     subdomain: "ips",
     address: "Station Road, Indrapur, Madhya Pradesh",
@@ -76,6 +93,69 @@ schools_data.each do |attrs|
         n.body = notice_attrs[:body]
         n.published_at = Time.current
         n.school = school
+      end
+    end
+  end
+
+  if attrs[:subdomain] == "sunrays"
+    sunrays_students = [
+      { name: "Isha Patel", email: "isha@sunrays.test", roll_number: "201", class_name: "10", section: "A", parent_phone: "9876543230" },
+      { name: "Dev Sharma", email: "dev@sunrays.test", roll_number: "202", class_name: "10", section: "A", parent_phone: "9876543231" },
+      { name: "Kavya Singh", email: "kavya@sunrays.test", roll_number: "203", class_name: "10", section: "B", parent_phone: "9876543232" },
+      { name: "Arjun Yadav", email: "arjun@sunrays.test", roll_number: "204", class_name: "9", section: "A", parent_phone: "9876543233" },
+      { name: "Meera Kumari", email: "meera@sunrays.test", roll_number: "205", class_name: "9", section: "B", parent_phone: "9876543234" },
+      { name: "Rahul Mehta", email: "rahul@sunrays.test", roll_number: "206", class_name: "8", section: "A", parent_phone: "9876543235" },
+      { name: "Sonia Verma", email: "sonia@sunrays.test", roll_number: "207", class_name: "8", section: "B", parent_phone: "9876543236" },
+      { name: "Vikram Joshi", email: "vikram@sunrays.test", roll_number: "208", class_name: "7", section: "A", parent_phone: "9876543237" }
+    ]
+
+    created_sunrays_students = sunrays_students.map do |student_attrs|
+      student = User.find_or_initialize_by(email: student_attrs[:email])
+      student.assign_attributes(
+        student_attrs.merge(
+          role: "student",
+          school: school,
+          language_preference: school.default_language,
+          password: "password123",
+          password_confirmation: "password123"
+        )
+      )
+      student.save!
+      student
+    end
+
+    attendance_dates = (1..5).map { |days_ago| Time.zone.today - days_ago }
+    attendance_dates.each_with_index do |date, date_index|
+      created_sunrays_students.each_with_index do |student, student_index|
+        status = ((student_index + date_index) % 5).zero? ? "absent" : "present"
+        AttendanceRecord.find_or_initialize_by(school: school, student: student, date: date).tap do |record|
+          record.assign_attributes(
+            marked_by: admin_user,
+            status: status,
+            class_name: student.class_name,
+            section: student.section
+          )
+          record.save!
+        end
+      end
+    end
+
+    fee_examples = [
+      { student: created_sunrays_students[0], fee_type: "tuition", amount: 1500, status: "paid", paid_on: Time.zone.today - 2, receipt_number: "SUNRAYS-#{Time.zone.today.year}-001", notes: "July tuition fee" },
+      { student: created_sunrays_students[1], fee_type: "transport", amount: 800, status: "paid", paid_on: Time.zone.today - 1, receipt_number: "SUNRAYS-#{Time.zone.today.year}-002", notes: "July transport fee" },
+      { student: created_sunrays_students[2], fee_type: "tuition", amount: 1500, status: "pending", due_date: Time.zone.today + 7, notes: "July tuition fee pending" },
+      { student: created_sunrays_students[3], fee_type: "exam", amount: 500, status: "pending", due_date: Time.zone.today + 10, notes: "Term exam fee pending" }
+    ]
+
+    fee_examples.each do |fee_attrs|
+      lookup = if fee_attrs[:receipt_number].present?
+                 { receipt_number: fee_attrs[:receipt_number] }
+               else
+                 { student: fee_attrs[:student], fee_type: fee_attrs[:fee_type], notes: fee_attrs[:notes] }
+               end
+      FeeRecord.find_or_initialize_by({ school: school }.merge(lookup)).tap do |fee|
+        fee.assign_attributes(fee_attrs.merge(school: school, recorded_by: admin_user))
+        fee.save!
       end
     end
   end
