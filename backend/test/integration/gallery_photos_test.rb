@@ -64,6 +64,26 @@ class GalleryPhotosTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "rejects oversized gallery photo" do
+    host! "greenvalley.localhost"
+    large = Tempfile.new(["large", ".png"])
+    large.write("\x89PNG\r\n\x1a\n" + ("0" * (5.megabytes + 1)))
+    large.rewind
+    upload = Rack::Test::UploadedFile.new(large.path, "image/png")
+
+    post api_v1_admin_gallery_photos_path,
+         params: { gallery_photo: { caption: "Too big", image: upload } },
+         headers: auth_headers(@admin_auth)
+
+    assert_response :unprocessable_entity
+    errors = JSON.parse(response.body)["errors"]
+    assert_includes errors.join, "5 MB"
+  ensure
+    large.close
+    large.unlink
+  end
+
+
   private
 
   def login_as(email)
