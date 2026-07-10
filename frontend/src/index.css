@@ -1295,6 +1295,100 @@ button.dashboard-nav-item:hover {
   gap: 0.75rem;
 }
 
+.public-gallery-carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.public-gallery-track {
+  display: flex;
+  transition: transform 0.6s ease;
+}
+
+.public-gallery-slide {
+  position: relative;
+  margin: 0;
+  flex: 0 0 100%;
+}
+
+.public-gallery-slide img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.public-gallery-slide figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+}
+
+.public-gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.public-gallery-nav:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.public-gallery-nav.prev {
+  left: 0.75rem;
+}
+
+.public-gallery-nav.next {
+  right: 0.75rem;
+}
+
+.public-gallery-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.public-gallery-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.public-gallery-dot.active {
+  background: #fff;
+  transform: scale(1.2);
+}
+
 .public-gallery-item {
   margin: 0;
   overflow: hidden;
