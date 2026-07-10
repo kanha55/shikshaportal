@@ -18,6 +18,8 @@ export function configureApiClient(options: {
 
 export const apiClient = axios.create({
   headers: { "Content-Type": "application/json", Accept: "application/json" },
+  // Send the session cookie so the login can be restored after a page reload.
+  withCredentials: true,
 });
 
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
