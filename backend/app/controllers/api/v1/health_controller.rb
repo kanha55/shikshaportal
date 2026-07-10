@@ -7,8 +7,17 @@ module Api
         render json: {
           status: "ok",
           app: "shikshaportal-api",
-          timestamp: Time.current.iso8601
+          timestamp: Time.current.iso8601,
+          gallery_table_ready: gallery_table_ready?
         }
+      end
+
+      private
+
+      def gallery_table_ready?
+        ActiveRecord::Base.connection.data_source_exists?("gallery_photos")
+      rescue StandardError
+        false
       end
     end
   end

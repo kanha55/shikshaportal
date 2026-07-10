@@ -8,6 +8,9 @@ module Api
       class GalleryPhotosController < ApplicationController
         include SchoolAdminAuth
 
+        rescue_from ActiveRecord::StatementInvalid, with: :render_gallery_db_error
+        rescue_from StandardError, with: :render_gallery_error
+
         MAX_GALLERY_SIZE = GalleryPhoto::MAX_FILE_SIZE
 
         def index
@@ -97,6 +100,20 @@ module Api
           GalleryPhoto.ordered.each_with_index do |photo, index|
             photo.update_column(:position, index + 1) if photo.position != index + 1
           end
+        end
+
+        def render_gallery_db_error(exception)
+          Rails.logger.error("[GalleryPhoto] database error: #{exception.class}: #{exception.message}")
+          render json: {
+            errors: [I18n.t("errors.gallery_db_not_ready", default: "Gallery database is not ready. Run db:migrate on the server.")]
+          }, status: :unprocessable_entity
+        end
+
+        def render_gallery_error(exception)
+          Rails.logger.error("[GalleryPhoto] error: #{exception.class}: #{exception.message}")
+          render json: {
+            errors: [I18n.t("errors.gallery_storage_failed", default: "Photo could not be saved.")]
+          }, status: :unprocessable_entity
         end
       end
     end

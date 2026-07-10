@@ -10,6 +10,7 @@ cd /rails
 
 echo "==> Preparing database..."
 bundle exec rails db:prepare
+bundle exec rails runner "puts 'gallery_photos table: ' + (ActiveRecord::Base.connection.data_source_exists?('gallery_photos') ? 'ready' : 'MISSING')"
 
 echo "==> Starting Puma on port 3000..."
 PORT=3000 bundle exec puma -C config/puma.rb &
