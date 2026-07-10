@@ -9,6 +9,7 @@ hi:
     no_tenant: "इस सबडोमेन के लिए कोई टेनेंट नहीं"
     csv_required: "CSV फ़ाइल आवश्यक है"
     gallery_storage_failed: "फोटो सेव नहीं हो सकी। कृपया JPEG/PNG 5 MB से छोटी फाइल आज़माएँ।"
+    gallery_db_not_ready: "गैलरी डेटाबेस तैयार नहीं है। सर्वर पर db:migrate चलाएँ।"
     missing_parameter: "आवश्यक पैरामीटर गायब: %{param}"
   messages:
     logged_out: "लॉग आउट हो गया"

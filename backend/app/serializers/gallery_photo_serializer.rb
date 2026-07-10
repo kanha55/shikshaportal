@@ -4,6 +4,8 @@ module GalleryPhotoSerializer
   module_function
 
   def serialize(photo, request:)
+    return nil unless photo.image.attached?
+
     {
       id: photo.id,
       position: photo.position,
