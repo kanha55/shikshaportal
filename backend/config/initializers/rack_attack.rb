@@ -26,3 +26,7 @@ class Rack::Attack
 end
 
 Rails.application.config.middleware.use Rack::Attack
+
+# Rate limiting is validated in AuthIntegrationTest; disable elsewhere so login
+# helpers in integration tests are not throttled by a shared IP counter.
+Rack::Attack.enabled = false if Rails.env.test?
