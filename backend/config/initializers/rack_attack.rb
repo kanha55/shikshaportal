@@ -3,6 +3,9 @@
 LOGIN_ATTEMPT_LIMIT = 10
 LOGIN_ATTEMPT_PERIOD = 15.minutes
 
+PASSWORD_RESET_LIMIT = 5
+PASSWORD_RESET_PERIOD = 15.minutes
+
 Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
 
 class Rack::Attack
@@ -12,6 +15,16 @@ class Rack::Attack
 
   throttle("auth/login/email", limit: LOGIN_ATTEMPT_LIMIT, period: LOGIN_ATTEMPT_PERIOD) do |req|
     if req.post? && req.path == "/api/v1/auth/login"
+      req.params.dig("user", "email")&.downcase.presence
+    end
+  end
+
+  throttle("auth/password/ip", limit: PASSWORD_RESET_LIMIT, period: PASSWORD_RESET_PERIOD) do |req|
+    req.ip if req.post? && req.path == "/api/v1/auth/password"
+  end
+
+  throttle("auth/password/email", limit: PASSWORD_RESET_LIMIT, period: PASSWORD_RESET_PERIOD) do |req|
+    if req.post? && req.path == "/api/v1/auth/password"
       req.params.dig("user", "email")&.downcase.presence
     end
   end

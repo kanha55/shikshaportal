@@ -88,10 +88,20 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
+  # Allowlist the apex + wildcard subdomains for each product domain, plus
+  # Railway's routing domains and any extra hosts from RAILS_ALLOWED_HOSTS
+  # (comma-separated). A leading dot matches the domain and all its subdomains.
+  app_host = ENV.fetch("APP_HOST", "campixo.com")
+  config.hosts = [
+    app_host,
+    ".#{app_host}",
+    ".campixo.com",
+    ".shikshaportal.in",
+    ".railway.app",
+    ".up.railway.app"
+  ]
+  config.hosts += ENV.fetch("RAILS_ALLOWED_HOSTS", "").split(",").map(&:strip).reject(&:blank?)
+
   # Skip DNS rebinding protection for the default health check endpoint.
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
