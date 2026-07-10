@@ -76,6 +76,26 @@ class AuthIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  def test_password_reset_rate_limited_after_repeated_requests
+    host! "greenvalley.localhost"
+
+    5.times do
+      post api_v1_user_password_path,
+           params: { user: { email: "principal@greenvalley.test" } },
+           as: :json
+
+      assert_response :success
+    end
+
+    post api_v1_user_password_path,
+         params: { user: { email: "principal@greenvalley.test" } },
+         as: :json
+
+    assert_response 429
+    body = JSON.parse(response.body)
+    assert body["error"].present?
+  end
+
   def test_student_login_includes_profile_fields
     host! "greenvalley.localhost"
 
