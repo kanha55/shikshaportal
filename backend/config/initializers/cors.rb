@@ -9,6 +9,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins(
       ENV.fetch("FRONTEND_ORIGIN", "http://localhost:5173"),
+      /\Ahttps?:\/\/campixo\.com\z/,
+      /\Ahttps?:\/\/[\w-]+\.campixo\.com\z/,
       /\Ahttps?:\/\/[\w-]+\.shikshaportal\.in\z/,
       /\Ahttp:\/\/[\w-]+\.localhost(:\d+)?\z/
     )
