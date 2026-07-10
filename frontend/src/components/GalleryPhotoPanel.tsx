@@ -11,6 +11,13 @@ import type { GalleryPhoto } from "../types/gallery";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const MAX_PHOTOS = 6;
+const ALLOWED_TYPES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
+
+function isAllowedImageType(file: File): boolean {
+  if (ALLOWED_TYPES.has(file.type)) return true;
+  const name = file.name.toLowerCase();
+  return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp");
+}
 
 
 function isFileTooLarge(file: File): boolean {
@@ -26,8 +33,8 @@ function mapBackendErrors(errors: string[], t: (key: string) => string): string 
       if (/JPEG|PNG|WebP/i.test(message)) {
         return t("gallery:invalidType");
       }
-      if (/Maximum|6 gallery photos|cannot exceed/i.test(message)) {
-        return t("gallery:limitReached");
+      if (/storage|saved|configuration/i.test(message)) {
+        return t("gallery:storageError");
       }
       return message;
     })
@@ -70,6 +77,11 @@ export function GalleryPhotoPanel() {
       return;
     }
 
+    if (!isAllowedImageType(selected)) {
+      setError(t("gallery:invalidType"));
+      return;
+    }
+
     setError(null);
   }
 
@@ -95,8 +107,17 @@ export function GalleryPhotoPanel() {
     } catch (err) {
       if (err instanceof Error && err.message === "FILE_TOO_LARGE") {
         setError(t("gallery:fileTooLarge"));
-      } else if (axios.isAxiosError(err) && err.response?.data?.errors) {
-        setError(mapBackendErrors(err.response.data.errors as string[], t));
+      } else if (axios.isAxiosError(err)) {
+        const data = err.response?.data as { errors?: string[]; error?: string } | undefined;
+        if (data?.errors?.length) {
+          setError(mapBackendErrors(data.errors, t));
+        } else if (data?.error) {
+          setError(data.error);
+        } else if (err.response?.status === 500) {
+          setError(t("gallery:storageError"));
+        } else {
+          setError(t("gallery:uploadFailed"));
+        }
       } else {
         setError(t("gallery:uploadFailed"));
       }
@@ -157,7 +178,7 @@ export function GalleryPhotoPanel() {
         </label>
         {error && <p className="error">{error}</p>}
         {message && <p className="import-message">{message}</p>}
-        <button type="submit" disabled={submitting || !file || photos.length >= MAX_PHOTOS || fileTooLarge}>
+        <button type="submit" disabled={submitting || !file || photos.length >= MAX_PHOTOS || fileTooLarge || (file !== null && !isAllowedImageType(file))}>
           {submitting ? t("gallery:uploading") : t("gallery:upload")}
         </button>
       </form>

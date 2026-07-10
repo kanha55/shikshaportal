@@ -5,7 +5,8 @@ class GalleryPhoto < TenantRecord
   has_one_attached :image
 
   MAX_PER_SCHOOL = 6
-  ALLOWED_CONTENT_TYPES = %w[image/jpeg image/png image/webp].freeze
+  ALLOWED_CONTENT_TYPES = %w[image/jpeg image/jpg image/pjpeg image/png image/webp].freeze
+  ALLOWED_EXTENSIONS = %w[.jpg .jpeg .png .webp].freeze
   MAX_FILE_SIZE = 5.megabytes
 
   validates :position, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -59,7 +60,9 @@ class GalleryPhoto < TenantRecord
       return
     end
 
-    unless ALLOWED_CONTENT_TYPES.include?(image.blob.content_type)
+    content_type = image.blob.content_type.to_s.downcase
+    extension = File.extname(image.blob.filename.to_s).downcase
+    unless ALLOWED_CONTENT_TYPES.include?(content_type) || ALLOWED_EXTENSIONS.include?(extension)
       errors.add(:image, "must be a JPEG, PNG, or WebP image")
       return
     end

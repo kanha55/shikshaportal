@@ -17,5 +17,6 @@
   "fileTooLarge": "Photo must be 5 MB or smaller.",
   "invalidType": "Photo must be a JPEG, PNG, or WebP image.",
   "limitReached": "You can upload at most 6 photos.",
+  "storageError": "Photo could not be saved. Try a JPEG/PNG under 5 MB, or contact support.",
   "publicTitle": "School gallery"
 }
