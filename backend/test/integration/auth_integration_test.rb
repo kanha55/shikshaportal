@@ -6,7 +6,12 @@ require "json"
 
 class AuthIntegrationTest < ActionDispatch::IntegrationTest
   setup do
+    Rack::Attack.enabled = true
     Rack::Attack.cache.store.clear
+  end
+
+  teardown do
+    Rack::Attack.enabled = false
   end
 
   def test_login_returns_jwt_and_role
