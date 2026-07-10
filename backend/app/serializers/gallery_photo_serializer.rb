@@ -20,8 +20,7 @@ module GalleryPhotoSerializer
     Rails.application.routes.url_helpers.rails_blob_url(
       photo.image,
       host: request.host,
-      port: request.port,
-      protocol: request.protocol.delete_suffix("://")
+      protocol: request.ssl? ? "https" : "http"
     )
   end
 end

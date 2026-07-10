@@ -8,6 +8,7 @@ hi:
     school_not_found_subdomain: "इस सबडोमेन के लिए विद्यालय नहीं मिला"
     no_tenant: "इस सबडोमेन के लिए कोई टेनेंट नहीं"
     csv_required: "CSV फ़ाइल आवश्यक है"
+    gallery_storage_failed: "फोटो सेव नहीं हो सकी। कृपया JPEG/PNG 5 MB से छोटी फाइल आज़माएँ।"
     missing_parameter: "आवश्यक पैरामीटर गायब: %{param}"
   messages:
     logged_out: "लॉग आउट हो गया"

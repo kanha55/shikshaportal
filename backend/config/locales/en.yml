@@ -8,6 +8,7 @@ en:
     school_not_found_subdomain: "School not found for this subdomain"
     no_tenant: "No tenant for this subdomain"
     csv_required: "CSV file required"
+    gallery_storage_failed: "Photo could not be saved. Try a JPEG/PNG under 5 MB."
     missing_parameter: "Missing parameter: %{param}"
   messages:
     logged_out: "Logged out"

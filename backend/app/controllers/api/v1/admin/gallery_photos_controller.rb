@@ -17,17 +17,27 @@ module Api
 
         def create
           image = photo_params[:image]
-          if image.present? && image.size > MAX_GALLERY_SIZE
+          if image.blank?
+            return render json: { errors: ["Image file is required"] }, status: :unprocessable_entity
+          end
+
+          if image.size > MAX_GALLERY_SIZE
             return render json: { errors: ["Photo must be smaller than 5 MB"] }, status: :unprocessable_entity
           end
 
           photo = GalleryPhoto.new(photo_params)
+          photo.school ||= ActsAsTenant.current_tenant
 
           if photo.save
             render json: { gallery_photo: serialize(photo) }, status: :created
           else
             render json: { errors: photo.errors.full_messages }, status: :unprocessable_entity
           end
+        rescue Aws::S3::Errors::ServiceError, ActiveStorage::Error => e
+          Rails.logger.error("[GalleryPhoto] storage upload failed: #{e.class}: #{e.message}")
+          render json: {
+            errors: [I18n.t("errors.gallery_storage_failed", default: "Photo could not be saved. Check file storage configuration.")]
+          }, status: :unprocessable_entity
         end
 
         def destroy
