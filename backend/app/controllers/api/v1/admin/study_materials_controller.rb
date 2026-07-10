@@ -14,7 +14,18 @@ module Api
         end
 
         def create
-          material = StudyMaterial.new(material_params)
+          file = material_params[:file]
+          material = StudyMaterial.new(material_params.except(:file))
+          material.school ||= ActsAsTenant.current_tenant
+
+          if file.present?
+            material.file.attach(
+              io: file.open,
+              filename: file.original_filename,
+              content_type: file.content_type,
+              key: study_material_blob_key(material.school, file.original_filename)
+            )
+          end
 
           if material.save
             render json: { study_material: serialize(material) }, status: :created
@@ -34,6 +45,14 @@ module Api
 
         def material_params
           params.require(:study_material).permit(:title, :class_name, :subject, :file)
+        end
+
+        # Store study materials in R2 under "<school>/study_materials/<uuid>.<ext>"
+        # so each school's files are grouped in their own folder.
+        def study_material_blob_key(school, filename)
+          folder = school&.subdomain.presence || "school-#{school&.id}"
+          extension = File.extname(filename.to_s).downcase
+          "#{folder}/study_materials/#{SecureRandom.uuid}#{extension}"
         end
 
         def serialize(material)
