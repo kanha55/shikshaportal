@@ -28,8 +28,14 @@ module Api
             return render json: { errors: ["Photo must be smaller than 5 MB"] }, status: :unprocessable_entity
           end
 
-          photo = GalleryPhoto.new(photo_params)
+          photo = GalleryPhoto.new(caption: photo_params[:caption])
           photo.school ||= ActsAsTenant.current_tenant
+          photo.image.attach(
+            io: image.open,
+            filename: image.original_filename,
+            content_type: image.content_type,
+            key: gallery_blob_key(photo.school, image.original_filename)
+          )
 
           if photo.save
             payload = safe_serialize(photo)
@@ -81,6 +87,14 @@ module Api
 
         def photo_params
           params.require(:gallery_photo).permit(:caption, :image)
+        end
+
+        # Store gallery images in R2 under "<school>/gallery/<uuid>.<ext>" so
+        # each school's photos live in their own folder.
+        def gallery_blob_key(school, filename)
+          folder = school&.subdomain.presence || "school-#{school&.id}"
+          extension = File.extname(filename.to_s).downcase
+          "#{folder}/gallery/#{SecureRandom.uuid}#{extension}"
         end
 
         def safe_serialize(photo)
