@@ -46,7 +46,7 @@ module Api
           render json: {
             errors: [I18n.t("errors.gallery_db_not_ready", default: "Gallery database is not ready. Run db:migrate on the server.")]
           }, status: :unprocessable_entity
-        rescue Aws::Errors::ServiceError, ActiveStorage::Error => e
+        rescue ActiveStorage::Error => e
           Rails.logger.error("[GalleryPhoto] storage upload failed: #{e.class}: #{e.message}")
           render json: {
             errors: [I18n.t("errors.gallery_storage_failed", default: "Photo could not be saved. Check file storage configuration.")]
