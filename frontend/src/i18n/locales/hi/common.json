@@ -15,5 +15,7 @@
   "schoolNotFound": "विद्यालय नहीं मिला",
   "schoolNotFoundHint": "विद्यालय नहीं मिला। सबडोमेन URL जाँचें।",
   "languageToggle": "भाषा चुनें",
-  "cancel": "रद्द करें"
+  "cancel": "रद्द करें",
+  "previous": "पिछला",
+  "next": "अगला"
 }

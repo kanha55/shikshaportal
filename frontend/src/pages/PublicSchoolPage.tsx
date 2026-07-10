@@ -12,6 +12,7 @@ export function PublicSchoolPage() {
   const [school, setSchool] = useState<PublicSchool | null>(null);
   const [notices, setNotices] = useState<PublicNotice[]>([]);
   const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +36,16 @@ export function PublicSchoolPage() {
 
     load();
   }, [t]);
+
+  useEffect(() => {
+    if (galleryPhotos.length <= 1) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % galleryPhotos.length);
+    }, 4000);
+    return () => window.clearInterval(timer);
+  }, [galleryPhotos.length]);
 
   if (loading) {
     return (
@@ -101,6 +112,77 @@ export function PublicSchoolPage() {
       </div>
 
       <main className="public-main">
+        {galleryPhotos.length > 0 ? (
+          <section className="panel public-gallery-panel">
+            <div className="panel-header">
+              <div className="panel-icon" aria-hidden>
+                P
+              </div>
+              <h2>{t("gallery:publicTitle")}</h2>
+            </div>
+            <div className="public-gallery-carousel">
+              <div
+                className="public-gallery-track"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {galleryPhotos.map((photo) => (
+                  <figure key={photo.id} className="public-gallery-slide">
+                    <img
+                      src={photo.image_url}
+                      alt={photo.caption ?? school.name}
+                      loading="lazy"
+                    />
+                    {photo.caption ? (
+                      <figcaption>{photo.caption}</figcaption>
+                    ) : null}
+                  </figure>
+                ))}
+              </div>
+              {galleryPhotos.length > 1 ? (
+                <>
+                  <button
+                    type="button"
+                    className="public-gallery-nav prev"
+                    aria-label={t("previous")}
+                    onClick={() =>
+                      setCurrentSlide(
+                        (prev) =>
+                          (prev - 1 + galleryPhotos.length) % galleryPhotos.length,
+                      )
+                    }
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className="public-gallery-nav next"
+                    aria-label={t("next")}
+                    onClick={() =>
+                      setCurrentSlide((prev) => (prev + 1) % galleryPhotos.length)
+                    }
+                  >
+                    ›
+                  </button>
+                  <div className="public-gallery-dots">
+                    {galleryPhotos.map((photo, index) => (
+                      <button
+                        key={photo.id}
+                        type="button"
+                        className={`public-gallery-dot${
+                          index === currentSlide ? " active" : ""
+                        }`}
+                        aria-label={`${index + 1}`}
+                        aria-current={index === currentSlide}
+                        onClick={() => setCurrentSlide(index)}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+
         <div className="public-grid">
           <section className="panel">
             <div className="panel-header">
@@ -134,30 +216,6 @@ export function PublicSchoolPage() {
             </ul>
           </section>
         </div>
-
-
-        {galleryPhotos.length > 0 ? (
-          <section className="panel public-gallery-panel">
-            <div className="panel-header">
-              <div className="panel-icon" aria-hidden>
-                P
-              </div>
-              <h2>{t("gallery:publicTitle")}</h2>
-            </div>
-            <div className="public-gallery-grid">
-              {galleryPhotos.map((photo) => (
-                <figure key={photo.id} className="public-gallery-item">
-                  <img
-                    src={photo.image_url}
-                    alt={photo.caption ?? school.name}
-                    loading="lazy"
-                  />
-                  {photo.caption ? <figcaption>{photo.caption}</figcaption> : null}
-                </figure>
-              ))}
-            </div>
-          </section>
-        ) : null}
 
         <section className="panel">
           <div className="panel-header">
