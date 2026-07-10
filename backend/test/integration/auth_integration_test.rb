@@ -5,6 +5,10 @@ require "rack/test"
 require "json"
 
 class AuthIntegrationTest < ActionDispatch::IntegrationTest
+  setup do
+    Rack::Attack.cache.store.clear
+  end
+
   def test_login_returns_jwt_and_role
     host! "greenvalley.localhost"
 
@@ -26,6 +30,26 @@ class AuthIntegrationTest < ActionDispatch::IntegrationTest
          as: :json
 
     assert_response :unauthorized
+  end
+
+  def test_login_rate_limited_after_repeated_failures
+    host! "greenvalley.localhost"
+
+    10.times do
+      post api_v1_user_session_path,
+           params: { user: { email: "principal@greenvalley.test", password: "wrong" } },
+           as: :json
+
+      assert_response :unauthorized
+    end
+
+    post api_v1_user_session_path,
+         params: { user: { email: "principal@greenvalley.test", password: "wrong" } },
+         as: :json
+
+    assert_response 429
+    body = JSON.parse(response.body)
+    assert body["error"].present?
   end
 
   def test_me_requires_jwt

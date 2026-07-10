@@ -30,6 +30,9 @@ gem "aws-sdk-s3", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors"
 
+# Brute-force protection for auth endpoints
+gem "rack-attack"
+
 # Multi-tenancy — each school is a tenant (T02)
 gem "acts_as_tenant"
 
