@@ -9,7 +9,11 @@ import {
   type ReactNode,
 } from "react";
 import { configureApiClient } from "../api/client";
-import { login as apiLogin, logout as apiLogout } from "../api/auth";
+import {
+  login as apiLogin,
+  logout as apiLogout,
+  fetchCurrentUser,
+} from "../api/auth";
 import { dashboardPathForRole } from "../lib/config";
 import { applyLocale, normalizeLocale } from "../lib/locale";
 import type { User } from "../types/user";
@@ -39,7 +43,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       getToken: () => tokenRef.current,
       onUnauthorized: clearSession,
     });
-    setIsLoading(false);
+
+    let active = true;
+    // Restore the session from the httpOnly cookie after a page reload.
+    (async () => {
+      try {
+        const currentUser = await fetchCurrentUser();
+        if (!active) return;
+        setUser(currentUser);
+        await applyLocale(normalizeLocale(currentUser.language_preference));
+      } catch {
+        // No active session — stay logged out.
+      } finally {
+        if (active) setIsLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
   }, [clearSession]);
 
   const login = useCallback(async (email: string, password: string) => {
