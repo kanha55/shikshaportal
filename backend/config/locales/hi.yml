@@ -11,6 +11,8 @@ hi:
     gallery_storage_failed: "फोटो सेव नहीं हो सकी। कृपया JPEG/PNG 5 MB से छोटी फाइल आज़माएँ।"
     gallery_db_not_ready: "गैलरी डेटाबेस तैयार नहीं है। सर्वर पर db:migrate चलाएँ।"
     missing_parameter: "आवश्यक पैरामीटर गायब: %{param}"
+    coaching_center_only: "यह सुविधा केवल कोचिंग सेंटर के लिए उपलब्ध है"
+    not_found: "रिकॉर्ड नहीं मिला"
   messages:
     logged_out: "लॉग आउट हो गया"
     password_reset_sent: "यदि वह ईमेल मौजूद है, तो पासवर्ड रीसेट निर्देश भेजे गए हैं।"
@@ -40,6 +42,21 @@ hi:
       service_unavailable: "AI सेवा उपलब्ध नहीं"
       empty_response: "खाली AI प्रतिक्रिया"
       incomplete_response: "अपूर्ण AI प्रतिक्रिया"
+    question_paper:
+      subject_required: "विषय आवश्यक है"
+      class_name_required: "कक्षा या ग्रेड आवश्यक है"
+      topic_required: "अध्याय या विषय आवश्यक है"
+      invalid_difficulty: "अमान्य कठिनाई स्तर"
+      invalid_language: "अमान्य भाषा विकल्प"
+      invalid_total_marks: "कुल अंक 1 से 500 के बीच होने चाहिए"
+      no_question_types: "कम से कम एक प्रश्न प्रकार चुनें"
+      too_many_questions: "कुल प्रश्न %{count} से अधिक नहीं हो सकते"
+      hourly_limit: "प्रति घंटे जनरेशन सीमा पूरी हो गई। बाद में पुनः प्रयास करें।"
+      service_unavailable: "प्रश्न पत्र जनरेशन सेवा उपलब्ध नहीं"
+      empty_response: "खाली AI प्रतिक्रिया"
+      incomplete_response: "अपूर्ण AI प्रतिक्रिया"
+      invalid_question_type: "AI प्रतिक्रिया में अमान्य प्रश्न प्रकार"
+      invalid_mcq_options: "MCQ प्रश्नों में ठीक 4 विकल्प होने चाहिए"
   mailers:
     student_credentials:
       subject: "आपका %{school} छात्र लॉगिन"

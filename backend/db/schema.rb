@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_09_110000) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_13_100200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -109,6 +109,37 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_09_110000) do
     t.index ["school_id"], name: "index_notices_on_school_id"
   end
 
+  create_table "question_paper_generation_logs", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "created_at"], name: "idx_on_school_id_created_at_1a745a46c6"
+    t.index ["school_id"], name: "index_question_paper_generation_logs_on_school_id"
+    t.index ["user_id"], name: "index_question_paper_generation_logs_on_user_id"
+  end
+
+  create_table "question_papers", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "teacher_id", null: false
+    t.string "title", null: false
+    t.string "subject", null: false
+    t.string "class_name", null: false
+    t.string "topic", null: false
+    t.string "difficulty", default: "mixed", null: false
+    t.string "language", default: "en", null: false
+    t.integer "total_marks", null: false
+    t.jsonb "questions", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "class_name"], name: "index_question_papers_on_school_id_and_class_name"
+    t.index ["school_id", "created_at"], name: "index_question_papers_on_school_id_and_created_at"
+    t.index ["school_id", "subject"], name: "index_question_papers_on_school_id_and_subject"
+    t.index ["school_id", "teacher_id"], name: "index_question_papers_on_school_id_and_teacher_id"
+    t.index ["school_id"], name: "index_question_papers_on_school_id"
+    t.index ["teacher_id"], name: "index_question_papers_on_teacher_id"
+  end
+
   create_table "schools", force: :cascade do |t|
     t.string "name", null: false
     t.string "subdomain", null: false
@@ -121,6 +152,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_09_110000) do
     t.string "board", default: "cbse", null: false
     t.string "default_language", default: "hi", null: false
     t.text "about_us"
+    t.string "institution_type", default: "school", null: false
+    t.index ["institution_type"], name: "index_schools_on_institution_type"
     t.index ["subdomain"], name: "index_schools_on_subdomain", unique: true
   end
 
@@ -170,6 +203,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_09_110000) do
   add_foreign_key "fee_records", "users", column: "student_id"
   add_foreign_key "gallery_photos", "schools"
   add_foreign_key "notices", "schools"
+  add_foreign_key "question_paper_generation_logs", "schools"
+  add_foreign_key "question_paper_generation_logs", "users"
+  add_foreign_key "question_papers", "schools"
+  add_foreign_key "question_papers", "users", column: "teacher_id"
   add_foreign_key "study_materials", "schools"
   add_foreign_key "users", "schools"
 end

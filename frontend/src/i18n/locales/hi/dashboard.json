@@ -1,6 +1,8 @@
 {
   "superAdmin": "सुपर एडमिन",
   "schoolAdmin": "विद्यालय प्रशासक",
+  "coachingAdmin": "कोचिंग प्रशासक",
+  "teacher": "शिक्षक",
   "student": "विद्यार्थी",
   "comingSoon": "डैशबोर्ड आने वाले स्प्रिंट में उपलब्ध होगा।",
   "totalStudents": "कुल विद्यार्थी",
@@ -10,6 +12,7 @@
   "welcomeStudent": "स्वागत है",
   "welcomeAdmin": "स्वागत है, {{name}}",
   "schoolBanner": "विद्यालय: {{school}}",
+  "coachingBanner": "कोचिंग सेंटर: {{center}}",
   "activeNotices": "सक्रिय सूचनाएँ",
   "quickActionAddStudent": "विद्यार्थी जोड़ें",
   "quickActionMarkAttendance": "उपस्थिति दर्ज करें",

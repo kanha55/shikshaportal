@@ -1,6 +1,8 @@
 {
   "superAdmin": "Super Admin",
   "schoolAdmin": "School Admin",
+  "coachingAdmin": "Coaching Admin",
+  "teacher": "Teacher",
   "student": "Student",
   "comingSoon": "Dashboard coming in upcoming sprints.",
   "totalStudents": "Total students",
@@ -10,6 +12,7 @@
   "welcomeStudent": "Welcome back",
   "welcomeAdmin": "Welcome back, {{name}}",
   "schoolBanner": "School: {{school}}",
+  "coachingBanner": "Coaching center: {{center}}",
   "activeNotices": "Active notices",
   "quickActionAddStudent": "Add student",
   "quickActionMarkAttendance": "Mark attendance",

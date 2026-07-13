@@ -17,6 +17,7 @@ import { StudentMaterialsPanel } from "../components/StudentMaterialsPanel";
 import { StudentNoticesPanel } from "../components/StudentNoticesPanel";
 import { StudyMaterialPanel } from "../components/StudyMaterialPanel";
 import { GalleryPhotoPanel } from "../components/GalleryPhotoPanel";
+import { QuestionPaperWorkspace } from "../components/QuestionPaperWorkspace";
 
 const STUDENT_SECTIONS = [
   "student-notices",
@@ -42,7 +43,7 @@ function DashboardShell({
   children,
   nav,
 }: {
-  titleKey: "superAdmin" | "schoolAdmin" | "student";
+  titleKey: "superAdmin" | "schoolAdmin" | "student" | "coachingAdmin" | "teacher";
   children?: React.ReactNode;
   nav?: React.ReactNode;
 }) {
@@ -173,6 +174,25 @@ export function AdminDashboard() {
       <DashboardPanel sectionId="admin-gallery" activeSection={activeSection}>
         <GalleryPhotoPanel />
       </DashboardPanel>
+    </DashboardShell>
+  );
+}
+
+export function CoachingDashboard({ canDelete = true }: { canDelete?: boolean }) {
+  const { t } = useTranslation(["dashboard", "questionPaper"]);
+  const { user } = useAuth();
+
+  return (
+    <DashboardShell titleKey={user?.role === "teacher" ? "teacher" : "coachingAdmin"}>
+      <p className="dashboard-greeting">
+        {t("dashboard:welcomeAdmin", { name: user?.name ?? "" })}
+      </p>
+      {user?.school_subdomain ? (
+        <p className="student-profile-banner">
+          {t("dashboard:coachingBanner", { center: user.school_subdomain })}
+        </p>
+      ) : null}
+      <QuestionPaperWorkspace canDelete={canDelete} />
     </DashboardShell>
   );
 }

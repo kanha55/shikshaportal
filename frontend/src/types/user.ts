@@ -1,4 +1,4 @@
-export type UserRole = "super_admin" | "school_admin" | "student";
+export type UserRole = "super_admin" | "school_admin" | "student" | "coaching_admin" | "teacher";
 
 export interface User {
   id: number;
@@ -8,6 +8,7 @@ export interface User {
   language_preference: string;
   school_id: number | null;
   school_subdomain: string | null;
+  institution_type?: "school" | "coaching" | null;
   roll_number?: string | null;
   class_name?: string | null;
   section?: string | null;
