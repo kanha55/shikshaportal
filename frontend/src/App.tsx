@@ -4,7 +4,7 @@ import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { LocaleBootstrap } from "./components/LocaleBootstrap";
 import { LoginPage } from "./pages/LoginPage";
 import { PublicSchoolPage } from "./pages/PublicSchoolPage";
-import { AdminDashboard, CoachingDashboard, StudentDashboard, SuperAdminDashboard } from "./pages/Dashboards";
+import { AdminDashboard, StudentDashboard, SuperAdminDashboard } from "./pages/Dashboards";
 
 export default function App() {
   return (
@@ -24,16 +24,8 @@ export default function App() {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute roles={["school_admin"]}>
+              <ProtectedRoute roles={["school_admin", "coaching_admin"]}>
                 <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/coaching-admin"
-            element={
-              <ProtectedRoute roles={["coaching_admin"]}>
-                <CoachingDashboard />
               </ProtectedRoute>
             }
           />
@@ -41,9 +33,13 @@ export default function App() {
             path="/teacher"
             element={
               <ProtectedRoute roles={["teacher"]}>
-                <CoachingDashboard canDelete={false} />
+                <AdminDashboard papersOnly />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/coaching-admin"
+            element={<Navigate to="/admin" replace />}
           />
           <Route
             path="/student"

@@ -15,6 +15,14 @@ const adminNavItems: NavItem[] = [
   { key: "gallery", labelKey: "nav:gallery", sectionId: "admin-gallery" },
 ];
 
+const questionPapersNavItem: NavItem = {
+  key: "questionPapers",
+  labelKey: "nav:questionPapers",
+  sectionId: "admin-question-papers",
+};
+
+const teacherNavItems: NavItem[] = [questionPapersNavItem];
+
 const adminQuickActions = [
   { labelKey: "dashboard:quickActionAddStudent", sectionId: "admin-students" },
   { labelKey: "dashboard:quickActionMarkAttendance", sectionId: "admin-attendance" },
@@ -33,13 +41,23 @@ export function DashboardNav({
   variant,
   activeSection,
   onSectionChange,
+  showQuestionPapers = false,
 }: {
-  variant: "admin" | "student";
+  variant: "admin" | "student" | "teacher";
   activeSection: string;
   onSectionChange: (sectionId: string) => void;
+  showQuestionPapers?: boolean;
 }) {
   const { t } = useTranslation(["nav", "dashboard"]);
-  const items = variant === "admin" ? adminNavItems : studentNavItems;
+
+  let items: NavItem[];
+  if (variant === "student") {
+    items = studentNavItems;
+  } else if (variant === "teacher") {
+    items = teacherNavItems;
+  } else {
+    items = showQuestionPapers ? [...adminNavItems, questionPapersNavItem] : adminNavItems;
+  }
 
   return (
     <nav className="dashboard-nav" aria-label={t("dashboard:menu")}>

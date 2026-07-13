@@ -154,6 +154,30 @@ class QuestionPapersIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  def test_coaching_admin_can_access_admin_students
+    host! "gurukul.localhost"
+    token = login_token(@admin.email)
+
+    get "/api/v1/admin/students",
+        headers: auth_headers(token),
+        as: :json
+
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert body.key?("students")
+  end
+
+  def test_teacher_cannot_access_admin_students
+    host! "gurukul.localhost"
+    token = login_token(@teacher.email)
+
+    get "/api/v1/admin/students",
+        headers: auth_headers(token),
+        as: :json
+
+    assert_response :forbidden
+  end
+
   private
 
   def login_token(email)

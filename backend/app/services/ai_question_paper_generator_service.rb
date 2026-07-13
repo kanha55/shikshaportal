@@ -31,7 +31,8 @@ class AiQuestionPaperGeneratorService
     difficulty:,
     total_marks:,
     language:,
-    instructions: nil
+    instructions: nil,
+    cursor_client: nil
   )
     @coaching_center = coaching_center
     @subject = subject.to_s.strip
@@ -42,6 +43,7 @@ class AiQuestionPaperGeneratorService
     @total_marks = total_marks.to_i
     @language = language.to_s
     @instructions = instructions.to_s.strip.presence
+    @cursor_client = cursor_client
   end
 
   def call
@@ -63,7 +65,7 @@ class AiQuestionPaperGeneratorService
   private
 
   attr_reader :coaching_center, :subject, :class_name, :topic, :question_counts,
-              :difficulty, :total_marks, :language, :instructions
+              :difficulty, :total_marks, :language, :instructions, :cursor_client
 
   def validate!
     raise GenerationError, :subject_required if subject.blank?
@@ -89,6 +91,11 @@ class AiQuestionPaperGeneratorService
   end
 
   def generate_with_fallback
+    if cursor_api?
+      payload = try_provider(:cursor) { call_cursor_api }
+      return payload if payload
+    end
+
     if anthropic_api?
       payload = try_provider(:anthropic) { call_anthropic_api }
       return payload if payload
@@ -97,8 +104,30 @@ class AiQuestionPaperGeneratorService
     mock_response
   end
 
+  def cursor_api?
+    ENV["CURSOR_API_KEY"].present?
+  end
+
   def anthropic_api?
     ENV["ANTHROPIC_API_KEY"].present?
+  end
+
+  def call_cursor_api
+    client = cursor_client || CursorAgentClient.new
+    text = client.complete(cursor_prompt)
+    parse_json_payload(text)
+  rescue CursorAgentClient::ApiError, JSON::ParserError
+    raise GenerationError, :service_unavailable
+  end
+
+  def cursor_prompt
+    <<~PROMPT
+      #{SYSTEM_PROMPT}
+
+      #{user_prompt}
+
+      Important: respond with JSON only. Do not use tools, code, or markdown fences.
+    PROMPT
   end
 
   def try_provider(name)
