@@ -250,3 +250,44 @@ User.find_or_create_by!(email: "super@shikshaportal.test") do |user|
 end
 
 puts "Seeded #{School.count} schools, #{User.count} users, #{Notice.count} notices"
+
+# Demo coaching center for Question Paper Generator feature
+coaching_attrs = {
+  name: "Gurukul Coaching Center",
+  subdomain: "gurukul",
+  address: "Station Road, Indrapur",
+  phone: "9876500001",
+  principal_name: "Director Sharma",
+  principal_email: "admin@gurukul.test",
+  board: "other",
+  default_language: "en",
+  institution_type: "coaching",
+  about_us: "Gurukul Coaching Center — JEE, NEET, and board exam preparation.",
+  admin_password: "password123"
+}
+
+coaching_password = coaching_attrs.delete(:admin_password)
+coaching_center = School.find_or_create_by!(subdomain: coaching_attrs[:subdomain]) do |school|
+  school.assign_attributes(coaching_attrs)
+end
+coaching_center.update!(coaching_attrs)
+
+coaching_admin = User.find_or_create_by!(email: coaching_attrs[:principal_email]) do |user|
+  user.name = coaching_attrs[:principal_name]
+  user.role = "coaching_admin"
+  user.school = coaching_center
+  user.language_preference = coaching_center.default_language
+  user.password = coaching_password
+  user.password_confirmation = coaching_password
+end
+
+teacher = User.find_or_create_by!(email: "teacher@gurukul.test") do |user|
+  user.name = "Mrs. Priya Verma"
+  user.role = "teacher"
+  user.school = coaching_center
+  user.language_preference = coaching_center.default_language
+  user.password = coaching_password
+  user.password_confirmation = coaching_password
+end
+
+puts "Coaching demo: #{coaching_center.subdomain}.campixo.com — admin: #{coaching_admin.email}, teacher: #{teacher.email}"

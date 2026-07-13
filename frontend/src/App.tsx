@@ -24,10 +24,22 @@ export default function App() {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute roles={["school_admin"]}>
+              <ProtectedRoute roles={["school_admin", "coaching_admin"]}>
                 <AdminDashboard />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/teacher"
+            element={
+              <ProtectedRoute roles={["teacher"]}>
+                <AdminDashboard papersOnly />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/coaching-admin"
+            element={<Navigate to="/admin" replace />}
           />
           <Route
             path="/student"

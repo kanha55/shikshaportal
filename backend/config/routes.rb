@@ -33,6 +33,12 @@ Rails.application.routes.draw do
       get "attendance", to: "attendance#index"
       get "fees", to: "fees#index"
 
+      resources :question_papers, only: %i[index show create update destroy] do
+        collection do
+          post :generate
+        end
+      end
+
       namespace :admin do
         resources :schools, only: :create
         resources :notices

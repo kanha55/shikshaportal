@@ -11,6 +11,8 @@ en:
     gallery_storage_failed: "Photo could not be saved. Try a JPEG/PNG under 5 MB."
     gallery_db_not_ready: "Gallery database is not ready. Run db:migrate on the server."
     missing_parameter: "Missing parameter: %{param}"
+    coaching_center_only: "This feature is only available for coaching centers"
+    not_found: "Record not found"
   messages:
     logged_out: "Logged out"
     password_reset_sent: "If that email exists, password reset instructions were sent."
@@ -40,6 +42,21 @@ en:
       service_unavailable: "AI service unavailable"
       empty_response: "Empty AI response"
       incomplete_response: "Incomplete AI response"
+    question_paper:
+      subject_required: "Subject is required"
+      class_name_required: "Class or grade is required"
+      topic_required: "Topic or chapter is required"
+      invalid_difficulty: "Invalid difficulty level"
+      invalid_language: "Invalid language preference"
+      invalid_total_marks: "Total marks must be between 1 and 500"
+      no_question_types: "Select at least one question type with a count"
+      too_many_questions: "Total questions cannot exceed %{count}"
+      hourly_limit: "Hourly generation limit reached. Try again later."
+      service_unavailable: "Question paper generation service unavailable"
+      empty_response: "Empty AI response"
+      incomplete_response: "Incomplete AI response"
+      invalid_question_type: "Invalid question type in AI response"
+      invalid_mcq_options: "MCQ questions must have exactly 4 options"
   mailers:
     student_credentials:
       subject: "Your %{school} student login"

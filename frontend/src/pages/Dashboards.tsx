@@ -17,6 +17,7 @@ import { StudentMaterialsPanel } from "../components/StudentMaterialsPanel";
 import { StudentNoticesPanel } from "../components/StudentNoticesPanel";
 import { StudyMaterialPanel } from "../components/StudyMaterialPanel";
 import { GalleryPhotoPanel } from "../components/GalleryPhotoPanel";
+import { QuestionPaperWorkspace } from "../components/QuestionPaperWorkspace";
 
 const STUDENT_SECTIONS = [
   "student-notices",
@@ -32,6 +33,7 @@ const ADMIN_SECTIONS = [
   "admin-fees",
   "admin-materials",
   "admin-gallery",
+  "admin-question-papers",
 ] as const;
 
 type StudentSection = (typeof STUDENT_SECTIONS)[number];
@@ -42,7 +44,7 @@ function DashboardShell({
   children,
   nav,
 }: {
-  titleKey: "superAdmin" | "schoolAdmin" | "student";
+  titleKey: "superAdmin" | "schoolAdmin" | "student" | "coachingAdmin" | "teacher";
   children?: React.ReactNode;
   nav?: React.ReactNode;
 }) {
@@ -101,10 +103,23 @@ function DashboardPanel({
   );
 }
 
-export function AdminDashboard() {
+function adminTitleKey(role: string | undefined): "schoolAdmin" | "coachingAdmin" | "teacher" {
+  if (role === "coaching_admin") return "coachingAdmin";
+  if (role === "teacher") return "teacher";
+  return "schoolAdmin";
+}
+
+export function AdminDashboard({ papersOnly = false }: { papersOnly?: boolean }) {
   const { t } = useTranslation(["dashboard", "attendance", "notices", "fees"]);
   const { user } = useAuth();
-  const [activeSection, setActiveSection] = useState<AdminSection>(ADMIN_SECTIONS[0]);
+  const isCoaching = user?.institution_type === "coaching";
+  const showQuestionPapers = isCoaching && (user?.role === "coaching_admin" || user?.role === "teacher");
+  const showAdminFeatures = !papersOnly && user?.role !== "teacher";
+  const defaultSection: AdminSection = papersOnly || user?.role === "teacher"
+    ? "admin-question-papers"
+    : "admin-students";
+
+  const [activeSection, setActiveSection] = useState<AdminSection>(defaultSection);
   const [studentCount, setStudentCount] = useState<string>(t("dashboard:statsPlaceholder"));
   const [noticeRefreshKey, setNoticeRefreshKey] = useState(0);
   const [todayAttendance, setTodayAttendance] = useState<string>(t("dashboard:statsPlaceholder"));
@@ -112,6 +127,8 @@ export function AdminDashboard() {
   const [noticeCount, setNoticeCount] = useState<string>(t("dashboard:statsPlaceholder"));
 
   useEffect(() => {
+    if (!showAdminFeatures) return;
+
     void fetchAttendanceReport()
       .then((report) => setTodayAttendance(`${report.attendance_percent}%`))
       .catch(() => setTodayAttendance(t("dashboard:statsPlaceholder")));
@@ -121,16 +138,19 @@ export function AdminDashboard() {
     void fetchAdminFees()
       .then((data) => setUnpaidCount(String(data.summary.pending_count)))
       .catch(() => setUnpaidCount(t("dashboard:statsPlaceholder")));
-  }, [t]);
+  }, [t, showAdminFeatures]);
+
+  const bannerValue = user?.school_subdomain ?? "";
 
   return (
     <DashboardShell
-      titleKey="schoolAdmin"
+      titleKey={adminTitleKey(user?.role)}
       nav={
         <DashboardNav
-          variant="admin"
+          variant={papersOnly || user?.role === "teacher" ? "teacher" : "admin"}
           activeSection={activeSection}
           onSectionChange={(id) => setActiveSection(id as AdminSection)}
+          showQuestionPapers={showQuestionPapers}
         />
       }
     >
@@ -139,40 +159,57 @@ export function AdminDashboard() {
       </p>
       {user?.school_subdomain ? (
         <p className="student-profile-banner">
-          {t("dashboard:schoolBanner", { school: user.school_subdomain })}
+          {isCoaching
+            ? t("dashboard:coachingBanner", { center: bannerValue })
+            : t("dashboard:schoolBanner", { school: bannerValue })}
         </p>
       ) : null}
-      <div className="stat-grid">
-        <StatCard label={t("dashboard:totalStudents")} value={studentCount} />
-        <StatCard label={t("attendance:todayAttendance")} value={todayAttendance} />
-        <StatCard label={t("fees:unpaidCount")} value={unpaidCount} />
-        <StatCard label={t("dashboard:activeNotices")} value={noticeCount} />
-      </div>
 
-      <QuickActions onSectionChange={(id) => setActiveSection(id as AdminSection)} />
+      {showAdminFeatures ? (
+        <>
+          <div className="stat-grid">
+            <StatCard label={t("dashboard:totalStudents")} value={studentCount} />
+            <StatCard label={t("attendance:todayAttendance")} value={todayAttendance} />
+            <StatCard label={t("fees:unpaidCount")} value={unpaidCount} />
+            <StatCard label={t("dashboard:activeNotices")} value={noticeCount} />
+          </div>
 
-      <DashboardPanel sectionId="admin-students" activeSection={activeSection}>
-        <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
-      </DashboardPanel>
-      <DashboardPanel sectionId="admin-attendance" activeSection={activeSection}>
-        <AttendanceMarkingPanel />
-      </DashboardPanel>
-      <DashboardPanel sectionId="admin-notices" activeSection={activeSection}>
-        <AiNoticeComposer onPosted={() => setNoticeRefreshKey((key) => key + 1)} />
-        <NoticeManager
-          refreshKey={noticeRefreshKey}
-          onNoticesChange={(count) => setNoticeCount(String(count))}
-        />
-      </DashboardPanel>
-      <DashboardPanel sectionId="admin-fees" activeSection={activeSection}>
-        <FeeRecordingPanel onSummaryChange={(count) => setUnpaidCount(String(count))} />
-      </DashboardPanel>
-      <DashboardPanel sectionId="admin-materials" activeSection={activeSection}>
-        <StudyMaterialPanel />
-      </DashboardPanel>
-      <DashboardPanel sectionId="admin-gallery" activeSection={activeSection}>
-        <GalleryPhotoPanel />
-      </DashboardPanel>
+          <QuickActions onSectionChange={(id) => setActiveSection(id as AdminSection)} />
+        </>
+      ) : null}
+
+      {showAdminFeatures ? (
+        <>
+          <DashboardPanel sectionId="admin-students" activeSection={activeSection}>
+            <StudentImportPanel onStudentsChange={(count) => setStudentCount(String(count))} />
+          </DashboardPanel>
+          <DashboardPanel sectionId="admin-attendance" activeSection={activeSection}>
+            <AttendanceMarkingPanel />
+          </DashboardPanel>
+          <DashboardPanel sectionId="admin-notices" activeSection={activeSection}>
+            <AiNoticeComposer onPosted={() => setNoticeRefreshKey((key) => key + 1)} />
+            <NoticeManager
+              refreshKey={noticeRefreshKey}
+              onNoticesChange={(count) => setNoticeCount(String(count))}
+            />
+          </DashboardPanel>
+          <DashboardPanel sectionId="admin-fees" activeSection={activeSection}>
+            <FeeRecordingPanel onSummaryChange={(count) => setUnpaidCount(String(count))} />
+          </DashboardPanel>
+          <DashboardPanel sectionId="admin-materials" activeSection={activeSection}>
+            <StudyMaterialPanel />
+          </DashboardPanel>
+          <DashboardPanel sectionId="admin-gallery" activeSection={activeSection}>
+            <GalleryPhotoPanel />
+          </DashboardPanel>
+        </>
+      ) : null}
+
+      {showQuestionPapers ? (
+        <DashboardPanel sectionId="admin-question-papers" activeSection={activeSection}>
+          <QuestionPaperWorkspace canDelete={user?.role === "coaching_admin"} />
+        </DashboardPanel>
+      ) : null}
     </DashboardShell>
   );
 }

@@ -11,7 +11,9 @@ module SchoolAdminAuth
   private
 
   def authorize_school_admin!
-    return if current_user&.school_admin? && current_user.school_id == ActsAsTenant.current_tenant&.id
+    tenant = ActsAsTenant.current_tenant
+    return if current_user&.school_admin? && current_user.school_id == tenant&.id
+    return if current_user&.coaching_admin? && current_user.school_id == tenant&.id
 
     render json: { error: I18n.t("errors.forbidden") }, status: :forbidden and return
   end

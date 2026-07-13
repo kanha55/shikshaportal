@@ -9,7 +9,8 @@ class UserSerializer
       role: user.role,
       language_preference: user.language_preference,
       school_id: user.school_id,
-      school_subdomain: user.school&.subdomain
+      school_subdomain: user.school&.subdomain,
+      institution_type: user.school&.institution_type
     }
 
     if user.student?
