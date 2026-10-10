@@ -19,7 +19,7 @@ RUN npm run build
 
 # --- Backend gem build ---
 FROM docker.io/library/ruby:${RUBY_VERSION}-slim AS backend-build
-WORKDIR /app/backend
+WORKDIR /rails
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
@@ -46,7 +46,7 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives && \
     rm -f /etc/nginx/sites-enabled/default
 
-WORKDIR /app/backend
+WORKDIR /rails
 
 ENV RAILS_ENV=production \
     BUNDLE_DEPLOYMENT=1 \
@@ -54,7 +54,7 @@ ENV RAILS_ENV=production \
     BUNDLE_WITHOUT=development:test
 
 COPY --from=backend-build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=backend-build /app/backend /app/backend
+COPY --from=backend-build /rails /rails
 COPY --from=frontend /build/frontend/dist /srv/frontend/dist
 
 COPY deploy/nginx-railway.conf /etc/nginx/templates/default.conf.template
@@ -64,5 +64,3 @@ RUN chmod +x /docker-start.sh && \
 
 EXPOSE 8080
 CMD ["/docker-start.sh"]
-
-Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
