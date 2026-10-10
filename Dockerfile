@@ -19,7 +19,7 @@ RUN npm run build
 
 # --- Backend gem build ---
 FROM docker.io/library/ruby:${RUBY_VERSION}-slim AS backend-build
-WORKDIR /rails
+WORKDIR /rail
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libpq-dev libyaml-dev pkg-config && \
